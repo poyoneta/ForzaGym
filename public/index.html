@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gimnasio Forza Gym</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+
+    <header id="inicio">
+        <div class="header-contenido">
+            <img src="imagenes/Forza logo.jpeg" alt="Logo Forza Gym" class="logo-header">
+            <div class="header-texto">
+                <h1>Gimnasio Forza Gym</h1>
+                <p>Break Your Limits</p>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#planes">Planes</a>
+        <a href="#actividades">Actividades</a>
+        <a href="#horarios">Horarios</a>
+        <a href="#entrenadores">Entrenadores</a>
+        <a href="#inscripcion">Inscripción</a>
+    </nav>
+
+    <main>
+
+        <section class="hero">
+            <h2>Transformá tu cuerpo y tu energía</h2>
+
+            <p>
+                Sumate a nuestro gimnasio con planes mensuales,
+                entrenadores profesionales y horarios flexibles.
+            </p>
+
+            </section>
+
+        <section id="actividades">
+            <h2>Nuestras Actividades</h2>
+            
+            <div class="contenedor-actividades">
+                
+                <article class="tarjeta-actividad">
+                    <div class="imagen-actividad">
+                        <img src="imagenes/crossfit.jpg" alt="Crossfit">
+                    </div>
+                    <div class="barra-actividad">
+                        <span>🏋️‍♂️ CROSSFIT</span>
+                    </div>
+                </article>
+
+                <article class="tarjeta-actividad">
+                    <div class="imagen-actividad">
+                        <img src="imagenes/funcional.jpg" alt="Funcional">
+                    </div>
+                    <div class="barra-actividad">
+                        <span>💪 FUNCIONAL</span>
+                    </div>
+                </article>
+
+                <article class="tarjeta-actividad">
+                    <div class="imagen-actividad">
+                        <img src="imagenes/gap.jpg" alt="GAP">
+                    </div>
+                    <div class="barra-actividad">
+                        <span>🔥 GAP</span>
+                    </div>
+                </article>
+
+                <article class="tarjeta-actividad">
+                    <div class="imagen-actividad">
+                        <img src="imagenes/musculacion.jfif" alt="Musculación">
+                    </div>
+                    <div class="barra-actividad">
+                        <span>🏋️ MUSCULACIÓN</span>
+                    </div>
+                </article>
+
+                <article class="tarjeta-actividad">
+                    <div class="imagen-actividad">
+                        <img src="imagenes/boxeo.jpg" alt="Boxeo">
+                    </div>
+                    <div class="barra-actividad">
+                        <span>🥊 BOXEO</span>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <section id="planes">
+
+            <h2>Planes de entrenamiento</h2>
+
+            <div class="contenedor-tarjetas">
+
+                <article class="tarjeta">
+                    <h3>Plan Básico</h3>
+                    <p>2 días por semana</p>
+                    <p><strong>$18.000</strong> por mes</p>
+                </article>
+
+                <article class="tarjeta">
+                    <h3>Plan Plus</h3>
+                    <p>3 días por semana</p>
+                    <p><strong>$23.000</strong> por mes</p>
+                </article>
+
+                <article class="tarjeta">
+                    <h3>Plan Premium</h3>
+                    <p>Pase libre</p>
+                    <p><strong>$30.000</strong> por mes</p>
+                </article>
+
+            </div>
+
+        </section>
+
+        <section id="horarios">
+
+            <h2>Horarios</h2>
+
+            <div class="contenedor-horarios">
+
+                <article class="tarjeta-horario">
+                    <div class="etiqueta-dia">Lunes a Viernes</div>
+                    
+                    <div class="bloque-turno">
+                        <h3>Por la mañana</h3>
+                        <p class="hora">8:00 a 12:00</p>
+                    </div>
+                    
+                    <div class="divisor-horario"></div>
+                    
+                    <div class="bloque-turno">
+                        <h3>Por la tarde</h3>
+                        <p class="hora">16:00 a 22:30</p>
+                    </div>
+                </article>
+
+                <article class="tarjeta-horario">
+                    <div class="etiqueta-dia">Sábado</div>
+                    
+                    <div class="bloque-turno">
+                        <h3>Por la mañana</h3>
+                        <p class="hora">10:30 a 12:30</p>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+        <section id="entrenadores">
+
+            <h2>Entrenador</h2>
+
+            <div class="contenedor-tarjetas">
+
+                <article class="tarjeta">
+
+                    <img src="imagenes/entrenador.jpeg"
+                         alt="Entrenador de musculación">
+
+                    <h3>Leonardo Bustillo</h3>
+
+                    <p>
+                        Especialista en musculación e hipertrofia.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+        <section id="inscripcion">
+
+            <h2>Formulario de inscripción</h2>
+
+            <form id="formulario">
+
+                <label for="nombre">
+                    Nombre completo
+                </label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    placeholder="Ingresá tu nombre"
+                    required
+                >
+
+                <label for="email">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Ingresá tu email"
+                    required
+                >
+
+                <label for="actividad">
+                    Actividad elegida
+                </label>
+
+                <select id="plan">
+                    <option value="Crossfit">Crossfit</option>
+                    <option value="Funcional">Funcional</option>
+                    <option value="GAP">GAP</option>
+                    <option value="Musculación">Musculación</option>
+                    <option value="Boxeo">Boxeo</option>
+                </select>
+
+                <label for="mensaje">
+                    Mensaje
+                </label>
+
+                <textarea
+                    id="mensaje"
+                    placeholder="Escribí tu consulta"
+                ></textarea>
+
+                <button type="submit">
+                    Enviar inscripción
+                </button>
+
+            </form>
+
+            <br>
+
+            <button id="verSocios">
+                Ver socios registrados
+            </button>
+
+            <div id="lista"></div>
+
+            <p id="mensajeResultado"></p>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="redes-sociales">
+            <a href="https://wa.me/5493573xxxxxx" target="_blank" aria-label="WhatsApp">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+            
+            <a href="https://www.instagram.com/_forzagym" target="_blank" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+            
+            <a href="https://www.facebook.com/tu_pagina_aca" target="_blank" aria-label="Facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+        </div>
+        
+        <p>
+            &copy; 2026 Gimnasio Forza Gym - Todos los derechos reservados
+        </p>
+    </footer>
