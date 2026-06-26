@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forza Gym - Panel de Control</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Estilos específicos para el Panel de Administración */
+        .admin-body {
+            background-color: #0b0b0b;
+            padding: 2rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .panel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #39e4a5;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        .panel-header h1 {
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin: 0;
+            color: #fff;
+        }
+        .panel-header h1 span {
+            color: #39e4a5;
+        }
+        /* Tarjetas de Estadísticas */
+        .metricas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .tarjeta-metrica {
+            background-color: #1a1a1a;
+            border-left: 4px solid #39e4a5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .tarjeta-metrica h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #888;
+            margin: 0 0 0.5rem 0;
+        }
+        .tarjeta-metrica .numero {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #fff;
+            margin: 0;
+        }
+        /* Tabla de Socios */
+        .tabla-contenedor {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(57, 228, 165, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        th, td {
+            padding: 1.2rem 1.5rem;
+        }
+        th {
+            background-color: #111;
+            color: #39e4a5;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(57, 228, 165, 0.2);
+        }
+        tr {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.2s;
+        }
+        td {
+            color: #eee;
+            font-size: 0.95rem;
+        }
+        .badge-plan {
+            background-color: #39e4a5;
+            color: #000;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        .btn-eliminar {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-eliminar:hover {
+            background-color: #ff1a1a;
+            transform: scale(1.05);
+        }
+        .btn-volver {
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-volver:hover {
+            background-color: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body class="admin-body">
+
+    <div class="panel-container">
+        
+        <header class="panel-header">
+            <h1>Forza Gym <span>Backoffice</span></h1>
+            <a href="index.html" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Ver Web Pública</a>
+        </header>
+
+        <section class="metricas">
+            <div class="tarjeta-metrica">
+                <h3>Total Inscriptos</h3>
+                <p class="numero" id="totalSocios">0</p>
+            </div>
+            <div class="tarjeta-metrica">
+                <h3>Última Inscripción</h3>
+                <p class="numero" id="ultimoSocio" style="font-size: 1.2rem; padding-top: 0.8rem; font-weight: 700; color: #39e4a5;">N/A</p>
+            </div>
+        </section>
+
+        <section class="tabla-contenedor">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Actividad</th>
+                        <th>Mensaje</th>
+                        <th>Tiempo Restante (Plan 3 Meses)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaSociosBody">
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: #888;">Cargando socios desde SQL Server...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/socios');
+                const socios = await response.json();
+                
+                const tbody = document.getElementById('tablaSociosBody');
+                const totalSocios = document.getElementById('totalSocios');
+                const ultimoSocio = document.getElementById('ultimoSocio');
+                
+                if(!socios || socios.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #888;">No hay socios registrados todavía.</td></tr>`;
+                    return;
+                }
+
+                // Actualizar bloques informativos de arriba
+                totalSocios.textContent = socios.length;
+                ultimoSocio.textContent = socios[socios.length - 1].Nombre;
+
+                tbody.innerHTML = '';
+
+                socios.forEach(socio => {
+                    // 1. Obtener fecha de inscripción desde la base de datos (o usar hoy como fallback)
+                    const fechaInscripcion = new Date(socio.FechaInscripcion || new Date());
+                    
+                    // 2. Sumar 90 días correspondientes a los 3 meses estipulados
+                    const fechaVencimiento = new Date(fechaInscripcion);
+                    fechaVencimiento.setDate(fechaVencimiento.getDate() + 90); 
+                    
+                    // 3. Comparar contra el día de hoy para extraer la diferencia de días exactos
+                    const hoy = new Date();
+                    const diferenciaTiempo = fechaVencimiento - hoy;
+                    const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+
+                    // 4. Lógica de renderizado del semáforo de alertas
+                    let colorEstado = '';
+                    let textoDias = '';
+                    let bordeFila = '';
+
+                    if (diasRestantes <= 0) {
+                        // Plan Completamente Vencido
+                        colorEstado = 'background-color: rgba(255, 77, 77, 0.15); color: #ff4d4d; font-weight: bold;';
+                        textoDias = 'Vencido ❌';
+                        bordeFila = 'border-left: 5px solid #ff4d4d;';
+                    } else if (diasRestantes <= 30) {
+                        // Alerta: Entrando en su último mes de vigencia
+                        colorEstado = 'background-color: rgba(255, 193, 7, 0.15); color: #ffc107; font-weight: bold;';
+                        textoDias = `${diasRestantes} días (Último mes)`;
+                        bordeFila = 'border-left: 5px solid #ffc107;';
+                    } else {
+                        // Situación normal y activa
+                        colorEstado = 'background-color: rgba(57, 228, 165, 0.15); color: #39e4a5; font-weight: bold;';
+                        textoDias = `${diasRestantes} días`;
+                        bordeFila = 'border-left: 5px solid #39e4a5;';
+                    }
+
+                    tbody.innerHTML += `
+                        <tr style="${bordeFila}">
+                            <td><strong>#${socio.Id}</strong></td>
+                            <td>${socio.Nombre}</td>
+                            <td>${socio.Email}</td>
+                            <td><span class="badge-plan">${socio.PlanElegido}</span></td>
+                            <td>${socio.Mensaje || '<em>Sin mensaje</em>'}</td>
+                            <td style="${colorEstado}">${textoDias}</td>
+                            <td>
+                                <button class="btn-eliminar" onclick="eliminarSocio(${socio.Id})">
+                                    <i class="fa-solid fa-trash"></i> Dar de baja
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error("Error al cargar socios:", error);
+                document.getElementById('tablaSociosBody').innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff4d4d;">Error al conectar con la API de SQL Server.</td></tr>`;
+            }
+        });
+
+        // Función interactiva para borrar registros de la tabla mediante su ID
+        async function eliminarSocio(id) {
+            if(confirm('¿Estás seguro de que querés dar de baja a este socio?')) {
+                try {
+                    const response = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
+                    if(response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error en el servidor al intentar dar la baja.');
+                    }
+                } catch (error) {
+                    alert('No se pudo establecer conexión para eliminar al socio.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
