@@ -192,57 +192,62 @@
                     return;
                 }
 
-                // Actualizar bloques informativos de arriba
+                // Actualizar bloques informativos de arriba usando minúsculas
                 totalSocios.textContent = socios.length;
-                ultimoSocio.textContent = socios[socios.length - 1].Nombre;
+                ultimoSocio.textContent = socios[socios.length - 1].nombre || socios[socios.length - 1].Nombre;
 
                 tbody.innerHTML = '';
 
                 socios.forEach(socio => {
-                    // 1. Obtener fecha de inscripción desde la base de datos (o usar hoy como fallback)
-                    const fechaInscripcion = new Date(socio.FechaInscripcion || new Date());
+                    // 1. Obtener fecha de inscripción (por si acaso probamos minúscula y mayúscula)
+                    const fechaRaw = socio.fechaInscripcion || socio.FechaInscripcion;
+                    const fechaInscripcion = new Date(fechaRaw || new Date());
                     
                     // 2. Sumar 90 días correspondientes a los 3 meses estipulados
                     const fechaVencimiento = new Date(fechaInscripcion);
                     fechaVencimiento.setDate(fechaVencimiento.getDate() + 90); 
                     
-                    // 3. Comparar contra el día de hoy para extraer la diferencia de días exactos
+                    // 3. Comparar contra el día de hoy
                     const hoy = new Date();
                     const diferenciaTiempo = fechaVencimiento - hoy;
                     const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
 
-                    // 4. Lógica de renderizado del semáforo de alertas
                     let colorEstado = '';
                     let textoDias = '';
                     let bordeFila = '';
 
                     if (diasRestantes <= 0) {
-                        // Plan Completamente Vencido
                         colorEstado = 'background-color: rgba(255, 77, 77, 0.15); color: #ff4d4d; font-weight: bold;';
                         textoDias = 'Vencido ❌';
                         bordeFila = 'border-left: 5px solid #ff4d4d;';
                     } else if (diasRestantes <= 30) {
-                        // Alerta: Entrando en su último mes de vigencia
                         colorEstado = 'background-color: rgba(255, 193, 7, 0.15); color: #ffc107; font-weight: bold;';
                         textoDias = `${diasRestantes} días (Último mes)`;
                         bordeFila = 'border-left: 5px solid #ffc107;';
                     } else {
-                        // Situación normal y activa
                         colorEstado = 'background-color: rgba(57, 228, 165, 0.15); color: #39e4a5; font-weight: bold;';
                         textoDias = `${diasRestantes} días`;
                         bordeFila = 'border-left: 5px solid #39e4a5;';
                     }
 
+                    // Identificadores exactos devueltos por la API (con respaldos por las dudas)
+                    const idSocio = socio.Id !== undefined ? socio.Id : (socio.id !== undefined ? socio.id : 'N/A');
+                    const nombreSocio = socio.nombre || socio.Nombre || 'Sin nombre';
+                    const emailSocio = socio.email || socio.Email || 'Sin email';
+                    const planSocio = socio.planElegido || socio.PlanElegido || 'Sin plan';
+                    const mensajeSocio = socio.mensaje || socio.Mensaje || '<em>Sin mensaje</em>';
+
+                    // Renderizado mapeado perfectamente a las variables reales
                     tbody.innerHTML += `
                         <tr style="${bordeFila}">
-                            <td><strong>#${socio.Id}</strong></td>
-                            <td>${socio.Nombre}</td>
-                            <td>${socio.Email}</td>
-                            <td><span class="badge-plan">${socio.PlanElegido}</span></td>
-                            <td>${socio.Mensaje || '<em>Sin mensaje</em>'}</td>
+                            <td><strong>#${idSocio !== null && idSocio !== undefined ? idSocio : 'N/A'}</strong></td>
+                            <td>${nombreSocio}</td>
+                            <td>${emailSocio}</td>
+                            <td><span class="badge-plan">${planSocio}</span></td>
+                            <td>${mensajeSocio}</td>
                             <td style="${colorEstado}">${textoDias}</td>
                             <td>
-                                <button class="btn-eliminar" onclick="eliminarSocio(${socio.Id})">
+                                <button class="btn-eliminar" onclick="eliminarSocio(${idSocio})">
                                     <i class="fa-solid fa-trash"></i> Dar de baja
                                 </button>
                             </td>
@@ -257,6 +262,10 @@
 
         // Función interactiva para borrar registros de la tabla mediante su ID
         async function eliminarSocio(id) {
+            if(!id) {
+                alert('No se puede eliminar: ID no válido.');
+                return;
+            }
             if(confirm('¿Estás seguro de que querés dar de baja a este socio?')) {
                 try {
                     const response = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
