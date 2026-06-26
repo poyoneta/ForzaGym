@@ -13,6 +13,7 @@ async (e) => {
 
     const socio = {
         nombre: document.getElementById("nombre").value,
+        telefono: document.getElementById("telefono").value, // ✨ AGREGADO: Captura el valor del celular
         email: document.getElementById("email").value,
         planElegido: document.getElementById("plan").value, 
         mensaje: document.getElementById("mensaje").value
@@ -24,15 +25,15 @@ async (e) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(socio)
+            body: JSON.stringify(socio) // Ahora incluye la propiedad "telefono"
         });
 
     const datos = await respuesta.json();
 
-    // ✨ CORRECCIÓN: Si datos.message no existe, muestra el texto de éxito por defecto
+    // Si datos.message no existe, muestra el texto de éxito por defecto
     alert(datos.message || "¡Socio registrado con éxito!"); 
 
-    // Opcional: limpia el formulario después de registrarse para que quede prolijo
+    // Limpia el formulario después de registrarse para que quede prolijo
     if (respuesta.ok) {
         document.getElementById("formulario").reset();
     }
@@ -56,11 +57,15 @@ async () => {
         lista.innerHTML = "";
 
         socios.forEach(socio => {
+            // Se asume que la propiedad que viene de la base de datos se llama "Telefono"
+            // Si viene nulo o vacío, muestra "Sin teléfono"
+            const telMostrado = socio.Telefono ? socio.Telefono : "Sin teléfono";
+
             lista.innerHTML += `
                 <p>
-                    ${socio.Nombre}
-                    -
-                    ${socio.PlanElegido} 
+                    <strong>${socio.Nombre}</strong> 
+                    - ${socio.PlanElegido} 
+                    - 📞 ${telMostrado}
                 </p>
             `;
         });

@@ -132,6 +132,75 @@
             background-color: #fff;
             color: #000;
         }
+
+        /* Estilos personalizados para las Notificaciones en Vivo */
+        .notificaciones-contenedor {
+            background-color: #1a1a1a;
+            border: 1px solid #39e4a5;
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(57, 228, 165, 0.1);
+        }
+        .notificaciones-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .notificaciones-header h3 {
+            color: #39e4a5;
+            margin: 0;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-limpiar-notif {
+            background: transparent;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+        .btn-limpiar-notif:hover {
+            background-color: #ff4d4d;
+            color: #fff;
+        }
+        .notificaciones-lista {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .notificacion-item {
+            background: rgba(57, 228, 165, 0.05);
+            border-left: 4px solid #39e4a5;
+            padding: 0.8rem 1.2rem;
+            margin-bottom: 0.6rem;
+            border-radius: 4px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .notificacion-item:last-child {
+            margin-bottom: 0;
+        }
+        .notificacion-hora {
+            color: #888;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="admin-body">
@@ -142,6 +211,17 @@
             <h1>Forza Gym <span>Backoffice</span></h1>
             <a href="index.html" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Ver Web Pública</a>
         </header>
+
+        <!-- 📢 SECCIÓN DE NOTIFICACIONES EN VIVO -->
+        <div id="contenedorNotificaciones" class="notificaciones-contenedor" style="display: none;">
+            <div class="notificaciones-header">
+                <h3><i class="fa-solid fa-bell fa-beat"></i> Alertas en Vivo</h3>
+                <button onclick="limpiarNotificaciones()" class="btn-limpiar-notif">Marcar como leídas</button>
+            </div>
+            <ul id="listaNotificaciones" class="notificaciones-lista">
+                <!-- Se inyectan dinámicamente -->
+            </ul>
+        </div>
 
         <section class="metricas">
             <div class="tarjeta-metrica">
@@ -161,6 +241,7 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Email</th>
+                        <th>Teléfono</th>
                         <th>Actividad</th>
                         <th>Mensaje</th>
                         <th>Tiempo Restante (Plan 3 Meses)</th>
@@ -169,7 +250,7 @@
                 </thead>
                 <tbody id="tablaSociosBody">
                     <tr>
-                        <td colspan="7" style="text-align: center; color: #888;">Cargando socios desde SQL Server...</td>
+                        <td colspan="8" style="text-align: center; color: #888;">Cargando socios desde SQL Server...</td>
                     </tr>
                 </tbody>
             </table>
@@ -188,26 +269,22 @@
                 const ultimoSocio = document.getElementById('ultimoSocio');
                 
                 if(!socios || socios.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #888;">No hay socios registrados todavía.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #888;">No hay socios registrados todavía.</td></tr>`;
                     return;
                 }
 
-                // Actualizar bloques informativos de arriba usando minúsculas
                 totalSocios.textContent = socios.length;
                 ultimoSocio.textContent = socios[socios.length - 1].nombre || socios[socios.length - 1].Nombre;
 
                 tbody.innerHTML = '';
 
                 socios.forEach(socio => {
-                    // 1. Obtener fecha de inscripción (por si acaso probamos minúscula y mayúscula)
                     const fechaRaw = socio.fechaInscripcion || socio.FechaInscripcion;
                     const fechaInscripcion = new Date(fechaRaw || new Date());
                     
-                    // 2. Sumar 90 días correspondientes a los 3 meses estipulados
                     const fechaVencimiento = new Date(fechaInscripcion);
                     fechaVencimiento.setDate(fechaVencimiento.getDate() + 90); 
                     
-                    // 3. Comparar contra el día de hoy
                     const hoy = new Date();
                     const diferenciaTiempo = fechaVencimiento - hoy;
                     const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
@@ -230,19 +307,19 @@
                         bordeFila = 'border-left: 5px solid #39e4a5;';
                     }
 
-                    // Identificadores exactos devueltos por la API (con respaldos por las dudas)
                     const idSocio = socio.Id !== undefined ? socio.Id : (socio.id !== undefined ? socio.id : 'N/A');
                     const nombreSocio = socio.nombre || socio.Nombre || 'Sin nombre';
                     const emailSocio = socio.email || socio.Email || 'Sin email';
+                    const telefonoSocio = socio.telefono || socio.Telefono || 'Sin teléfono';
                     const planSocio = socio.planElegido || socio.PlanElegido || 'Sin plan';
                     const mensajeSocio = socio.mensaje || socio.Mensaje || '<em>Sin mensaje</em>';
 
-                    // Renderizado mapeado perfectamente a las variables reales
                     tbody.innerHTML += `
                         <tr style="${bordeFila}">
                             <td><strong>#${idSocio !== null && idSocio !== undefined ? idSocio : 'N/A'}</strong></td>
                             <td>${nombreSocio}</td>
                             <td>${emailSocio}</td>
+                            <td><a href="tel:${telefonoSocio}" style="color: #39e4a5; text-decoration: none; font-weight: bold;"><i class="fa-solid fa-phone" style="font-size: 0.8rem;"></i> ${telefonoSocio}</a></td>
                             <td><span class="badge-plan">${planSocio}</span></td>
                             <td>${mensajeSocio}</td>
                             <td style="${colorEstado}">${textoDias}</td>
@@ -256,11 +333,10 @@
                 });
             } catch (error) {
                 console.error("Error al cargar socios:", error);
-                document.getElementById('tablaSociosBody').innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ff4d4d;">Error al conectar con la API de SQL Server.</td></tr>`;
+                document.getElementById('tablaSociosBody').innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ff4d4d;">Error al conectar con la API de SQL Server.</td></tr>`;
             }
         });
 
-        // Función interactiva para borrar registros de la tabla mediante su ID
         async function eliminarSocio(id) {
             if(!id) {
                 alert('No se puede eliminar: ID no válido.');
@@ -279,6 +355,46 @@
                 }
             }
         }
+
+        async function verificarNotificaciones() {
+            try {
+                const response = await fetch('/api/socios/notificaciones');
+                const alertas = await response.json();
+                
+                const contenedor = document.getElementById('contenedorNotificaciones');
+                const lista = document.getElementById('listaNotificaciones');
+                
+                if (alertas && alertas.length > 0) {
+                    contenedor.style.display = 'block'; 
+                    lista.innerHTML = '';
+                    
+                    alertas.forEach(alerta => {
+                        lista.innerHTML += `
+                            <li class="notificacion-item">
+                                <span>${alerta.texto}</span>
+                                <span class="notificacion-hora">${alerta.fecha}</span>
+                            </li>
+                        `;
+                    });
+                } else {
+                    contenedor.style.display = 'none'; 
+                }
+            } catch (error) {
+                console.error("Error al verificar notificaciones:", error);
+            }
+        }
+
+        async function limpiarNotificaciones() {
+            try {
+                await fetch('/api/socios/notificaciones/limpiar', { method: 'POST' });
+                document.getElementById('contenedorNotificaciones').style.display = 'none';
+            } catch (error) {
+                console.error("Error al limpiar notificaciones:", error);
+            }
+        }
+
+        verificarNotificaciones();
+        setInterval(verificarNotificaciones, 5000);
     </script>
 </body>
 </html>
