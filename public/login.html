@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forza Gym - Iniciar Sesión</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        
+        html, body {
+            background-color: #0b0b0b !important; /* Forzamos el fondo oscuro */
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .login-card {
+            background-color: #1a1a1a !important;
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            border-top: 4px solid #39e4a5;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .login-card h1 {
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+            letter-spacing: -1px;
+            color: #fff;
+        }
+        .login-card h1 span { color: #39e4a5; }
+        .login-card p { color: #666; font-size: 0.9rem; margin: 0 0 2rem 0; }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .form-group i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #444;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 2.8rem;
+            background-color: #111;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        .form-group input:focus {
+            border-color: #39e4a5;
+            outline: none;
+        }
+        .btn-login {
+            background-color: #39e4a5;
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 0.5rem;
+            display: block;
+        }
+        .btn-login:hover {
+            background-color: #2ec78f;
+            transform: scale(1.01);
+        }
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-card">
+            <h1>FORZA <span>GYM</span></h1>
+            <p>Panel de Miembros y Administración</p>
+
+            <form id="formLogin">
+                <div class="form-group">
+                    <input type="email" id="email" placeholder="Correo Electrónico" required>
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" placeholder="Contraseña" required>
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <button type="submit" class="btn-login">Ingresar</button>
+                <div id="errorBox" class="error-msg"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formLogin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorBox = document.getElementById('errorBox');
+            
+            errorBox.style.display = 'none';
+
+            try {
+                const respuesta = await fetch('/api/socios/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const datos = await respuesta.json();
+
+                if (datos.success) {
+                    localStorage.setItem('usuarioId', datos.id);
+                    localStorage.setItem('usuarioNombre', datos.nombre);
+                    localStorage.setItem('usuarioRol', datos.rol);
+
+                    if (datos.rol === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'cliente.html';
+                    }
+                } else {
+                    errorBox.textContent = datos.error || 'Credenciales incorrectas';
+                    errorBox.style.display = 'block';
+                }
+            } catch (err) {
+                console.error("Error en login:", err);
+                errorBox.textContent = 'Error de conexión con el servidor';
+                errorBox.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

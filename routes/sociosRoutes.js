@@ -108,5 +108,39 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({ error: "No se pudo procesar la baja" });
     }
 });
+// === NUEVA RUTA: Login de usuarios (Dueño o Cliente) ===
+router.post("/login", async (req, res) => {
+    const { email, password } = req.body;
 
+    if (!email || !password) {
+        return res.status(400).json({ error: "Faltan ingresar datos obligatorios" });
+    }
+
+    try {
+        let pool = await sql.connect(config);
+        
+        // Buscamos si existe el socio con ese email y esa contraseña exactas
+        let result = await pool.request()
+            .input("Email", sql.NVarChar(100), email)
+            .input("Password", sql.NVarChar(255), password)
+            .query("SELECT Id, Nombre, Rol FROM Socios WHERE Email = @Email AND Password = @Password");
+
+        if (result.recordset.length > 0) {
+            const usuario = result.recordset[0];
+            
+            // Si todo coincide, respondemos con éxito devolviendo los datos esenciales
+            res.json({ 
+                success: true, 
+                rol: usuario.Rol || 'cliente', 
+                id: usuario.Id,
+                nombre: usuario.Nombre 
+            });
+        } else {
+            res.status(401).json({ success: false, error: "Email o contraseña incorrectos" });
+        }
+    } catch (error) {
+        console.error("Error en POST /api/socios/login:", error);
+        res.status(500).json({ error: "Error al intentar iniciar sesión" });
+    }
+});
 module.exports = router;
