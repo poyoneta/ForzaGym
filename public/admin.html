@@ -16,7 +16,7 @@
             margin: 0;
         }
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         .header {
@@ -30,7 +30,6 @@
         .header h1 { font-weight: 900; margin: 0; font-size: 1.6rem; text-transform: uppercase; }
         .header h1 span { color: #39e4a5; }
 
-        /* Estilos de la Tabla */
         .card-tabla {
             background-color: #1a1a1a;
             border-radius: 8px;
@@ -84,12 +83,16 @@
         }
         .btn-ficha { background-color: #39e4a5; color: #000; }
         .btn-ficha:hover { background-color: #2ec78f; transform: scale(1.02); }
-        .btn-baja { background-color: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; margin-left: 0.5rem; }
+        .btn-rutina { background-color: #222; border: 1px solid #39e4a5; color: #39e4a5; margin-left: 0.2rem;}
+        .btn-rutina:hover { background-color: #39e4a5; color: #000; }
+        .btn-baja { background-color: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; margin-left: 0.2rem; }
         .btn-baja:hover { background-color: #ff4d4d; color: #fff; }
         .btn-logout { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.5rem 1rem; font-size: 0.85rem;}
         .btn-logout:hover { background: #ff4d4d; color: #fff; }
+        .btn-add-ejercicio { background-color: #333; color: #fff; margin-top: 0.5rem; border: 1px dashed #666; width: 100%; justify-content: center;}
+        .btn-add-ejercicio:hover { background-color: #444; border-color: #39e4a5;}
 
-        /* === VENTANA FLOTANTE (MODAL DE FICHA MÉDICA) === */
+        /* Modales */
         .modal {
             display: none; 
             position: fixed; 
@@ -100,6 +103,7 @@
             justify-content: center; align-items: center;
             padding: 1rem;
             box-sizing: border-box;
+            overflow-y: auto;
         }
         .modal-content {
             background-color: #1a1a1a;
@@ -107,9 +111,11 @@
             padding: 2rem;
             border-radius: 8px;
             width: 100%;
-            max-width: 500px;
+            max-width: 650px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .close-modal {
             position: absolute;
@@ -120,21 +126,42 @@
         .close-modal:hover { color: #ff4d4d; }
         .modal h2 { margin-top: 0; color: #39e4a5; font-size: 1.3rem; text-transform: uppercase; border-bottom: 1px solid #2d2d2d; padding-bottom: 0.5rem; }
         
-        .info-ficha-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.2rem;
-        }
-        .info-block {
-            background: #111;
-            padding: 0.8rem;
-            border-radius: 6px;
-            border: 1px solid #2d2d2d;
-        }
+        .info-ficha-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+        .info-block { background: #111; padding: 0.8rem; border-radius: 6px; border: 1px solid #2d2d2d; }
         .info-block span { display: block; font-size: 0.75rem; color: #666; font-weight: bold; text-transform: uppercase; margin-bottom: 0.2rem;}
         .info-block p { margin: 0; font-size: 0.95rem; font-weight: bold; }
         .info-block-full { grid-column: span 2; }
+
+        /* Estilos Formulario Dinámico Rutinas */
+        .fila-ejercicio {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 0.5rem;
+            align-items: center;
+            background: #111;
+            padding: 0.5rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #2d2d2d;
+        }
+        .fila-ejercicio input {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .fila-ejercicio input:focus { border-color: #39e4a5; outline: none; }
+        .btn-remove-ejercicio { background: transparent; color: #ff4d4d; border: none; cursor: pointer; font-size: 1rem; padding: 0.5rem; }
+        .btn-remove-ejercicio:hover { color: #fff; background: #ff4d4d; border-radius: 4px; }
+        
+        .form-group-rutina { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
+        .form-group-rutina label { font-size: 0.75rem; color: #888; font-weight: bold; text-transform: uppercase; }
+        .form-group-rutina input, .form-group-rutina select { background: #111; border: 1px solid #2d2d2d; color:#fff; padding: 0.6rem; border-radius: 4px; font-family: 'Montserrat';}
     </style>
 </head>
 <body>
@@ -159,24 +186,55 @@
                         <th style="text-align: right;">Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="tablaSocios">
-                    </tbody>
+                <tbody id="tablaSocios"></tbody>
             </table>
         </div>
     </div>
 
     <div id="modalFicha" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            <span class="close-modal" onclick="cerrarModal('modalFicha')">&times;</span>
             <h2><i class="fa-solid fa-heart-pulse"></i> Ficha Física y Médica</h2>
+            <div class="info-ficha-grid" id="detalleFicha"></div>
+        </div>
+    </div>
+
+    <div id="modalRutina" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModal('modalRutina')">&times;</span>
+            <h2><i class="fa-solid fa-dumbbell"></i> Asignar Plan de Ejercicios</h2>
+            <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: #aaa;">Socio: <strong id="rutinaSocioNombre" style="color: #39e4a5;"></strong> | Plan Mensual: <span id="rutinaSocioPlan" class="plan-badge"></span></p>
             
-            <div class="info-ficha-grid" id="detalleFicha">
+            <form id="formRutina">
+                <input type="hidden" id="rutinaSocioId">
+                
+                <div class="grid-rutina-meta" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group-rutina">
+                        <label>Duración del Plan (Semanas)</label>
+                        <input type="number" id="rutinaDuracion" placeholder="Ej: 4 semanas" min="1" required>
+                    </div>
+                    <div class="form-group-rutina">
+                        <label>Enfoque / Tipo de Rutina</label>
+                        <input type="text" id="rutinaEnfoque" placeholder="Ej: Hipertrofia, Fuerza, Adaptación" required>
+                    </div>
                 </div>
+
+                <label style="font-size: 0.75rem; color: #39e4a5; font-weight: bold; text-transform: uppercase; display: block; margin: 1rem 0 0.5rem 0;">Tabla de Ejercicios</label>
+                
+                <div id="contenedorEjercicios">
+                    </div>
+
+                <button type="button" class="btn btn-add-ejercicio" onclick="agregarFilaEjercicio()"><i class="fa-solid fa-plus"></i> Añadir Ejercicio</button>
+                
+                <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; gap: 0.5rem;">
+                    <button type="button" class="btn btn-baja" style="margin:0;" onclick="borrarRutinaCompleta()"><i class="fa-solid fa-trash-can"></i> Borrar Rutina</button>
+                    <button type="submit" class="btn btn-ficha"><i class="fa-solid fa-floppy-disk"></i> Guardar y Publicar</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
-        // Verificación de seguridad básica
         const adminId = localStorage.getItem('usuarioId');
         const adminRol = localStorage.getItem('usuarioRol');
 
@@ -184,7 +242,7 @@
             window.location.href = 'login.html';
         }
 
-        let listaSociosGlobal = []; // Guardamos temporalmente los datos traídos de la API
+        let listaSociosGlobal = [];
 
         async function cargarSocios() {
             try {
@@ -195,12 +253,10 @@
                 tbody.innerHTML = '';
 
                 listaSociosGlobal.forEach(socio => {
-                    // Quitamos al propio administrador de la lista de clientes para no entorpecer
                     if(socio.email === 'admin@gym.com') return;
 
                     const claseBadge = socio.planElegido === 'Premium' ? 'plan-badge plan-premium' : 'plan-badge';
                     
-                    // Formatear la fecha de vencimiento si existe
                     let vencimientoStr = "--/--/--";
                     if(socio.fechaFinPlan) {
                         vencimientoStr = new Date(socio.fechaFinPlan).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'});
@@ -215,8 +271,9 @@
                             <td><span class="${claseBadge}">${socio.planElegido}</span></td>
                             <td style="font-weight: bold; color: #ccc;">${vencimientoStr}</td>
                             <td style="text-align: right;">
-                                <button class="btn btn-ficha" onclick="verFichaSocio(${socio.id})"><i class="fa-solid fa-file-medical"></i> Ficha</button>
-                                <button class="btn btn-baja" onclick="darDeBaja(${socio.id})"><i class="fa-solid fa-trash"></i> Baja</button>
+                                <button class="btn btn-ficha" onclick="verFichaSocio(${socio.id})"><i class="fa-solid fa-file-medical"></i></button>
+                                <button class="btn btn-rutina" onclick="abrirCreadorRutina(${socio.id})"><i class="fa-solid fa-dumbbell"></i> Rutina</button>
+                                <button class="btn btn-baja" onclick="darDeBaja(${socio.id})"><i class="fa-solid fa-trash"></i></button>
                             </td>
                         </tr>
                     `;
@@ -226,14 +283,11 @@
             }
         }
 
-        // Función para abrir el modal con la radiografía médica del cliente elegido
         function verFichaSocio(id) {
             const socio = listaSociosGlobal.find(s => s.id === id);
             if (!socio) return;
 
             const detalle = document.getElementById('detalleFicha');
-            
-            // Evaluamos si el cliente rellenó sus datos, si no, avisamos que está vacía
             const peso = socio.peso ? `${socio.peso} Kg` : "No registrado";
             const altura = socio.altura ? `${socio.altura} Mts` : "No registrado";
             const sexo = socio.sexo || "No registrado";
@@ -250,60 +304,145 @@
                     <p style="font-size: 1.1rem; color: #39e4a5;">${socio.nombre}</p>
                     <span style="font-size: 0.8rem; color: #666;">Socio #${socio.id}</span>
                 </div>
-                <div class="info-block">
-                    <span>Peso</span>
-                    <p>${peso}</p>
-                </div>
-                <div class="info-block">
-                    <span>Altura</span>
-                    <p>${altura}</p>
-                </div>
-                <div class="info-block">
-                    <span>Sexo / Género</span>
-                    <p>${sexo}</p>
-                </div>
-                <div class="info-block">
-                    <span>Vencimiento del Plan</span>
-                    <p style="color: #39e4a5;">${vencimientoStr}</p>
-                </div>
-                <div class="info-block info-block-full">
-                    <span>Lesiones, Dolores o Golpes</span>
-                    <p style="color: #ff4d4d; font-weight: normal; font-size: 0.9rem; line-height: 1.4;">${lesiones}</p>
-                </div>
-                <div class="info-block info-block-full">
-                    <span>Otras Actividades (Fútbol, Boxeo, etc.)</span>
-                    <p style="color: #ccc; font-weight: normal; font-size: 0.9rem;">${actividadExtra}</p>
-                </div>
+                <div class="info-block"><span>Peso</span><p>${peso}</p></div>
+                <div class="info-block"><span>Altura</span><p>${altura}</p></div>
+                <div class="info-block"><span>Sexo / Género</span><p>${sexo}</p></div>
+                <div class="info-block"><span>Vencimiento del Plan</span><p style="color: #39e4a5;">${vencimientoStr}</p></div>
+                <div class="info-block info-block-full"><span>Lesiones, Dolores o Golpes</span><p style="color: #ff4d4d; font-weight: normal; font-size: 0.9rem; line-height: 1.4;">${lesiones}</p></div>
+                <div class="info-block info-block-full"><span>Otras Actividades</span><p style="color: #ccc; font-weight: normal; font-size: 0.9rem;">${actividadExtra}</p></div>
             `;
-
             document.getElementById('modalFicha').style.display = 'flex';
         }
 
-        function cerrarModal() {
-            document.getElementById('modalFicha').style.display = 'none';
+        // ================= GESTIÓN DINÁMICA DE RUTINAS =================
+
+        async function abrirCreadorRutina(id) {
+            const socio = listaSociosGlobal.find(s => s.id === id);
+            if (!socio) return;
+
+            document.getElementById('rutinaSocioId').value = socio.id;
+            document.getElementById('rutinaSocioNombre').textContent = socio.nombre;
+            
+            const badgePlan = document.getElementById('rutinaSocioPlan');
+            badgePlan.textContent = socio.planElegido || 'Regular';
+            badgePlan.className = socio.planElegido === 'Premium' ? 'plan-badge plan-premium' : 'plan-badge';
+
+            // Resetear el formulario básico
+            document.getElementById('rutinaDuracion').value = '';
+            document.getElementById('rutinaEnfoque').value = '';
+            document.getElementById('contenedorEjercicios').innerHTML = '';
+
+            // Intentar cargar si el socio ya posee una rutina guardada en la API
+            try {
+                const res = await fetch(`/api/rutinas/${socio.id}`);
+                if (res.ok) {
+                    const dataRutina = await res.json();
+                    if(dataRutina && dataRutina.ejercicios) {
+                        document.getElementById('rutinaDuracion').value = dataRutina.duracionSemanas || '';
+                        document.getElementById('rutinaEnfoque').value = dataRutina.enfoque || '';
+                        
+                        // Renderizar las filas existentes
+                        dataRutina.ejercicios.forEach(ej => {
+                            agregarFilaEjercicio(ej.nombre, ej.series, ej.repeticiones, ej.descanso);
+                        });
+                    }
+                }
+            } catch (err) {
+                console.log("El socio no tiene rutina previa o error de servidor:", err);
+            }
+
+            // Si quedó vacía la lista de ejercicios, le agregamos una por defecto
+            if(document.getElementById('contenedorEjercicios').children.length === 0) {
+                agregarFilaEjercicio();
+            }
+
+            document.getElementById('modalRutina').style.display = 'flex';
         }
 
-        async function darDeBaja(id) {
-            if (confirm("¿Estás seguro de dar de baja a este socio del gimnasio?")) {
-                const res = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    cargarSocios();
+        function agregarFilaEjercicio(nombre='', series='', repeticiones='', descanso='') {
+            const contenedor = document.getElementById('contenedorEjercicios');
+            const div = document.createElement('div');
+            div.className = 'fila-ejercicio';
+            div.innerHTML = `
+                <input type="text" class="ej-nombre" placeholder="Nombre Ejercicio" value="${nombre}" required>
+                <input type="number" class="ej-series" placeholder="Series" value="${series}" required min="1">
+                <input type="text" class="ej-reps" placeholder="Reps (ej: 12 o 10-12)" value="${repeticiones}" required>
+                <input type="text" class="ej-descanso" placeholder="Descanso (ej: 1m)" value="${descanso}">
+                <button type="button" class="btn-remove-ejercicio" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>
+            `;
+            contenedor.appendChild(div);
+        }
+
+        document.getElementById('formRutina').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const socioId = document.getElementById('rutinaSocioId').value;
+            const duracionSemanas = document.getElementById('rutinaDuracion').value;
+            const enfoque = document.getElementById('rutinaEnfoque').value;
+
+            // Mapeamos las filas dinámicas
+            const filas = document.querySelectorAll('.fila-ejercicio');
+            const ejercicios = [];
+
+            filas.forEach(fil => {
+                ejercicios.push({
+                    nombre: fil.querySelector('.ej-nombre').value,
+                    series: fil.querySelector('.ej-series').value,
+                    repeticiones: fil.querySelector('.ej-reps').value,
+                    descanso: fil.querySelector('.ej-descanso').value
+                });
+            });
+
+            try {
+                const res = await fetch('/api/rutinas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ socioId, duracionSemanas, enfoque, ejercicios })
+                });
+
+                if(res.ok) {
+                    alert('¡Rutina asignada y publicada con éxito!');
+                    cerrarModal('modalRutina');
                 } else {
-                    alert("No se pudo procesar la baja.");
+                    alert('Error en el servidor al intentar guardar la rutina.');
+                }
+            } catch (err) {
+                alert('Error de conexión.');
+            }
+        });
+
+        async function borrarRutinaCompleta() {
+            const socioId = document.getElementById('rutinaSocioId').value;
+            if(!socioId) return;
+
+            if(confirm("¿Estás seguro de eliminar por completo el plan de entrenamiento de este socio?")) {
+                try {
+                    const res = await fetch(`/api/rutinas/${socioId}`, { method: 'DELETE' });
+                    if(res.ok) {
+                        alert('Rutina borrada.');
+                        cerrarModal('modalRutina');
+                    } else {
+                        alert('No se pudo borrar la rutina (puede que no tuviera una asignada).');
+                    }
+                } catch (e) {
+                    alert('Error en la solicitud.');
                 }
             }
         }
 
-        function cerrarSesion() {
-            localStorage.clear();
-            window.location.href = 'login.html';
+        function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        async function darDeBaja(id) {
+            if (confirm("¿Estás seguro de dar de baja a este socio del gimnasio?")) {
+                const res = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
+                if (res.ok) cargarSocios();
+            }
         }
 
-        // Cerrar modal si hace clic fuera de la caja
+        function cerrarSesion() { localStorage.clear(); window.location.href = 'login.html'; }
+
         window.onclick = function(event) {
-            const modal = document.getElementById('modalFicha');
-            if (event.target == modal) {
-                modal.style.display = "none";
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = "none";
             }
         }
 
