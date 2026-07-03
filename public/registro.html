@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forza Gym - Iniciar Sesión</title>
+    <title>Forza Gym - Crear Cuenta</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
         html, body {
-            background-color: #0b0b0b !important; /* Forzamos el fondo oscuro */
+            background-color: #0b0b0b !important;
             font-family: 'Montserrat', sans-serif;
             color: #fff;
             display: flex;
@@ -20,25 +20,25 @@
             padding: 1rem;
             box-sizing: border-box;
         }
-        .login-container {
+        .register-container {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
             height: 100%;
         }
-        .login-card {
+        .register-card {
             background-color: #1a1a1a !important;
-            padding: 2.5rem 2rem;
+            padding: 2rem;
             border-radius: 8px;
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.6);
             border-top: 4px solid #39e4a5;
             text-align: center;
             box-sizing: border-box;
         }
-        .login-card h1 {
+        .register-card h1 {
             font-weight: 900;
             text-transform: uppercase;
             margin: 0 0 0.5rem 0;
@@ -46,12 +46,12 @@
             letter-spacing: -1px;
             color: #fff;
         }
-        .login-card h1 span { color: #39e4a5; }
-        .login-card p { color: #666; font-size: 0.9rem; margin: 0 0 2rem 0; }
+        .register-card h1 span { color: #39e4a5; }
+        .register-card p { color: #666; font-size: 0.9rem; margin: 0 0 1.5rem 0; }
 
         .form-group {
             position: relative;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             text-align: left;
         }
         .form-group i {
@@ -62,10 +62,11 @@
             color: #444;
             transition: 0.2s;
             font-size: 1rem;
+            z-index: 2;
         }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 1rem 1rem 1rem 2.8rem;
+            padding: 0.9rem 1rem 0.9rem 2.8rem;
             background-color: #111;
             border: 1px solid #333;
             color: #fff;
@@ -74,12 +75,16 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 0.95rem;
             transition: 0.2s;
+            appearance: none; /* Quita flecha nativa de select */
         }
-        .form-group input:focus {
+        .form-group select {
+            cursor: pointer;
+        }
+        .form-group input:focus, .form-group select:focus {
             border-color: #39e4a5;
             outline: none;
         }
-        .btn-login {
+        .btn-register {
             background-color: #39e4a5;
             color: #000;
             border: none;
@@ -94,76 +99,103 @@
             margin-top: 0.5rem;
             display: block;
         }
-        .btn-login:hover {
+        .btn-register:hover {
             background-color: #2ec78f;
             transform: scale(1.01);
         }
-        .error-msg {
-            color: #ff4d4d;
+        .link-login {
+            margin-top: 1.5rem;
             font-size: 0.85rem;
-            margin-top: 1rem;
-            display: none;
+            color: #aaa;
         }
+        .link-login a {
+            color: #39e4a5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-login a:hover { text-decoration: underline; }
+        
+        .error-msg { color: #ff4d4d; font-size: 0.85rem; margin-top: 1rem; display: none; }
+        .success-msg { color: #39e4a5; font-size: 0.85rem; margin-top: 1rem; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-card">
+    <div class="register-container">
+        <div class="register-card">
             <h1>FORZA <span>GYM</span></h1>
-            <p>Panel de Miembros y Administración</p>
+            <p>Creá tu cuenta de Socio</p>
 
-            <form id="formLogin">
+            <form id="formRegistro">
+                <div class="form-group">
+                    <input type="text" id="nombre" placeholder="Nombre Completo" required>
+                    <i class="fa-solid fa-user"></i>
+                </div>
                 <div class="form-group">
                     <input type="email" id="email" placeholder="Correo Electrónico" required>
                     <i class="fa-solid fa-envelope"></i>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="password" placeholder="Contraseña" required>
+                    <input type="password" id="password" placeholder="Crear Contraseña" required>
                     <i class="fa-solid fa-lock"></i>
-                </div>
-                <button type="submit" class="btn-login">Ingresar</button>
-                <div id="errorBox" class="error-msg"></div>
-            </form>
-       <div style="margin-top: 1.5rem; font-size: 0.85rem; color: #aaa;">
-    ¿No tenés una cuenta? <a href="registro.html" style="color: #39e4a5; text-decoration: none; font-weight: bold;">Registrate acá</a>
+                <div class="form-group">
+    <select id="planElegido" required>
+        <option value="" disabled selected>Seleccioná tu Plan...</option>
+        <option value="Básico">Plan Básico (2 días/sem) 🏋️‍♂️</option>
+        <option value="Plus">Plan Plus (3 días/sem) 🔥</option>
+        <option value="Premium">Plan Premium (Pase Libre + Nutrición) 👑</option>
+    </select>
+    <i class="fa-solid fa-dumbbell"></i>
 </div>
+                
+                <button type="submit" class="btn-register">Registrarme</button>
+                <div id="errorBox" class="error-msg"></div>
+                <div id="successBox" class="success-msg"></div>
+            </form>
+
+            <div class="link-login">
+                ¿Ya tenés una cuenta? <a href="login.html">Iniciá sesión acá</a>
+            </div>
+        </div>
+    </div>
 
     <script>
-        document.getElementById('formLogin').addEventListener('submit', async (e) => {
+        document.getElementById('formRegistro').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const planElegido = document.getElementById('planElegido').value;
+            
             const errorBox = document.getElementById('errorBox');
+            const successBox = document.getElementById('successBox');
             
             errorBox.style.display = 'none';
+            successBox.style.display = 'none';
 
             try {
-                const respuesta = await fetch('/api/socios/login', {
+                // Mandamos los datos al método POST que ya tenés en tu backend
+                const respuesta = await fetch('/api/socios', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ nombre, email, password, planElegido })
                 });
 
                 const datos = await respuesta.json();
 
-                if (datos.success) {
-                    localStorage.setItem('usuarioId', datos.id);
-                    localStorage.setItem('usuarioNombre', datos.nombre);
-                    localStorage.setItem('usuarioRol', datos.rol);
-
-                    if (datos.rol === 'admin') {
-                        window.location.href = 'admin.html';
-                    } else {
-                        window.location.href = 'cliente.html';
-                    }
+                if (respuesta.ok) {
+                    successBox.textContent = '¡Cuenta creada con éxito! Redirigiendo al login...';
+                    successBox.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
                 } else {
-                    errorBox.textContent = datos.error || 'Credenciales incorrectas';
+                    errorBox.textContent = datos.error || 'Ocurrió un error al registrarse';
                     errorBox.style.display = 'block';
                 }
             } catch (err) {
-                console.error("Error en login:", err);
+                console.error("Error en registro:", err);
                 errorBox.textContent = 'Error de conexión con el servidor';
                 errorBox.style.display = 'block';
             }

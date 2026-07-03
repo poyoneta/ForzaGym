@@ -3,71 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forza Gym - Panel de Control</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Forza Gym - Panel de Administración</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* Estilos específicos para el Panel de Administración */
-        .admin-body {
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        
+        body {
             background-color: #0b0b0b;
-            padding: 2rem;
+            padding: 1.5rem;
             font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            margin: 0;
         }
-        .panel-container {
-            max-width: 1200px;
+        .container {
+            max-width: 1100px;
             margin: 0 auto;
         }
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .header {
             border-bottom: 2px solid #39e4a5;
             padding-bottom: 1rem;
             margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .panel-header h1 {
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -1px;
-            margin: 0;
-            color: #fff;
-        }
-        .panel-header h1 span {
-            color: #39e4a5;
-        }
-        /* Tarjetas de Estadísticas */
-        .metricas {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-        .tarjeta-metrica {
+        .header h1 { font-weight: 900; margin: 0; font-size: 1.6rem; text-transform: uppercase; }
+        .header h1 span { color: #39e4a5; }
+
+        /* Estilos de la Tabla */
+        .card-tabla {
             background-color: #1a1a1a;
-            border-left: 4px solid #39e4a5;
-            padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .tarjeta-metrica h3 {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            color: #888;
-            margin: 0 0 0.5rem 0;
-        }
-        .tarjeta-metrica .numero {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #fff;
-            margin: 0;
-        }
-        /* Tabla de Socios */
-        .tabla-contenedor {
-            background-color: #1a1a1a;
-            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
             overflow-x: auto;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(57, 228, 165, 0.1);
         }
         table {
             width: 100%;
@@ -75,166 +44,109 @@
             text-align: left;
         }
         th, td {
-            padding: 1.2rem 1.5rem;
+            padding: 1rem;
+            border-bottom: 1px solid #2d2d2d;
+            font-size: 0.9rem;
         }
         th {
-            background-color: #111;
             color: #39e4a5;
             text-transform: uppercase;
+            font-weight: 700;
             font-size: 0.85rem;
-            font-weight: 700;
             letter-spacing: 0.5px;
-            border-bottom: 2px solid rgba(57, 228, 165, 0.2);
         }
-        tr {
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: background 0.2s;
-        }
-        td {
-            color: #eee;
-            font-size: 0.95rem;
-        }
-        .badge-plan {
-            background-color: #39e4a5;
-            color: #000;
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-        .btn-eliminar {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn-eliminar:hover {
-            background-color: #ff1a1a;
-            transform: scale(1.05);
-        }
-        .btn-volver {
-            background-color: transparent;
-            color: #fff;
-            border: 1px solid #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: 0.3s;
-        }
-        .btn-volver:hover {
-            background-color: #fff;
-            color: #000;
-        }
+        tr:hover { background-color: rgba(255,255,255,0.02); }
 
-        /* Estilos personalizados para las Notificaciones en Vivo */
-        .notificaciones-contenedor {
-            background-color: #1a1a1a;
-            border: 1px solid #39e4a5;
-            border-radius: 8px;
-            padding: 1.2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 15px rgba(57, 228, 165, 0.1);
-        }
-        .notificaciones-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .notificaciones-header h3 {
-            color: #39e4a5;
-            margin: 0;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn-limpiar-notif {
-            background: transparent;
-            border: 1px solid #ff4d4d;
-            color: #ff4d4d;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            cursor: pointer;
+        .plan-badge {
+            background-color: #111;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
             font-weight: bold;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border: 1px solid #333;
+        }
+        .plan-premium { border-color: #39e4a5; color: #39e4a5; }
+
+        /* Botones */
+        .btn {
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .btn-ficha { background-color: #39e4a5; color: #000; }
+        .btn-ficha:hover { background-color: #2ec78f; transform: scale(1.02); }
+        .btn-baja { background-color: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; margin-left: 0.5rem; }
+        .btn-baja:hover { background-color: #ff4d4d; color: #fff; }
+        .btn-logout { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.5rem 1rem; font-size: 0.85rem;}
+        .btn-logout:hover { background: #ff4d4d; color: #fff; }
+
+        /* === VENTANA FLOTANTE (MODAL DE FICHA MÉDICA) === */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            justify-content: center; align-items: center;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            border-top: 4px solid #39e4a5;
+            padding: 2rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 1rem; right: 1.2rem;
+            color: #666; font-size: 1.5rem; cursor: pointer;
             transition: 0.2s;
         }
-        .btn-limpiar-notif:hover {
-            background-color: #ff4d4d;
-            color: #fff;
+        .close-modal:hover { color: #ff4d4d; }
+        .modal h2 { margin-top: 0; color: #39e4a5; font-size: 1.3rem; text-transform: uppercase; border-bottom: 1px solid #2d2d2d; padding-bottom: 0.5rem; }
+        
+        .info-ficha-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.2rem;
         }
-        .notificaciones-lista {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 160px;
-            overflow-y: auto;
+        .info-block {
+            background: #111;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid #2d2d2d;
         }
-        .notificacion-item {
-            background: rgba(57, 228, 165, 0.05);
-            border-left: 4px solid #39e4a5;
-            padding: 0.8rem 1.2rem;
-            margin-bottom: 0.6rem;
-            border-radius: 4px;
-            color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.95rem;
-        }
-        .notificacion-item:last-child {
-            margin-bottom: 0;
-        }
-        .notificacion-hora {
-            color: #888;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+        .info-block span { display: block; font-size: 0.75rem; color: #666; font-weight: bold; text-transform: uppercase; margin-bottom: 0.2rem;}
+        .info-block p { margin: 0; font-size: 0.95rem; font-weight: bold; }
+        .info-block-full { grid-column: span 2; }
     </style>
 </head>
-<body class="admin-body">
+<body>
 
-    <div class="panel-container">
-        
-        <header class="panel-header">
-            <h1>Forza Gym <span>Backoffice</span></h1>
-            <a href="index.html" class="btn-volver"><i class="fa-solid fa-arrow-left"></i> Ver Web Pública</a>
+    <div class="container">
+        <header class="header">
+            <h1>Panel <span>Backoffice</span></h1>
+            <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
         </header>
 
-        <!-- 📢 SECCIÓN DE NOTIFICACIONES EN VIVO -->
-        <div id="contenedorNotificaciones" class="notificaciones-contenedor" style="display: none;">
-            <div class="notificaciones-header">
-                <h3><i class="fa-solid fa-bell fa-beat"></i> Alertas en Vivo</h3>
-                <button onclick="limpiarNotificaciones()" class="btn-limpiar-notif">Marcar como leídas</button>
-            </div>
-            <ul id="listaNotificaciones" class="notificaciones-lista">
-                <!-- Se inyectan dinámicamente -->
-            </ul>
-        </div>
-
-        <section class="metricas">
-            <div class="tarjeta-metrica">
-                <h3>Total Inscriptos</h3>
-                <p class="numero" id="totalSocios">0</p>
-            </div>
-            <div class="tarjeta-metrica">
-                <h3>Última Inscripción</h3>
-                <p class="numero" id="ultimoSocio" style="font-size: 1.2rem; padding-top: 0.8rem; font-weight: 700; color: #39e4a5;">N/A</p>
-            </div>
-        </section>
-
-        <section class="tabla-contenedor">
+        <div class="card-tabla">
+            <h3 style="margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.5px; color: #aaa; margin-bottom: 1.5rem;"><i class="fa-solid fa-users"></i> Socios Inscriptos</h3>
             <table>
                 <thead>
                     <tr>
@@ -242,162 +154,160 @@
                         <th>Nombre</th>
                         <th>Email</th>
                         <th>Teléfono</th>
-                        <th>Actividad</th>
-                        <th>Mensaje</th>
-                        <th>Tiempo Restante (Plan 3 Meses)</th>
-                        <th>Acciones</th>
+                        <th>Plan</th>
+                        <th>Vencimiento</th>
+                        <th style="text-align: right;">Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="tablaSociosBody">
-                    <tr>
-                        <td colspan="8" style="text-align: center; color: #888;">Cargando socios desde SQL Server...</td>
-                    </tr>
-                </tbody>
+                <tbody id="tablaSocios">
+                    </tbody>
             </table>
-        </section>
+        </div>
+    </div>
 
+    <div id="modalFicha" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            <h2><i class="fa-solid fa-heart-pulse"></i> Ficha Física y Médica</h2>
+            
+            <div class="info-ficha-grid" id="detalleFicha">
+                </div>
+        </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        // Verificación de seguridad básica
+        const adminId = localStorage.getItem('usuarioId');
+        const adminRol = localStorage.getItem('usuarioRol');
+
+        if (!adminId || adminRol !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
+        let listaSociosGlobal = []; // Guardamos temporalmente los datos traídos de la API
+
+        async function cargarSocios() {
             try {
-                const response = await fetch('/api/socios');
-                const socios = await response.json();
+                const res = await fetch('/api/socios');
+                listaSociosGlobal = await res.json();
                 
-                const tbody = document.getElementById('tablaSociosBody');
-                const totalSocios = document.getElementById('totalSocios');
-                const ultimoSocio = document.getElementById('ultimoSocio');
-                
-                if(!socios || socios.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #888;">No hay socios registrados todavía.</td></tr>`;
-                    return;
-                }
-
-                totalSocios.textContent = socios.length;
-                ultimoSocio.textContent = socios[socios.length - 1].Nombre || socios[socios.length - 1].nombre || "N/A";
-
+                const tbody = document.getElementById('tablaSocios');
                 tbody.innerHTML = '';
 
-                socios.forEach(socio => {
-                    const fechaRaw = socio.FechaInscripcion || socio.fechaInscripcion;
-                    const fechaInscripcion = new Date(fechaRaw || new Date());
-                    
-                    const fechaVencimiento = new Date(fechaInscripcion);
-                    fechaVencimiento.setDate(fechaVencimiento.getDate() + 90); 
-                    
-                    const hoy = new Date();
-                    const diferenciaTiempo = fechaVencimiento - hoy;
-                    const diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+                listaSociosGlobal.forEach(socio => {
+                    // Quitamos al propio administrador de la lista de clientes para no entorpecer
+                    if(socio.email === 'admin@gym.com') return;
 
-                    let colorEstado = '';
-                    let textoDias = '';
-                    let bordeFila = '';
-
-                    if (diasRestantes <= 0) {
-                        colorEstado = 'background-color: rgba(255, 77, 77, 0.15); color: #ff4d4d; font-weight: bold;';
-                        textoDias = 'Vencido ❌';
-                        bordeFila = 'border-left: 5px solid #ff4d4d;';
-                    } else if (diasRestantes <= 30) {
-                        colorEstado = 'background-color: rgba(255, 193, 7, 0.15); color: #ffc107; font-weight: bold;';
-                        textoDias = `${diasRestantes} días (Último mes)`;
-                        bordeFila = 'border-left: 5px solid #ffc107;';
-                    } else {
-                        colorEstado = 'background-color: rgba(57, 228, 165, 0.15); color: #39e4a5; font-weight: bold;';
-                        textoDias = `${diasRestantes} días`;
-                        bordeFila = 'border-left: 5px solid #39e4a5;';
+                    const claseBadge = socio.planElegido === 'Premium' ? 'plan-badge plan-premium' : 'plan-badge';
+                    
+                    // Formatear la fecha de vencimiento si existe
+                    let vencimientoStr = "--/--/--";
+                    if(socio.fechaFinPlan) {
+                        vencimientoStr = new Date(socio.fechaFinPlan).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'});
                     }
 
-                    const idSocio = socio.Id !== undefined ? socio.Id : (socio.id !== undefined ? socio.id : 'N/A');
-                    const nombreSocio = socio.Nombre || socio.nombre || 'Sin nombre';
-                    const emailSocio = socio.Email || socio.email || 'Sin email';
-                    
-                    // ✨ CORRECCIÓN CLAVE: Forzamos la lectura con T Mayúscula que viene de SQL Server
-                    const telefonoSocio = socio.Telefono || socio.telefono || 'Sin teléfono';
-                    
-                    const planSocio = socio.PlanElegido || socio.planElegido || 'Sin plan';
-                    const mensajeSocio = socio.Mensaje || socio.mensaje || '<em>Sin mensaje</em>';
-
                     tbody.innerHTML += `
-                        <tr style="${bordeFila}">
-                            <td><strong>#${idSocio}</strong></td>
-                            <td>${nombreSocio}</td>
-                            <td>${emailSocio}</td>
-                            <td><a href="tel:${telefonoSocio}" style="color: #39e4a5; text-decoration: none; font-weight: bold;"><i class="fa-solid fa-phone" style="font-size: 0.8rem;"></i> ${telefonoSocio}</a></td>
-                            <td><span class="badge-plan">${planSocio}</span></td>
-                            <td>${mensajeSocio}</td>
-                            <td style="${colorEstado}">${textoDias}</td>
-                            <td>
-                                <button class="btn-eliminar" onclick="eliminarSocio(${idSocio})">
-                                    <i class="fa-solid fa-trash"></i> Dar de baja
-                                </button>
+                        <tr>
+                            <td>#${socio.id}</td>
+                            <td style="font-weight: bold;">${socio.nombre}</td>
+                            <td>${socio.email}</td>
+                            <td>${socio.telefono}</td>
+                            <td><span class="${claseBadge}">${socio.planElegido}</span></td>
+                            <td style="font-weight: bold; color: #ccc;">${vencimientoStr}</td>
+                            <td style="text-align: right;">
+                                <button class="btn btn-ficha" onclick="verFichaSocio(${socio.id})"><i class="fa-solid fa-file-medical"></i> Ficha</button>
+                                <button class="btn btn-baja" onclick="darDeBaja(${socio.id})"><i class="fa-solid fa-trash"></i> Baja</button>
                             </td>
                         </tr>
                     `;
                 });
-            } catch (error) {
-                console.error("Error al cargar socios:", error);
-                document.getElementById('tablaSociosBody').innerHTML = `<tr><td colspan="8" style="text-align: center; color: #ff4d4d;">Error al conectar con la API de SQL Server.</td></tr>`;
-            }
-        });
-
-        async function eliminarSocio(id) {
-            if(!id) {
-                alert('No se puede eliminar: ID no válido.');
-                return;
-            }
-            if(confirm('¿Estás seguro de que querés dar de baja a este socio?')) {
-                try {
-                    const response = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
-                    if(response.ok) {
-                        location.reload();
-                    } else {
-                        alert('Error en el servidor al intentar dar la baja.');
-                    }
-                } catch (error) {
-                    alert('No se pudo establecer conexión para eliminar al socio.');
-                }
+            } catch (err) {
+                console.error("Error al traer los socios:", err);
             }
         }
 
-        async function verificarNotificaciones() {
-            try {
-                const response = await fetch('/api/socios/notificaciones');
-                const alertas = await response.json();
-                
-                const contenedor = document.getElementById('contenedorNotificaciones');
-                const lista = document.getElementById('listaNotificaciones');
-                
-                if (alertas && alertas.length > 0) {
-                    contenedor.style.display = 'block'; 
-                    lista.innerHTML = '';
-                    
-                    alertas.forEach(alerta => {
-                        lista.innerHTML += `
-                            <li class="notificacion-item">
-                                <span>${alerta.texto}</span>
-                                <span class="notificacion-hora">${alerta.fecha}</span>
-                            </li>
-                        `;
-                    });
+        // Función para abrir el modal con la radiografía médica del cliente elegido
+        function verFichaSocio(id) {
+            const socio = listaSociosGlobal.find(s => s.id === id);
+            if (!socio) return;
+
+            const detalle = document.getElementById('detalleFicha');
+            
+            // Evaluamos si el cliente rellenó sus datos, si no, avisamos que está vacía
+            const peso = socio.peso ? `${socio.peso} Kg` : "No registrado";
+            const altura = socio.altura ? `${socio.altura} Mts` : "No registrado";
+            const sexo = socio.sexo || "No registrado";
+            const lesiones = socio.lesiones || "Ninguna registrada / Sin dolores";
+            const actividadExtra = socio.actividadExtra || "Ninguna / Solo gimnasio";
+            
+            let vencimientoStr = "No asignado / A convenir";
+            if(socio.fechaFinPlan) {
+                vencimientoStr = new Date(socio.fechaFinPlan).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'});
+            }
+
+            detalle.innerHTML = `
+                <div class="info-block-full" style="text-align: center; margin-bottom: 0.5rem;">
+                    <p style="font-size: 1.1rem; color: #39e4a5;">${socio.nombre}</p>
+                    <span style="font-size: 0.8rem; color: #666;">Socio #${socio.id}</span>
+                </div>
+                <div class="info-block">
+                    <span>Peso</span>
+                    <p>${peso}</p>
+                </div>
+                <div class="info-block">
+                    <span>Altura</span>
+                    <p>${altura}</p>
+                </div>
+                <div class="info-block">
+                    <span>Sexo / Género</span>
+                    <p>${sexo}</p>
+                </div>
+                <div class="info-block">
+                    <span>Vencimiento del Plan</span>
+                    <p style="color: #39e4a5;">${vencimientoStr}</p>
+                </div>
+                <div class="info-block info-block-full">
+                    <span>Lesiones, Dolores o Golpes</span>
+                    <p style="color: #ff4d4d; font-weight: normal; font-size: 0.9rem; line-height: 1.4;">${lesiones}</p>
+                </div>
+                <div class="info-block info-block-full">
+                    <span>Otras Actividades (Fútbol, Boxeo, etc.)</span>
+                    <p style="color: #ccc; font-weight: normal; font-size: 0.9rem;">${actividadExtra}</p>
+                </div>
+            `;
+
+            document.getElementById('modalFicha').style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalFicha').style.display = 'none';
+        }
+
+        async function darDeBaja(id) {
+            if (confirm("¿Estás seguro de dar de baja a este socio del gimnasio?")) {
+                const res = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    cargarSocios();
                 } else {
-                    contenedor.style.display = 'none'; 
+                    alert("No se pudo procesar la baja.");
                 }
-            } catch (error) {
-                console.error("Error al verificar notificaciones:", error);
             }
         }
 
-        async function limpiarNotificaciones() {
-            try {
-                await fetch('/api/socios/notificaciones/limpiar', { method: 'POST' });
-                document.getElementById('contenedorNotificaciones').style.display = 'none';
-            } catch (error) {
-                console.error("Error al limpiar notificaciones:", error);
+        function cerrarSesion() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
+
+        // Cerrar modal si hace clic fuera de la caja
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalFicha');
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
         }
 
-        verificarNotificaciones();
-        setInterval(verificarNotificaciones, 5000);
+        cargarSocios();
     </script>
 </body>
 </html>
