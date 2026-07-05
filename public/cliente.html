@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forza Gym - Mi Perfil</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="manifest" href="/manifest.json">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
@@ -207,11 +208,36 @@
                 
                 if(miData) {
                     document.getElementById('planCliente').textContent = miData.planElegido || 'Regular';
-                    if(miData.fechaFinPlan) {
-                        document.getElementById('venceCliente').textContent = new Date(miData.fechaFinPlan).toLocaleDateString('es-AR');
+                    
+                    // =========================================================
+                    // CÓDIGO CORREGIDO PARA CALCULAR LOS DÍAS RESTANTES
+                    // =========================================================
+                    const vencimientoElemento = document.getElementById('venceCliente');
+                    const fechaFinStr = miData.fechaFinPlan || miData.FechaFinPlan;
+
+                    if (fechaFinStr) {
+                        const fechaVencimiento = new Date(fechaFinStr);
+                        const fechaActual = new Date();
+
+                        // Restamos las fechas y convertimos la diferencia de milisegundos a días
+                        const diferenciaMili = fechaVencimiento - fechaActual;
+                        const diasRestantes = Math.ceil(diferenciaMili / (1000 * 60 * 60 * 24));
+
+                        if (diasRestantes > 0) {
+                            vencimientoElemento.textContent = `${diasRestantes} días restantes`;
+                            vencimientoElemento.style.color = "#39e4a5"; // Verde activo
+                        } else if (diasRestantes === 0) {
+                            vencimientoElemento.textContent = "Vence hoy";
+                            vencimientoElemento.style.color = "#ffb020"; // Naranja de advertencia
+                        } else {
+                            vencimientoElemento.textContent = "Plan vencido";
+                            vencimientoElemento.style.color = "#ff4d4d"; // Rojo expirado
+                        }
                     } else {
-                        document.getElementById('venceCliente').textContent = "A convenir";
+                        vencimientoElemento.textContent = "A convenir";
+                        vencimientoElemento.style.color = "#ff4d4d";
                     }
+                    // =========================================================
                     
                     document.getElementById('fichaPeso').value = miData.peso || '';
                     document.getElementById('fichaAltura').value = miData.altura || '';
