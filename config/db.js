@@ -1,14 +1,23 @@
-const sql = require("mssql");
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const config = {
-    server: process.env.DB_SERVER,
-    database: process.env.DB_DATABASE,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    options: {
-        trustServerCertificate: true
+// Se usa la URL completa de conexión (Connection String) que nos da Supabase
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false // Requerido para conectarse de forma segura a Supabase
     }
-};
+});
 
-module.exports = { sql, config };
+pool.on("connect", () => {
+    console.log("✅ Conectado con éxito a Supabase (PostgreSQL)");
+});
+
+pool.on("error", (err) => {
+    console.error("❌ Error inesperado en el cliente de Supabase:", err);
+});
+
+module.exports = {
+    query: (text, params) => pool.query(text, params),
+    pool
+};

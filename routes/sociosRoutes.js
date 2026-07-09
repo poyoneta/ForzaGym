@@ -1,20 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const sql = require("mssql");
-
-// Corregimos la barra invertida reemplazándola para que no rompa el string en JS
-const dbServer = process.env.DB_SERVER ? process.env.DB_SERVER.replace(/\\/g, '\\\\') : "localhost";
-
-const config = {
-    user: process.env.DB_USER,          
-    password: process.env.DB_PASSWORD,  
-    server: dbServer, 
-    database: process.env.DB_DATABASE,  
-    options: {
-        encrypt: false, 
-        trustServerCertificate: true 
-    }
-};
+const db = require("../config/db"); // Importamos tu pool de Postgres
 
 // Arreglo temporal en memoria para guardar las notificaciones del Backoffice
 let notificaciones = [];
@@ -38,34 +24,34 @@ router.post("/notificaciones/limpiar", (req, res) => {
 // 2. RUTAS PRINCIPALES DE SOCIOS (GET, POST, DELETE)
 // ==========================================
 
-// Traer todos los socios con TODAS las columnas de la tabla
+// Traer todos los socios
 router.get("/", async (req, res) => {
     try {
-        let pool = await sql.connect(config);
-        let result = await pool.request().query("SELECT * FROM Socios ORDER BY Id ASC");
+        const queryTexto = "SELECT * FROM socios ORDER BY id ASC";
+        const result = await db.query(queryTexto);
         
-        const sociosMapeados = result.recordset.map(socio => ({
-            id: socio.Id,
-            nombre: socio.Nombre,
-            email: socio.Email,
-            telefono: socio.Telefono || socio.telefono || "Sin teléfono",
-            planElegido: socio.PlanElegido,
-            mensaje: socio.Mensaje,
-            fechaInscripcion: socio.FechaInscripcion,
-            peso: socio.Peso,
-            altura: socio.Altura,
-            sexo: socio.Sexo,
-            lesiones: socio.Lesiones,
-            actividadExtra: socio.ActividadExtra,
-            // ✨ Nuevos campos para que el Admin y el Cliente controlen las vigencias
-            fechaInicioPlan: socio.FechaInicioPlan,
-            fechaFinPlan: socio.FechaFinPlan
+        // Mapeamos los campos en minúscula de Postgres a lo que espera tu frontend en JS
+        const sociosMapeados = result.rows.map(socio => ({
+            id: socio.id,
+            nombre: socio.nombre,
+            email: socio.email,
+            telefono: socio.telefono || "Sin teléfono",
+            planElegido: socio.plan_elegido,
+            mensaje: socio.mensaje,
+            fechaInscripcion: socio.fecha_inscripcion,
+            peso: socio.peso,
+            altura: socio.altura,
+            sexo: socio.sexo,
+            lesiones: socio.lesiones,
+            actividadExtra: socio.actividad_extra,
+            fechaInicioPlan: socio.fecha_inicio_plan,
+            fechaFinPlan: socio.fecha_fin_plan
         }));
 
         res.json(sociosMapeados);
     } catch (error) {
         console.error("Error en GET /api/socios:", error);
-        res.status(500).json({ error: "Error al obtener los socios desde SQL Server" });
+        res.status(500).json({ error: "Error al obtener los socios desde Supabase" });
     }
 });
 
@@ -83,18 +69,23 @@ router.post("/", async (req, res) => {
     }
 
     try {
-        let pool = await sql.connect(config);
+        // En Postgres usamos $1, $2... y manejamos las fechas de forma nativa
+        const queryTexto = `
+            INSERT INTO socios (nombre, email, password, rol, telefono, plan_elegido, mensaje, fecha_inscripcion, fecha_inicio_plan, fecha_fin_plan) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW(), NOW() + INTERVAL '1 month')
+        `;
         
-        await pool.request()
-            .input("Nombre", sql.NVarChar(100), nombre)
-            .input("Email", sql.NVarChar(100), email)
-            .input("Password", sql.NVarChar(255), password || null)
-            .input("Rol", sql.NVarChar(50), "cliente") 
-            .input("Telefono", sql.NVarChar(50), telefono || null) 
-            .input("PlanElegido", sql.NVarChar(50), planElegido)
-            .input("Mensaje", sql.NVarChar(500), mensaje || null)
-            .query("INSERT INTO Socios (Nombre, Email, Password, Rol, Telefono, PlanElegido, Mensaje, FechaInscripcion, FechaInicioPlan, FechaFinPlan) VALUES (@Nombre, @Email, @Password, @Rol, @Telefono, @PlanElegido, @Mensaje, GETDATE(), GETDATE(), DATEADD(month, 1, GETDATE()))");
-            // Nota: Por defecto al inscribirse, se sugiere de manera automática 1 mes de duración con DATEADD
+        const valores = [
+            nombre,
+            email,
+            password || null,
+            "cliente",
+            telefono || null,
+            planElegido,
+            mensaje || null
+        ];
+
+        await db.query(queryTexto, valores);
 
         // Agregar la notificación al panel
         notificaciones.unshift({
@@ -114,11 +105,7 @@ router.post("/", async (req, res) => {
 router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        let pool = await sql.connect(config);
-        await pool.request()
-            .input("Id", sql.Int, id)
-            .query("DELETE FROM Socios WHERE Id = @Id");
-
+        await db.query("DELETE FROM socios WHERE id = $1", [id]);
         res.json({ success: true, message: `Socio #${id} dado de baja` });
     } catch (error) {
         console.error("Error en DELETE /api/socios:", error);
@@ -137,21 +124,17 @@ router.post("/login", async (req, res) => {
     }
 
     try {
-        let pool = await sql.connect(config);
-        
-        let result = await pool.request()
-            .input("Email", sql.NVarChar(100), email)
-            .input("Password", sql.NVarChar(255), password)
-            .query("SELECT Id, Nombre, Rol FROM Socios WHERE Email = @Email AND Password = @Password");
+        const queryTexto = "SELECT id, nombre, rol FROM socios WHERE email = $1 AND password = $2";
+        const result = await db.query(queryTexto, [email, password]);
 
-        if (result.recordset.length > 0) {
-            const usuario = result.recordset[0];
+        if (result.rows.length > 0) {
+            const usuario = result.rows[0];
             
             res.json({ 
                 success: true, 
-                rol: usuario.Rol || 'cliente', 
-                id: usuario.Id,
-                nombre: usuario.Nombre 
+                rol: usuario.rol || 'cliente', 
+                id: usuario.id,
+                nombre: usuario.nombre 
             });
         } else {
             res.status(401).json({ success: false, error: "Email o contraseña incorrectos" });
@@ -172,15 +155,22 @@ router.put("/ficha/:id", async (req, res) => {
     const { peso, altura, sexo, lesiones, actividadExtra } = req.body;
 
     try {
-        let pool = await sql.connect(config);
-        await pool.request()
-            .input("Id", sql.Int, id)
-            .input("Peso", sql.Decimal(5,2), peso ? parseFloat(peso) : null)
-            .input("Altura", sql.Decimal(3,2), altura ? parseFloat(altura) : null)
-            .input("Sexo", sql.NVarChar(20), sexo || null)
-            .input("Lesiones", sql.NVarChar(sql.MAX), lesiones || null)
-            .input("ActividadExtra", sql.NVarChar(sql.MAX), actividadExtra || null)
-            .query("UPDATE Socios SET Peso = @Peso, Altura = @Altura, Sexo = @Sexo, Lesiones = @Lesiones, ActividadExtra = @ActividadExtra WHERE Id = @Id");
+        const queryTexto = `
+            UPDATE socios 
+            SET peso = $1, altura = $2, sexo = $3, lesiones = $4, actividad_extra = $5 
+            WHERE id = $6
+        `;
+        
+        const valores = [
+            peso ? parseFloat(peso) : null,
+            altura ? parseFloat(altura) : null,
+            sexo || null,
+            lesiones || null,
+            actividadExtra || null,
+            id
+        ];
+
+        await db.query(queryTexto, valores);
 
         res.json({ success: true, message: "Ficha médica actualizada con éxito" });
     } catch (error) {
@@ -189,7 +179,7 @@ router.put("/ficha/:id", async (req, res) => {
     }
 });
 
-// ✨ NUEVA RUTA: Modificar Plan y fechas de vigencia (La edita el Administrador)
+// Modificar Plan y fechas de vigencia (La edita el Administrador)
 router.put("/plan/:id", async (req, res) => {
     const { id } = req.params;
     const { planElegido, fechaInicioPlan, fechaFinPlan } = req.body;
@@ -199,13 +189,13 @@ router.put("/plan/:id", async (req, res) => {
     }
 
     try {
-        let pool = await sql.connect(config);
-        await pool.request()
-            .input("Id", sql.Int, id)
-            .input("PlanElegido", sql.NVarChar(50), planElegido)
-            .input("FechaInicio", sql.DateTime, fechaInicioPlan)
-            .input("FechaFin", sql.DateTime, fechaFinPlan)
-            .query("UPDATE Socios SET PlanElegido = @PlanElegido, FechaInicioPlan = @FechaInicio, FechaFinPlan = @FechaFin WHERE Id = @Id");
+        const queryTexto = `
+            UPDATE socios 
+            SET plan_elegido = $1, fecha_inicio_plan = $2, fecha_fin_plan = $3 
+            WHERE id = $4
+        `;
+        
+        await db.query(queryTexto, [planElegido, fechaInicioPlan, fechaFinPlan, id]);
 
         res.json({ success: true, message: "Plan y vigencia actualizados correctamente" });
     } catch (error) {
@@ -222,12 +212,11 @@ router.put("/plan/:id", async (req, res) => {
 router.post("/pesos", async (req, res) => {
     const { socioId, ejercicio, peso } = req.body;
     try {
-        let pool = await sql.connect(config);
-        await pool.request()
-            .input("SocioId", sql.Int, socioId)
-            .input("Ejercicio", sql.NVarChar(100), ejercicio)
-            .input("Peso", sql.Decimal(5,2), parseFloat(peso))
-            .query("INSERT INTO HistorialPesos (SocioId, Ejercicio, Peso, Fecha) VALUES (@SocioId, @Ejercicio, @Peso, GETDATE())");
+        const queryTexto = `
+            INSERT INTO historial_pesos (socio_id, ejercicio, peso, fecha) 
+            VALUES ($1, $2, $3, NOW())
+        `;
+        await db.query(queryTexto, [socioId, ejercicio, parseFloat(peso)]);
 
         res.status(201).json({ success: true, message: "Carga registrada correctamente" });
     } catch (error) {
@@ -240,12 +229,10 @@ router.post("/pesos", async (req, res) => {
 router.get("/pesos/:socioId", async (req, res) => {
     const { socioId } = req.params;
     try {
-        let pool = await sql.connect(config);
-        let result = await pool.request()
-            .input("SocioId", sql.Int, socioId)
-            .query("SELECT Ejercicio, Peso, Fecha FROM HistorialPesos WHERE SocioId = @SocioId ORDER BY Fecha DESC");
+        const queryTexto = "SELECT ejercicio, peso, fecha FROM historial_pesos WHERE socio_id = $1 ORDER BY fecha DESC";
+        const result = await db.query(queryTexto, [socioId]);
 
-        res.json(result.recordset);
+        res.json(result.rows);
     } catch (error) {
         console.error("Error en GET /api/socios/pesos:", error);
         res.status(500).json({ error: "Error al traer el historial de cargas" });

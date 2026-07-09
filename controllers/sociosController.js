@@ -1,53 +1,55 @@
-// Importamos la librería directamente desde tu archivo de configuración
-const { sql, config } = require('../config/db');
+// Importamos el pool de conexión que creamos en tu nuevo config/db.js
+const db = require('../config/db');
 
-// Obtener todos los socios desde SQL Server
+// Obtener todos los socios desde Supabase (PostgreSQL)
 const obtenerSocios = async (req, res) => {
     try {
-        // Abrimos la conexión usando el objeto config que exportás en db.js
-        let pool = await sql.connect(config);
+        // En Postgres las consultas se hacen directo con db.query
+        // Cambiamos los nombres de las columnas a minúsculas/guion bajo
+        const queryTexto = `
+            SELECT id, nombre, telefono, email, plan_elegido, mensaje, fecha_inscripcion 
+            FROM socios
+        `;
+        const resultado = await db.query(queryTexto);
         
-        // ✨ CORRECCIÓN 1: Agregamos "Telefono" al SELECT para que admin.html pueda mostrarlo
-        let resultado = await pool.request().query("SELECT Id, Nombre, Telefono, Email, PlanElegido, Mensaje, FechaInscripcion FROM Socios");
-        
-        // Retornamos las filas
-        res.json(resultado.recordset);
+        // ✨ NOTA: Postgres guarda las filas en '.rows' (en lugar de '.recordset')
+        res.json(resultado.rows);
     } catch (error) {
-        console.error("Error al obtener socios desde SQL:", error);
+        console.error("Error al obtener socios desde Supabase:", error);
         res.status(500).json({ error: "Error al obtener los socios desde la base de datos" });
     }
 };
 
-// Agregar un nuevo socio en SQL Server
+// Agregar un nuevo socio en Supabase (PostgreSQL)
 const agregarSocio = async (req, res) => {
     console.log("Datos recibidos en el backend:", req.body);
     
-    // ✨ CORRECCIÓN 2: Agregamos "telefono" a la desestructuración del req.body
     const { nombre, telefono, email, planElegido, mensaje } = req.body;
 
     try {
-        let pool = await sql.connect(config);
+        // En Postgres usamos parámetros seguros con $1, $2, $3... en lugar de .input() y @Nombre
+        const queryTexto = `
+            INSERT INTO socios (nombre, telefono, email, plan_elegido, mensaje) 
+            VALUES ($1, $2, $3, $4, $5)
+        `;
         
-        // Insertamos los datos usando parámetros seguros
-        // ✨ CORRECCIÓN 3: Sumamos el .input de Telefono y lo agregamos en el INSERT INTO
-        await pool.request()
-            .input('Nombre', sql.VarChar, nombre)
-            .input('Telefono', sql.VarChar, telefono) 
-            .input('Email', sql.VarChar, email)
-            .input('PlanElegido', sql.VarChar, planElegido)
-            .input('Mensaje', sql.VarChar, mensaje || '')
-            .input('FechaInscripcion', sql.DateTime, new Date()) 
-            .query(`
-                INSERT INTO Socios (Nombre, Telefono, Email, PlanElegido, Mensaje, FechaInscripcion) 
-                VALUES (@Nombre, @Telefono, @Email, @PlanElegido, @Mensaje, @FechaInscripcion)
-            `);
+        // Pasamos las variables en un array ordenado que coincide con los $1, $2...
+        const valores = [
+            nombre, 
+            telefono, 
+            email, 
+            planElegido, 
+            mensaje || ''
+        ];
+
+        await db.query(queryTexto, valores);
 
         res.json({
-            mensaje: "Socio registrado con éxito en SQL Server",
+            mensaje: "Socio registrado con éxito en Supabase",
             socio: { nombre, telefono, email, planElegido, mensaje }
         });
     } catch (error) {
-        console.error("Error al insertar el socio en SQL:", error);
+        console.error("Error al insertar el socio en Supabase:", error);
         res.status(500).json({ error: "No se pudo guardar el socio en la base de datos" });
     }
 };
