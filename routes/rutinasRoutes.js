@@ -64,13 +64,20 @@ router.get("/:socioId", async (req, res) => {
 
         const rutinaRaw = result.rows[0];
         
+        // Convertimos el objeto JSON de Supabase a un String de texto (como respondía SQL Server)
+        // para mantener compatibilidad total con el JSON.parse() del frontend.
+        let ejerciciosEnTexto = rutinaRaw.ejercicios;
+        if (typeof rutinaRaw.ejercicios !== "string") {
+            ejerciciosEnTexto = JSON.stringify(rutinaRaw.ejercicios);
+        }
+
         // Mapeamos los datos de la DB al formato exacto que espera tu Front en JS
         const rutina = {
             id: rutinaRaw.id,
             socioId: rutinaRaw.socio_id,
             duracionSemanas: rutinaRaw.duracion_semanas,
             enfoque: rutinaRaw.enfoque,
-            ejercicios: rutinaRaw.ejercicios // Postgres ya te lo devuelve como Objeto/Array de JS, no hace falta JSON.parse()
+            ejercicios: ejerciciosEnTexto // Enviamos en texto plano
         };
 
         res.json(rutina);
