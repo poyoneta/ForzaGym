@@ -1,122 +1,225 @@
-/* Importamos una tipografía más moderna y deportiva (Montserrat) */
+/* Tipografía moderna y deportiva (Montserrat) */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+/* ==========================================================
+   COLORES DE LA MARCA (cambiándolos acá se actualiza todo)
+   ========================================================== */
+:root {
+  --verde: #39e4a5;
+  --verde-hover: #2ec78f;
+  --negro: #000;
+  --fondo: #111;
+  --fondo-tarjeta: #1a1a1a;
+  --texto: #eee;
+  --texto-suave: #aaa;
+  --alto-nav: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--alto-nav); /* Que la barra fija no tape los títulos */
+}
 
 body {
   font-family: 'Montserrat', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #111; /* Tu fondo original */
-  color: #eee; /* Tu color de texto original */
+  background-color: var(--fondo);
+  color: var(--texto);
   line-height: 1.6;
 }
 
-/* HEADER */
-header {
-  background-color: #000; /* Tu negro puro original */
-  border-bottom: 1px solid rgba(57, 228, 165, 0.1); /* Línea divisoria muy fina con tu verde */
-  padding: 1.2rem 2rem;
+img {
+  max-width: 100%;
+  display: block;
 }
 
-.header-contenido {
+/* ==========================================================
+   BARRA DE NAVEGACIÓN (fija arriba)
+   ========================================================== */
+.barra-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--alto-nav);
   display: flex;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 1.5rem;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 2rem;
+  background-color: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(57, 228, 165, 0.15);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 900;
+  font-size: 1.2rem;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.marca strong {
+  color: var(--verde);
 }
 
 .logo-header {
-  width: 60px;
-  height: 60px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #39e4a5; /* Tu verde menta */
+  border: 2px solid var(--verde);
   box-shadow: 0 0 10px rgba(57, 228, 165, 0.3);
 }
 
-.header-texto {
-  text-align: left;
-}
-
-header h1 {
-  margin: 0;
-  font-size: 1.6rem;
-  font-weight: 900; /* Letra bien gruesa de gimnasio */
-  letter-spacing: -0.5px;
-  color: #ffffff;
-}
-
-header p {
-  margin: 2px 0 0 0;
-  color: #39e4a5; /* Slogan en tu verde */
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* NAV (Estilo limpio e interactivo) */
 nav {
-  background-color: #1a1a1a; /* Tu nav original */
-  padding: 1rem;
   display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  flex-wrap: wrap;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  align-items: center;
+  gap: 1.8rem;
 }
 
 nav a {
-  color: #39e4a5; /* Tu verde menta */
+  color: var(--texto);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   letter-spacing: 0.5px;
-  transition: 0.3s;
+  transition: color 0.2s;
 }
 
 nav a:hover {
-  color: white;
+  color: var(--verde);
 }
 
-/* HERO */
+nav .nav-ingresar {
+  color: #000;
+  background-color: var(--verde);
+  padding: 0.55rem 1.1rem;
+  border-radius: 8px;
+}
+
+nav .nav-ingresar:hover {
+  color: #000;
+  background-color: #fff;
+}
+
+.btn-menu {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--verde);
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+/* ==========================================================
+   BOTONES GENERALES
+   ========================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 2rem;
+  border-radius: 8px;
+  font-weight: 900;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-principal {
+  background-color: var(--verde);
+  color: #000;
+  border: 2px solid var(--verde);
+  box-shadow: 0 4px 14px rgba(57, 228, 165, 0.3);
+}
+
+.btn-principal:hover {
+  background-color: #fff;
+  border-color: #fff;
+  transform: translateY(-3px);
+}
+
+.btn-secundario {
+  background-color: transparent;
+  color: var(--verde);
+  border: 2px solid var(--verde);
+}
+
+.btn-secundario:hover {
+  background-color: var(--verde);
+  color: #000;
+  transform: translateY(-3px);
+}
+
+/* ==========================================================
+   HERO (portada con foto)
+   ========================================================== */
 .hero {
-  text-align: center;
-  padding: 5rem 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-  color: #39e4a5; /* Tu verde menta */
+  max-width: none;
+  min-height: calc(100vh - var(--alto-nav));
+  display: flex;
+  align-items: center;
+  padding: 4rem 6vw;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.15) 100%),
+    url("imagenes/hero.jpg") center right / cover no-repeat;
 }
 
-.hero h2 {
-  font-size: 3rem;
+.hero-contenido {
+  max-width: 600px;
+}
+
+.hero-slogan {
+  color: var(--verde);
   font-weight: 900;
   text-transform: uppercase;
-  line-height: 1.1;
-  color: #ffffff;
-  margin-bottom: 1rem;
+  letter-spacing: 3px;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
 }
 
-.hero p {
-  color: #eee;
-  font-size: 1.2rem;
-  max-width: 600px;
-  margin: 0 auto 2.5rem auto;
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: #fff;
+  margin: 0 0 1.5rem 0;
+  letter-spacing: -1px;
 }
 
-.hero img {
-  width: 100%;
-  max-width: 450px;
-  border-radius: 16px; /* Bordes redondeados modernos estilo Feel */
-  display: block;
-  margin: 0 auto 2rem auto;
-  box-shadow: 0 0 20px rgba(57, 228, 165, 0.4); /* Tu sombra adaptada */
+.hero-texto {
+  font-size: 1.15rem;
+  color: #ddd;
+  margin: 0 0 2.5rem 0;
 }
 
-/* SECCIONES */
+.hero-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ==========================================================
+   SECCIONES
+   ========================================================== */
 section {
-  padding: 5rem 2rem; /* Más espacio entre bloques para que "respire" */
+  padding: 5rem 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -126,8 +229,7 @@ section h2 {
   font-weight: 900;
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: 3rem;
-  position: relative;
+  margin: 0 0 3rem 0;
 }
 
 /* Línea decorativa verde debajo de los títulos */
@@ -136,56 +238,166 @@ section h2::after {
   display: block;
   width: 50px;
   height: 4px;
-  background-color: #39e4a5;
+  background-color: var(--verde);
   margin: 10px auto 0 auto;
   border-radius: 2px;
 }
 
-/* SECCIÓN ACTIVIDADES (Estilo Feel Fitness adaptado) */
+/* ==========================================================
+   ACTIVIDADES
+   ========================================================== */
 .contenedor-actividades {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
-  justify-content: center;
-  padding: 1rem 0;
 }
 
 .tarjeta-actividad {
-  background-color: #1a1a1a;
+  background-color: var(--fondo-tarjeta);
   border-radius: 12px;
-  overflow: hidden; /* Corta las imágenes en las esquinas redondeadas */
+  overflow: hidden;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tarjeta-actividad:hover {
-  transform: scale(1.03); /* Efecto de zoom sutil al pasar el mouse */
+  transform: translateY(-6px);
 }
 
 .imagen-actividad {
   width: 100%;
-  height: 200px; /* Altura fija para la consistencia visual */
+  height: 200px;
   overflow: hidden;
 }
 
 .imagen-actividad img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Evita que las fotos se deformen */
-  filter: brightness(0.8); /* Oscurece un poco la imagen para un look moderno */
+  object-fit: cover;
+  filter: brightness(0.85);
+  transition: transform 0.4s ease;
+}
+
+.tarjeta-actividad:hover .imagen-actividad img {
+  transform: scale(1.06);
 }
 
 .barra-actividad {
-  background-color: #39e4a5; /* Tu color verde menta */
-  color: #000000; /* Texto negro para contraste limpio */
-  padding: 1rem;
+  background-color: var(--verde);
+  color: #000;
+  padding: 0.8rem 1rem;
   text-align: center;
   font-weight: 900;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   letter-spacing: 0.5px;
 }
 
-/* TARJETAS PREMIUM CON TUS COLORES */
+.desc-actividad {
+  margin: 0;
+  padding: 1.1rem 1.3rem 1.4rem;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+/* ==========================================================
+   PLANES
+   ========================================================== */
+.contenedor-planes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
+  align-items: stretch;
+}
+
+.tarjeta-plan {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--fondo-tarjeta);
+  border: 2px solid #2a2a2a;
+  border-radius: 14px;
+  padding: 2.5rem 2rem 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tarjeta-plan:hover {
+  transform: translateY(-8px);
+  border-color: var(--verde);
+}
+
+.tarjeta-plan.destacado {
+  border-color: var(--verde);
+  box-shadow: 0 0 30px rgba(57, 228, 165, 0.25);
+}
+
+.etiqueta-destacado {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--verde);
+  color: #000;
+  font-weight: 900;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0.35rem 1rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.tarjeta-plan h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.precio {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--verde);
+  margin: 0.8rem 0 1.5rem 0;
+}
+
+.precio span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.lista-beneficios {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+  flex-grow: 1; /* Empuja el botón al fondo para que queden alineados */
+}
+
+.lista-beneficios li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid #2a2a2a;
+  font-size: 0.95rem;
+}
+
+.lista-beneficios li:last-child {
+  border-bottom: none;
+}
+
+.lista-beneficios i {
+  color: var(--verde);
+  margin-right: 0.6rem;
+}
+
+.tarjeta-plan .btn {
+  width: 100%;
+}
+
+/* ==========================================================
+   TARJETA DEL ENTRENADOR
+   ========================================================== */
 .contenedor-tarjetas {
   display: flex;
   flex-wrap: wrap;
@@ -194,33 +406,30 @@ section h2::after {
 }
 
 .tarjeta {
-  background-color: #222; /* Tu color original de tarjetas */
-  border: 2px solid #39e4a5; /* Tu borde verde original */
+  background-color: #222;
+  border: 2px solid var(--verde);
   border-radius: 12px;
   box-shadow: 2px 2px 8px rgba(57, 228, 165, 0.3);
-  width: 260px;
-  padding: 2rem 1.5rem;
+  width: 280px;
+  padding: 1.5rem;
   text-align: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #eee;
 }
 
-/* Efecto hover suave inspirado en Feel Fitness */
 .tarjeta:hover {
-  transform: translateY(-8px); /* Eleva la tarjeta suavemente */
-  border-color: white;
+  transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(57, 228, 165, 0.4);
 }
 
 .tarjeta h3 {
-  font-size: 1.4rem;
-  margin-top: 0;
+  font-size: 1.3rem;
+  margin: 0 0 0.3rem 0;
   font-weight: 700;
 }
 
-.tarjeta p strong {
-  font-size: 1.4rem;
-  color: #39e4a5;
+.tarjeta p {
+  margin: 0;
+  color: var(--texto-suave);
 }
 
 .tarjeta img {
@@ -229,21 +438,18 @@ section h2::after {
   margin-bottom: 1rem;
 }
 
-/* HORARIOS (Estilo tarjetas oscuras basadas en folleto) */
-#horarios {
-  text-align: center;
-}
-
+/* ==========================================================
+   HORARIOS
+   ========================================================== */
 .contenedor-horarios {
   display: flex;
   flex-wrap: wrap;
   gap: 2.5rem;
   justify-content: center;
-  margin-top: 2rem;
 }
 
 .tarjeta-horario {
-  background-color: #1a1a1a; /* Fondo idéntico al fondo del volante */
+  background-color: var(--fondo-tarjeta);
   border-radius: 16px;
   padding: 2.5rem 2rem;
   width: 320px;
@@ -254,10 +460,9 @@ section h2::after {
   text-align: center;
 }
 
-/* Etiquetas redondeadas en verde menta */
 .etiqueta-dia {
-  background-color: #39e4a5;
-  color: #000000;
+  background-color: var(--verde);
+  color: #000;
   font-weight: 900;
   text-transform: uppercase;
   padding: 0.6rem 1.8rem;
@@ -268,7 +473,7 @@ section h2::after {
 }
 
 .bloque-turno h3 {
-  color: #ffffff;
+  color: #fff;
   text-transform: uppercase;
   font-size: 1rem;
   font-weight: 700;
@@ -277,135 +482,124 @@ section h2::after {
 }
 
 .bloque-turno .hora {
-  color: #ffffff;
+  color: #fff;
   font-size: 1.8rem;
   font-weight: 900;
   margin: 0;
 }
 
-/* Línea divisoria verde del diseño original */
 .divisor-horario {
   width: 80%;
   height: 2px;
-  background-color: #39e4a5;
+  background-color: var(--verde);
   margin: 1.5rem 0;
   opacity: 0.8;
 }
 
-/* FORMULARIO DE INSCRIPCIÓN MEJORADO */
-#inscripcion {
-  text-align: center;
+/* ==========================================================
+   UBICACIÓN
+   ========================================================== */
+.contenedor-ubicacion {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 2rem;
+  align-items: stretch;
 }
 
-form {
+.info-ubicacion {
+  background-color: var(--fondo-tarjeta);
+  border-radius: 14px;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  background-color: #1a1a1a; /* Fondo oscuro integrado */
-  padding: 3rem 2.5rem;
-  border-radius: 16px;
-  border: 2px solid #39e4a5; /* Borde verde característico de Forza Gym */
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px rgba(57, 228, 165, 0.15);
-  box-sizing: border-box;
+  justify-content: center;
+  gap: 1.2rem;
 }
 
-form label {
-  font-size: 0.85rem;
+.info-ubicacion p {
+  margin: 0;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.info-ubicacion i {
+  color: var(--verde);
+  font-size: 1.4rem;
+  width: 1.6rem;
+  text-align: center;
+}
+
+.info-ubicacion a {
+  color: var(--texto);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(57, 228, 165, 0.5);
+}
+
+.info-ubicacion a:hover {
+  color: var(--verde);
+}
+
+.mapa {
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 320px;
+  border: 2px solid #2a2a2a;
+}
+
+.mapa iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  border: 0;
+  filter: grayscale(0.3) contrast(1.05);
+}
+
+/* ==========================================================
+   LLAMADO FINAL (reemplaza al viejo formulario)
+   ========================================================== */
+.cta-final {
+  text-align: center;
+  max-width: 800px;
+}
+
+.cta-final > p {
+  font-size: 1.1rem;
+  color: #ddd;
+  margin: 0 auto 2rem auto;
+  max-width: 560px;
+}
+
+.cta-final .hero-botones {
+  justify-content: center;
+}
+
+.cta-final .ya-socio {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+
+.ya-socio a {
+  color: var(--verde);
   font-weight: 700;
-  text-transform: uppercase;
-  color: #39e4a5; /* Etiquetas en verde menta para destacar */
-  text-align: left;
-  letter-spacing: 0.5px;
-  margin-bottom: -0.5rem;
+  text-decoration: none;
 }
 
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 1.1rem;
-  border: 1px solid rgba(57, 228, 165, 0.4);
-  border-radius: 8px;
-  background-color: #0b0b0b; /* Contraste interior más oscuro */
-  color: #ffffff;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-}
-
-textarea {
-  resize: none;
-  height: 120px;
-}
-
-/* Efectos al hacer foco en los campos */
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #ffffff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  background-color: #111111;
-}
-
-/* BOTONES */
-button {
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 900;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* Botón principal enviar */
-button[type="submit"] {
-  background-color: #39e4a5;
-  color: #000000;
-  border: none;
-  margin-top: 1rem;
-  box-shadow: 0 4px 12px rgba(57, 228, 165, 0.3);
-}
-
-button[type="submit"]:hover {
-  background-color: #ffffff;
-  color: #000000;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
-}
-
-/* Botones secundarios (Ver socios) */
-#verSocios {
-  background-color: transparent;
-  color: #39e4a5;
-  border: 2px solid #39e4a5;
-  margin-top: 1.5rem;
-}
-
-#verSocios:hover {
-  background-color: #39e4a5;
-  color: #000000;
-  transform: translateY(-2px);
-}
-
-/* FOOTER */
+/* ==========================================================
+   FOOTER
+   ========================================================== */
 footer {
-  background-color: black;
-  color: #39e4a5;
+  background-color: var(--negro);
+  color: var(--verde);
   text-align: center;
   padding: 2rem;
-  margin-top: 4rem;
+  margin-top: 2rem;
   font-size: 0.9rem;
   border-top: 1px solid rgba(57, 228, 165, 0.1);
 }
-/* ICONOS SOCIALES (Inspirado en image_9f12e1.png) */
+
 .redes-sociales {
   display: flex;
   justify-content: center;
@@ -414,60 +608,116 @@ footer {
 }
 
 .redes-sociales a {
-  color: #39e4a5; /* Tus iconos en verde menta original */
-  font-size: 1.8rem; /* Tamaño ideal para que se vea cómodo en celu y PC */
+  color: var(--verde);
+  font-size: 1.8rem;
   transition: all 0.3s ease;
   text-decoration: none;
 }
 
-/* Efecto hover interactivo */
 .redes-sociales a:hover {
-  color: #ffffff; /* Cambian a blanco al pasar el mouse, invirtiendo el contraste */
-  transform: scale(1.15); /* Crece sutilmente */
+  color: #fff;
+  transform: scale(1.15);
 }
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .header-contenido {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .header-texto {
-    text-align: center;
+
+/* ==========================================================
+   BOTÓN FLOTANTE DE WHATSAPP
+   ========================================================== */
+.whatsapp-flotante {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 200;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #25d366;
+  color: #fff;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.25s ease;
+}
+
+.whatsapp-flotante:hover {
+  transform: scale(1.1);
+}
+
+/* ==========================================================
+   RESPONSIVE (tablets y celulares)
+   ========================================================== */
+@media (max-width: 860px) {
+  .barra-nav {
+    padding: 0 1rem;
   }
 
+  .btn-menu {
+    display: block;
+  }
+
+  /* El menú se despliega debajo de la barra */
   nav {
+    position: absolute;
+    top: var(--alto-nav);
+    left: 0;
+    right: 0;
     flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+    align-items: stretch;
+    gap: 0;
+    background-color: rgba(0, 0, 0, 0.97);
+    border-bottom: 1px solid rgba(57, 228, 165, 0.2);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
   }
 
-  .hero h2 {
-    font-size: 2.2rem;
+  nav.abierto {
+    max-height: 480px;
   }
 
-  .contenedor-actividades {
-    grid-template-columns: 1fr; /* Una sola tarjeta por fila en celulares */
-    padding: 1rem 5%;
+  nav a {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #1f1f1f;
+    font-size: 0.95rem;
   }
 
-  .contenedor-horarios {
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
+  nav .nav-ingresar {
+    margin: 1rem 1.5rem 1.2rem;
+    text-align: center;
+    border-top: none;
   }
 
-  .tarjeta-horario {
-    width: 90%; /* Se adapta al ancho de pantallas chicas */
-    padding: 2rem 1rem;
+  .hero {
+    min-height: 80vh;
+    padding: 3rem 1.5rem;
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.85) 70%),
+      url("imagenes/hero.jpg") 70% center / cover no-repeat;
+    align-items: flex-end;
   }
 
+  .hero-botones .btn {
+    flex: 1 1 100%;
+  }
+
+  section {
+    padding: 3.5rem 1.25rem;
+  }
+
+  section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+
+  .contenedor-ubicacion {
+    grid-template-columns: 1fr;
+  }
+
+  .tarjeta-horario,
   .tarjeta {
-    width: 90%;
-  }
-
-  form {
-    width: 95%;
-    padding: 2rem 1.5rem;
+    width: 100%;
+    max-width: 340px;
   }
 }

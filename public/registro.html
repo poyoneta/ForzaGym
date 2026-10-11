@@ -15,7 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             padding: 1rem;
             box-sizing: border-box;
@@ -25,7 +25,6 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 100%;
         }
         .register-card {
             background-color: #1a1a1a !important;
@@ -136,17 +135,22 @@
                     <i class="fa-solid fa-envelope"></i>
                 </div>
                 <div class="form-group">
+                    <input type="tel" id="telefono" placeholder="Teléfono celular" required>
+                    <i class="fa-solid fa-phone"></i>
+                </div>
+                <div class="form-group">
                     <input type="password" id="password" placeholder="Crear Contraseña" required>
                     <i class="fa-solid fa-lock"></i>
+                </div>
                 <div class="form-group">
-    <select id="planElegido" required>
-        <option value="" disabled selected>Seleccioná tu Plan...</option>
-        <option value="Básico">Plan Básico (2 días/sem) 🏋️‍♂️</option>
-        <option value="Plus">Plan Plus (3 días/sem) 🔥</option>
-        <option value="Premium">Plan Premium (Pase Libre + Nutrición) 👑</option>
-    </select>
-    <i class="fa-solid fa-dumbbell"></i>
-</div>
+                    <select id="planElegido" required>
+                        <option value="" disabled selected>Seleccioná tu Plan...</option>
+                        <option value="Básico">Plan Básico (2 días/sem) 🏋️‍♂️</option>
+                        <option value="Plus">Plan Plus (3 días/sem) 🔥</option>
+                        <option value="Premium">Plan Premium (Pase Libre + Nutrición) 👑</option>
+                    </select>
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
                 
                 <button type="submit" class="btn-register">Registrarme</button>
                 <div id="errorBox" class="error-msg"></div>
@@ -160,11 +164,19 @@
     </div>
 
     <script>
+        // Si viene desde un botón "Elegir plan" del index (registro.html?plan=Premium), lo dejamos preseleccionado
+        const planUrl = new URLSearchParams(window.location.search).get('plan');
+        if (planUrl) {
+            const selectPlan = document.getElementById('planElegido');
+            if ([...selectPlan.options].some(o => o.value === planUrl)) selectPlan.value = planUrl;
+        }
+
         document.getElementById('formRegistro').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const nombre = document.getElementById('nombre').value;
             const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
             const password = document.getElementById('password').value;
             const planElegido = document.getElementById('planElegido').value;
             
@@ -179,7 +191,7 @@
                 const respuesta = await fetch('/api/socios', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nombre, email, password, planElegido })
+                    body: JSON.stringify({ nombre, email, telefono, password, planElegido })
                 });
 
                 const datos = await respuesta.json();

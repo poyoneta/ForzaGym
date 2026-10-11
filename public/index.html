@@ -3,130 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gimnasio Forza Gym</title>
+    <title>Forza Gym | Break Your Limits</title>
+    <meta name="description" content="Forza Gym: musculación, crossfit, funcional, GAP y boxeo. Planes mensuales, rutinas personalizadas y seguimiento de tu progreso desde la app.">
+    <meta name="theme-color" content="#0b0b0b">
+
+    <!-- Vista previa al compartir el link (WhatsApp, Instagram, etc.) -->
+    <meta property="og:title" content="Forza Gym | Break Your Limits">
+    <meta property="og:description" content="Planes mensuales, entrenador profesional y rutinas personalizadas. ¡Sumate!">
+    <meta property="og:image" content="/imagenes/hero.jpg">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" type="image/jpeg" href="imagenes/logo.jpg">
+    <link rel="apple-touch-icon" href="imagenes/logo.jpg">
+    <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 <body>
 
-    <header id="inicio">
-        <div class="header-contenido">
-            <img src="imagenes/Forza logo.jpeg" alt="Logo Forza Gym" class="logo-header">
-            <div class="header-texto">
-                <h1>Gimnasio Forza Gym</h1>
-                <p>Break Your Limits</p>
-            </div>
-        </div>
-    </header>
+    <!-- ===================== NAVEGACIÓN ===================== -->
+    <header class="barra-nav" id="inicio">
+        <a href="#inicio" class="marca">
+            <img src="imagenes/logo.jpg" alt="Logo Forza Gym" class="logo-header">
+            <span>FORZA <strong>GYM</strong></span>
+        </a>
 
-    <nav>
-        <a href="#planes">Planes</a>
-        <a href="#actividades">Actividades</a>
-        <a href="#horarios">Horarios</a>
-        <a href="#entrenadores">Entrenadores</a>
-        <a href="#inscripcion">Inscripción</a>
-        <a href="login.html"><i class="fa-solid fa-user"></i> Ingresar</a>
-    </nav>
+        <button class="btn-menu" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="menuPrincipal">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+        <nav id="menuPrincipal">
+            <a href="#actividades">Actividades</a>
+            <a href="#planes">Planes</a>
+            <a href="#horarios">Horarios</a>
+            <a href="#entrenadores">Entrenador</a>
+            <a href="#ubicacion">Ubicación</a>
+            <a href="login.html" class="nav-ingresar"><i class="fa-solid fa-user"></i> Ingresar</a>
+        </nav>
+    </header>
 
     <main>
 
+        <!-- ===================== HERO ===================== -->
         <section class="hero">
-            <h2>Transformá tu cuerpo y tu energía</h2>
-            <p>
-                Sumate a nuestro gimnasio con planes mensuales,
-                entrenadores profesionales y horarios flexibles.
-            </p>
+            <div class="hero-contenido">
+                <p class="hero-slogan">Break Your Limits</p>
+                <h1>Transformá tu cuerpo y tu energía</h1>
+                <p class="hero-texto">
+                    Planes mensuales, entrenador profesional y tu rutina personalizada
+                    siempre a mano desde el celular.
+                </p>
+                <div class="hero-botones">
+                    <a href="registro.html" class="btn btn-principal">Inscribite</a>
+                    <a href="#planes" class="btn btn-secundario">Ver planes</a>
+                </div>
+            </div>
         </section>
 
+        <!-- ===================== ACTIVIDADES ===================== -->
         <section id="actividades">
             <h2>Nuestras Actividades</h2>
-            
+
             <div class="contenedor-actividades">
                 <article class="tarjeta-actividad">
                     <div class="imagen-actividad">
-                        <img src="imagenes/crossfit.jpg" alt="Crossfit">
+                        <img src="imagenes/crossfit.jpg" alt="Clase de crossfit" loading="lazy">
                     </div>
-                    <div class="barra-actividad">
-                        <span>🏋️‍♂️ CROSSFIT</span>
-                    </div>
+                    <div class="barra-actividad">🏋️‍♂️ CROSSFIT</div>
+                    <p class="desc-actividad">Alta intensidad: combina levantamiento, gimnasia y cardio en entrenamientos variados.</p>
                 </article>
 
                 <article class="tarjeta-actividad">
                     <div class="imagen-actividad">
-                        <img src="imagenes/funcional.jpg" alt="Funcional">
+                        <img src="imagenes/funcional.jpg" alt="Entrenamiento funcional" loading="lazy">
                     </div>
-                    <div class="barra-actividad">
-                        <span>💪 FUNCIONAL</span>
-                    </div>
+                    <div class="barra-actividad">💪 FUNCIONAL</div>
+                    <p class="desc-actividad">Movimientos naturales del cuerpo para ganar fuerza, coordinación y resistencia.</p>
                 </article>
 
                 <article class="tarjeta-actividad">
                     <div class="imagen-actividad">
-                        <img src="imagenes/gap.jpg" alt="GAP">
+                        <img src="imagenes/gap.jpg" alt="Clase de GAP" loading="lazy">
                     </div>
-                    <div class="barra-actividad">
-                        <span>🔥 GAP</span>
-                    </div>
+                    <div class="barra-actividad">🔥 GAP</div>
+                    <p class="desc-actividad">Glúteos, abdominales y piernas: tonificá el tren inferior y fortalecé el core.</p>
                 </article>
 
                 <article class="tarjeta-actividad">
                     <div class="imagen-actividad">
-                        <img src="imagenes/musculacion.jfif" alt="Musculación">
+                        <img src="imagenes/musculacion.jpg" alt="Musculación con pesas" loading="lazy">
                     </div>
-                    <div class="barra-actividad">
-                        <span>🏋️ MUSCULACIÓN</span>
-                    </div>
+                    <div class="barra-actividad">🏋️ MUSCULACIÓN</div>
+                    <p class="desc-actividad">Pesas y máquinas para ganar fuerza y masa muscular, con tu rutina personalizada.</p>
                 </article>
 
                 <article class="tarjeta-actividad">
                     <div class="imagen-actividad">
-                        <img src="imagenes/boxeo.jpg" alt="Boxeo">
+                        <img src="imagenes/boxeo.jpg" alt="Clase de boxeo" loading="lazy">
                     </div>
-                    <div class="barra-actividad">
-                        <span>🥊 BOXEO</span>
-                    </div>
+                    <div class="barra-actividad">🥊 BOXEO</div>
+                    <p class="desc-actividad">Técnica, cardio y descarga: mejorá tu resistencia, reflejos y coordinación.</p>
                 </article>
             </div>
         </section>
 
+        <!-- ===================== PLANES ===================== -->
         <section id="planes">
             <h2>Planes de entrenamiento</h2>
 
-            <div class="contenedor-tarjetas">
-                <article class="tarjeta">
+            <div class="contenedor-planes">
+                <article class="tarjeta-plan">
                     <h3>Plan Básico</h3>
-                    <p>2 días por semana</p>
-                    <p><strong>$18.000</strong> por mes</p>
+                    <p class="precio">$18.000 <span>/ mes</span></p>
+                    <ul class="lista-beneficios">
+                        <li><i class="fa-solid fa-check"></i> 2 días por semana</li>
+                        <li><i class="fa-solid fa-check"></i> Rutina personalizada en la app</li>
+                        <li><i class="fa-solid fa-check"></i> Registro de cargas y progreso</li>
+                    </ul>
+                    <a href="registro.html?plan=B%C3%A1sico" class="btn btn-secundario">Elegir plan</a>
                 </article>
 
-                <article class="tarjeta">
+                <article class="tarjeta-plan">
                     <h3>Plan Plus</h3>
-                    <p>3 días por semana</p>
-                    <p><strong>$23.000</strong> por mes</p>
+                    <p class="precio">$23.000 <span>/ mes</span></p>
+                    <ul class="lista-beneficios">
+                        <li><i class="fa-solid fa-check"></i> 3 días por semana</li>
+                        <li><i class="fa-solid fa-check"></i> Rutina personalizada en la app</li>
+                        <li><i class="fa-solid fa-check"></i> Registro de cargas y progreso</li>
+                    </ul>
+                    <a href="registro.html?plan=Plus" class="btn btn-secundario">Elegir plan</a>
                 </article>
 
-                <article class="tarjeta">
+                <article class="tarjeta-plan destacado">
+                    <span class="etiqueta-destacado">Recomendado</span>
                     <h3>Plan Premium</h3>
-                    <p>Pase libre</p>
-                    <p><strong>$30.000</strong> por mes</p>
+                    <p class="precio">$30.000 <span>/ mes</span></p>
+                    <ul class="lista-beneficios">
+                        <li><i class="fa-solid fa-check"></i> Pase libre todos los días</li>
+                        <li><i class="fa-solid fa-check"></i> Asesoramiento nutricional</li>
+                        <li><i class="fa-solid fa-check"></i> Rutina personalizada en la app</li>
+                        <li><i class="fa-solid fa-check"></i> Registro de cargas y progreso</li>
+                    </ul>
+                    <a href="registro.html?plan=Premium" class="btn btn-principal">Elegir plan</a>
                 </article>
             </div>
         </section>
 
+        <!-- ===================== HORARIOS ===================== -->
         <section id="horarios">
             <h2>Horarios</h2>
 
             <div class="contenedor-horarios">
                 <article class="tarjeta-horario">
                     <div class="etiqueta-dia">Lunes a Viernes</div>
-                    
+
                     <div class="bloque-turno">
                         <h3>Por la mañana</h3>
                         <p class="hora">8:00 a 12:00</p>
                     </div>
-                    
+
                     <div class="divisor-horario"></div>
-                    
+
                     <div class="bloque-turno">
                         <h3>Por la tarde</h3>
                         <p class="hora">16:00 a 22:30</p>
@@ -135,7 +172,7 @@
 
                 <article class="tarjeta-horario">
                     <div class="etiqueta-dia">Sábado</div>
-                    
+
                     <div class="bloque-turno">
                         <h3>Por la mañana</h3>
                         <p class="hora">10:30 a 12:30</p>
@@ -144,72 +181,64 @@
             </div>
         </section>
 
+        <!-- ===================== ENTRENADOR ===================== -->
         <section id="entrenadores">
             <h2>Entrenador</h2>
 
             <div class="contenedor-tarjetas">
                 <article class="tarjeta">
-                    <img src="imagenes/entrenador.jpeg" alt="Entrenador de musculación">
+                    <img src="imagenes/entrenador.jpeg" alt="Leonardo Bustillo, entrenador de musculación" loading="lazy">
                     <h3>Leonardo Bustillo</h3>
                     <p>Especialista en musculación e hipertrofia.</p>
                 </article>
             </div>
         </section>
 
-        <section id="inscripcion">
-            <h2>Formulario de inscripción</h2>
+        <!-- ===================== UBICACIÓN ===================== -->
+        <section id="ubicacion">
+            <h2>Dónde estamos</h2>
 
-            <form id="formulario">
-                <label for="nombre">Nombre completo</label>
-                <input type="text" id="nombre" placeholder="Ingresá tu nombre" required>
+            <div class="contenedor-ubicacion">
+                <div class="info-ubicacion">
+                    <p><i class="fa-solid fa-location-dot"></i> <span data-direccion></span></p>
+                    <p><i class="fa-brands fa-whatsapp"></i> <a href="#" data-whatsapp>Escribinos por WhatsApp</a></p>
+                    <p><i class="fa-brands fa-instagram"></i> <a href="https://www.instagram.com/_forzagym" target="_blank" rel="noopener">@_forzagym</a></p>
+                </div>
+                <div class="mapa">
+                    <iframe id="mapaGym" title="Mapa de Forza Gym" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </section>
 
-                <label for="telefono">Teléfono celular</label>
-                <input type="tel" id="telefono" placeholder="Ej: 3573456789" required>
-
-                <label for="email">Correo electrónico</label>
-                <input type="email" id="email" placeholder="Ingresá tu email" required>
-
-                <label for="plan">Actividad elegida</label>
-                <select id="plan">
-                    <option value="Crossfit">Crossfit</option>
-                    <option value="Funcional">Funcional</option>
-                    <option value="GAP">GAP</option>
-                    <option value="Musculación">Musculación</option>
-                    <option value="Boxeo">Boxeo</option>
-                </select>
-
-                <label for="mensaje">Mensaje</label>
-                <textarea id="mensaje" placeholder="Escribí tu consulta"></textarea>
-
-                <button type="submit">Enviar inscripción</button>
-            </form>
-
-            <br>
-
-            <button id="verSocios">Ver socios registrados</button>
-            <div id="lista"></div>
-            <p id="mensajeResultado"></p>
+        <!-- ===================== LLAMADO FINAL ===================== -->
+        <section id="inscripcion" class="cta-final">
+            <h2>¿Listo para empezar?</h2>
+            <p>Creá tu cuenta en un minuto, elegí tu plan y empezá a ver tu rutina desde el celular.</p>
+            <div class="hero-botones">
+                <a href="registro.html" class="btn btn-principal">Crear mi cuenta</a>
+                <a href="#" class="btn btn-secundario" data-whatsapp><i class="fa-brands fa-whatsapp"></i> Tengo una consulta</a>
+            </div>
+            <p class="ya-socio">¿Ya sos socio? <a href="login.html">Ingresá acá</a></p>
         </section>
 
     </main>
 
     <footer>
         <div class="redes-sociales">
-            <a href="https://wa.me/5493573xxxxxx" target="_blank" aria-label="WhatsApp">
+            <a href="#" data-whatsapp target="_blank" rel="noopener" aria-label="WhatsApp">
                 <i class="fa-brands fa-whatsapp"></i>
             </a>
-            
-            <a href="https://www.instagram.com/_forzagym" target="_blank" aria-label="Instagram">
+            <a href="https://www.instagram.com/_forzagym" target="_blank" rel="noopener" aria-label="Instagram">
                 <i class="fa-brands fa-instagram"></i>
             </a>
-            
-            <a href="https://www.facebook.com/tu_pagina_aca" target="_blank" aria-label="Facebook">
-                <i class="fa-brands fa-facebook-f"></i>
-            </a>
         </div>
-        
         <p>&copy; 2026 Gimnasio Forza Gym - Todos los derechos reservados</p>
     </footer>
+
+    <!-- Botón flotante de WhatsApp -->
+    <a href="#" class="whatsapp-flotante" data-whatsapp target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
     <script src="script.js"></script>
 </body>
