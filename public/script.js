@@ -1,11 +1,13 @@
 // ==========================================================
-// ⚙️ DATOS DEL GIMNASIO: cambiá solo estas dos líneas
+// ⚙️ DATOS DEL GIMNASIO: cambiá solo estas líneas
 // ==========================================================
 const CONFIG_GYM = {
     // Número con código de país, sin "+", espacios ni guiones. Ej: "5493571234567"
     whatsapp: "549XXXXXXXXXX",
-    // Dirección tal cual la buscarías en Google Maps
-    direccion: "Calle 123, Ciudad, Córdoba"
+    // Dirección que se muestra escrita en la página
+    direccion: "Pasaje Bolivia 1285, Villa del Rosario, Córdoba (CP 5963)",
+    // Lo que se busca en Google Maps (con el nombre del gimnasio para que marque el local)
+    busquedaMapa: "Forza Gym, Pasaje Bolivia 1285, Villa del Rosario, Córdoba, Argentina"
 };
 
 const MENSAJE_WHATSAPP = "¡Hola! Quiero consultar por los planes de Forza Gym.";
@@ -30,8 +32,18 @@ document.querySelectorAll("[data-direccion]").forEach(el => {
 
 const mapa = document.getElementById("mapaGym");
 if (mapa) {
-    mapa.src = `https://www.google.com/maps?q=${encodeURIComponent(CONFIG_GYM.direccion)}&output=embed`;
+    mapa.src = `https://www.google.com/maps?q=${encodeURIComponent(CONFIG_GYM.busquedaMapa)}&output=embed`;
 }
+
+// Al tocar la dirección se abre Google Maps (en el celu, la app) para ir hasta el gimnasio
+document.querySelectorAll("[data-direccion]").forEach(el => {
+    const link = document.createElement("a");
+    link.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(CONFIG_GYM.busquedaMapa)}`;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = CONFIG_GYM.direccion;
+    el.replaceChildren(link);
+});
 
 // ==========================================================
 // Menú hamburguesa (celular)
