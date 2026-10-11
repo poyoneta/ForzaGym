@@ -35,6 +35,7 @@ router.get("/", async (req, res) => {
             id: socio.id,
             nombre: socio.nombre,
             email: socio.email,
+            rol: socio.rol || "cliente",
             telefono: socio.telefono || "Sin teléfono",
             planElegido: socio.plan_elegido,
             mensaje: socio.mensaje,

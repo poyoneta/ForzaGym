@@ -162,6 +162,91 @@
         .form-group-rutina { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
         .form-group-rutina label { font-size: 0.75rem; color: #888; font-weight: bold; text-transform: uppercase; }
         .form-group-rutina input, .form-group-rutina select { background: #111; border: 1px solid #2d2d2d; color:#fff; padding: 0.6rem; border-radius: 4px; font-family: 'Montserrat';}
+
+        /* ================= RESUMEN (tarjetas de arriba) ================= */
+        .resumen {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat {
+            background: #1a1a1a;
+            border: 1px solid #2d2d2d;
+            border-left: 4px solid #555;
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+        }
+        .stat:hover { border-color: #444; transform: translateY(-2px); }
+        .stat.activo-filtro { background: #222; box-shadow: 0 0 0 1px currentColor inset; }
+        .stat span { display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #888; font-weight: bold; }
+        .stat strong { font-size: 2rem; font-weight: 900; line-height: 1.2; }
+        .stat.total { border-left-color: #fff; }
+        .stat.ok { border-left-color: #39e4a5; } .stat.ok strong { color: #39e4a5; }
+        .stat.pronto { border-left-color: #ffb020; } .stat.pronto strong { color: #ffb020; }
+        .stat.vencido { border-left-color: #ff4d4d; } .stat.vencido strong { color: #ff4d4d; }
+
+        /* ================= BUSCADOR Y FILTROS ================= */
+        .barra-filtros {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.2rem;
+            align-items: center;
+        }
+        .buscador {
+            flex: 1 1 260px;
+            position: relative;
+        }
+        .buscador i { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #555; }
+        .barra-filtros input, .barra-filtros select {
+            background: #111;
+            border: 1px solid #2d2d2d;
+            color: #fff;
+            padding: 0.7rem 0.9rem;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+        }
+        .buscador input { width: 100%; padding-left: 2.4rem; box-sizing: border-box; }
+        .barra-filtros input:focus, .barra-filtros select:focus { border-color: #39e4a5; outline: none; }
+        .contador-resultados { font-size: 0.8rem; color: #666; margin-left: auto; }
+
+        /* ================= ESTADO DEL VENCIMIENTO EN LA TABLA ================= */
+        tr.fila-vencido td:first-child { box-shadow: inset 4px 0 0 #ff4d4d; }
+        tr.fila-pronto td:first-child { box-shadow: inset 4px 0 0 #ffb020; }
+        .venc-fecha { display: block; font-weight: bold; }
+        .venc-estado { display: inline-block; margin-top: 0.2rem; font-size: 0.72rem; font-weight: bold; text-transform: uppercase; padding: 0.1rem 0.45rem; border-radius: 4px; }
+        .estado-ok { color: #39e4a5; background: rgba(57,228,165,0.1); }
+        .estado-pronto { color: #ffb020; background: rgba(255,176,32,0.12); }
+        .estado-vencido { color: #ff4d4d; background: rgba(255,77,77,0.12); }
+        .estado-sin { color: #888; background: #222; }
+        .sin-resultados { text-align: center; color: #666; padding: 2rem; }
+        td.acciones { text-align: right; white-space: nowrap; }
+
+        .btn-plan { background-color: #222; border: 1px solid #ffb020; color: #ffb020; margin-left: 0.2rem; }
+        .btn-plan:hover { background-color: #ffb020; color: #000; }
+
+        /* ================= MODAL EDITAR PLAN ================= */
+        .grid-plan { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .grid-plan .completo { grid-column: span 2; }
+        .renovar-rapido { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.3rem 0 1.2rem 0; }
+        .btn-chip { background: #111; border: 1px solid #39e4a5; color: #39e4a5; }
+        .btn-chip:hover { background: #39e4a5; color: #000; }
+        .vista-previa-plan { font-size: 0.85rem; color: #aaa; background: #111; border: 1px dashed #333; padding: 0.7rem 0.9rem; border-radius: 6px; margin-bottom: 1rem; }
+
+        @media (max-width: 760px) {
+            body { padding: 1rem; }
+            .resumen { grid-template-columns: 1fr 1fr; }
+            .grid-plan { grid-template-columns: 1fr; }
+            .grid-plan .completo { grid-column: span 1; }
+            .contador-resultados { margin-left: 0; width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -172,8 +257,39 @@
             <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
         </header>
 
+        <!-- Resumen: al tocar una tarjeta se filtra la tabla -->
+        <div class="resumen">
+            <button class="stat total" data-estado="todos"><span>Socios</span><strong id="statTotal">0</strong></button>
+            <button class="stat ok" data-estado="ok"><span>Activos</span><strong id="statActivos">0</strong></button>
+            <button class="stat pronto" data-estado="pronto"><span>Vencen en 7 días</span><strong id="statPronto">0</strong></button>
+            <button class="stat vencido" data-estado="vencido"><span>Vencidos</span><strong id="statVencidos">0</strong></button>
+        </div>
+
         <div class="card-tabla">
-            <h3 style="margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.5px; color: #aaa; margin-bottom: 1.5rem;"><i class="fa-solid fa-users"></i> Socios Inscriptos</h3>
+            <h3 style="margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.5px; color: #aaa; margin-bottom: 1.2rem;"><i class="fa-solid fa-users"></i> Socios Inscriptos</h3>
+
+            <div class="barra-filtros">
+                <div class="buscador">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="search" id="filtroTexto" placeholder="Buscar por nombre, email o teléfono...">
+                </div>
+                <select id="filtroPlan">
+                    <option value="todos">Todos los planes</option>
+                    <option value="Básico">Básico</option>
+                    <option value="Plus">Plus</option>
+                    <option value="Premium">Premium</option>
+                    <option value="otro">Otro / Sin plan</option>
+                </select>
+                <select id="filtroEstado">
+                    <option value="todos">Todos los estados</option>
+                    <option value="ok">Activos</option>
+                    <option value="pronto">Vencen en 7 días</option>
+                    <option value="vencido">Vencidos</option>
+                    <option value="sin">Sin fecha</option>
+                </select>
+                <span class="contador-resultados" id="contadorResultados"></span>
+            </div>
+
             <table>
                 <thead>
                     <tr>
@@ -196,6 +312,51 @@
             <span class="close-modal" onclick="cerrarModal('modalFicha')">&times;</span>
             <h2><i class="fa-solid fa-heart-pulse"></i> Ficha Física y Médica</h2>
             <div class="info-ficha-grid" id="detalleFicha"></div>
+        </div>
+    </div>
+
+    <div id="modalPlan" class="modal">
+        <div class="modal-content" style="max-width: 520px;">
+            <span class="close-modal" onclick="cerrarModal('modalPlan')">&times;</span>
+            <h2><i class="fa-solid fa-calendar-check"></i> Plan y Vencimiento</h2>
+            <p style="margin: 0 0 1.2rem 0; font-size: 0.85rem; color: #aaa;">Socio: <strong id="planSocioNombre" style="color: #39e4a5;"></strong></p>
+
+            <form id="formPlan">
+                <input type="hidden" id="planSocioId">
+
+                <div class="grid-plan">
+                    <div class="form-group-rutina completo">
+                        <label>Plan</label>
+                        <select id="planEditar" required>
+                            <option value="Básico">Plan Básico (2 días/sem)</option>
+                            <option value="Plus">Plan Plus (3 días/sem)</option>
+                            <option value="Premium">Plan Premium (Pase libre + Nutrición)</option>
+                        </select>
+                    </div>
+                    <div class="form-group-rutina">
+                        <label>Fecha de inicio</label>
+                        <input type="date" id="planInicio" required>
+                    </div>
+                    <div class="form-group-rutina">
+                        <label>Fecha de vencimiento</label>
+                        <input type="date" id="planFin" required>
+                    </div>
+                </div>
+
+                <label style="font-size: 0.75rem; color: #888; font-weight: bold; text-transform: uppercase;">Renovación rápida</label>
+                <div class="renovar-rapido">
+                    <button type="button" class="btn btn-chip" onclick="renovarPlan('hoy', 1)">+1 mes desde hoy</button>
+                    <button type="button" class="btn btn-chip" onclick="renovarPlan('vencimiento', 1)">+1 mes desde el vencimiento</button>
+                    <button type="button" class="btn btn-chip" onclick="renovarPlan('hoy', 3)">+3 meses desde hoy</button>
+                </div>
+
+                <div class="vista-previa-plan" id="vistaPreviaPlan"></div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+                    <button type="button" class="btn btn-baja" style="margin:0;" onclick="cerrarModal('modalPlan')">Cancelar</button>
+                    <button type="submit" class="btn btn-ficha"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -243,45 +404,286 @@
         }
 
         let listaSociosGlobal = [];
+        const DIAS_AVISO = 7; // Cuántos días antes del vencimiento se marca en naranja
+        const PLANES_VALIDOS = ['Básico', 'Plus', 'Premium'];
+
+        // ================= UTILIDADES DE FECHAS =================
+
+        // Convierte lo que venga de la base a una fecha local sin hora (para comparar por días)
+        function soloDia(valor) {
+            if (!valor) return null;
+            const d = new Date(valor);
+            if (isNaN(d)) return null;
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        }
+
+        function hoy() {
+            const d = new Date();
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        }
+
+        // Fecha -> "2026-10-11" (formato de los <input type="date">)
+        function aInputFecha(fecha) {
+            if (!fecha) return '';
+            const m = String(fecha.getMonth() + 1).padStart(2, '0');
+            const d = String(fecha.getDate()).padStart(2, '0');
+            return `${fecha.getFullYear()}-${m}-${d}`;
+        }
+
+        // "2026-10-11" -> Date local
+        function desdeInputFecha(texto) {
+            if (!texto) return null;
+            const [a, m, d] = texto.split('-').map(Number);
+            return new Date(a, m - 1, d);
+        }
+
+        function formatearFecha(fecha) {
+            return fecha ? fecha.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '--/--/----';
+        }
+
+        // Suma meses sin pasarse de mes (31/01 + 1 mes = 28/02, no 03/03)
+        function sumarMeses(fecha, meses) {
+            const r = new Date(fecha.getFullYear(), fecha.getMonth() + meses, 1);
+            const ultimoDia = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate();
+            r.setDate(Math.min(fecha.getDate(), ultimoDia));
+            return r;
+        }
+
+        function diasEntre(desde, hasta) {
+            return Math.round((hasta - desde) / (1000 * 60 * 60 * 24));
+        }
+
+        // Estado del socio según su vencimiento: ok | pronto | vencido | sin
+        function estadoSocio(socio) {
+            const fin = soloDia(socio.fechaFinPlan);
+            if (!fin) return { clave: 'sin', dias: null, fin: null };
+            const dias = diasEntre(hoy(), fin);
+            if (dias < 0) return { clave: 'vencido', dias, fin };
+            if (dias <= DIAS_AVISO) return { clave: 'pronto', dias, fin };
+            return { clave: 'ok', dias, fin };
+        }
+
+        function textoEstado(estado) {
+            const { clave, dias } = estado;
+            if (clave === 'sin') return 'Sin fecha';
+            if (clave === 'vencido') return dias === -1 ? 'Venció ayer' : `Vencido hace ${-dias} días`;
+            if (dias === 0) return 'Vence hoy';
+            if (dias === 1) return 'Vence mañana';
+            return clave === 'pronto' ? `Vence en ${dias} días` : `${dias} días restantes`;
+        }
+
+        // Evita que un nombre con símbolos raros rompa la tabla
+        function esc(texto) {
+            return String(texto ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        // ================= LISTADO DE SOCIOS =================
+
+        function sociosSinAdmin() {
+            return listaSociosGlobal.filter(s => s.rol !== 'admin' && s.email !== 'admin@gym.com');
+        }
 
         async function cargarSocios() {
             try {
                 const res = await fetch('/api/socios');
                 listaSociosGlobal = await res.json();
-                
-                const tbody = document.getElementById('tablaSocios');
-                tbody.innerHTML = '';
-
-                listaSociosGlobal.forEach(socio => {
-                    if(socio.email === 'admin@gym.com') return;
-
-                    const claseBadge = socio.planElegido === 'Premium' ? 'plan-badge plan-premium' : 'plan-badge';
-                    
-                    let vencimientoStr = "--/--/--";
-                    if(socio.fechaFinPlan) {
-                        vencimientoStr = new Date(socio.fechaFinPlan).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit', year: 'numeric'});
-                    }
-
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>#${socio.id}</td>
-                            <td style="font-weight: bold;">${socio.nombre}</td>
-                            <td>${socio.email}</td>
-                            <td>${socio.telefono}</td>
-                            <td><span class="${claseBadge}">${socio.planElegido}</span></td>
-                            <td style="font-weight: bold; color: #ccc;">${vencimientoStr}</td>
-                            <td style="text-align: right;">
-                                <button class="btn btn-ficha" onclick="verFichaSocio(${socio.id})"><i class="fa-solid fa-file-medical"></i></button>
-                                <button class="btn btn-rutina" onclick="abrirCreadorRutina(${socio.id})"><i class="fa-solid fa-dumbbell"></i> Rutina</button>
-                                <button class="btn btn-baja" onclick="darDeBaja(${socio.id})"><i class="fa-solid fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `;
-                });
+                actualizarResumen();
+                renderTabla();
             } catch (err) {
                 console.error("Error al traer los socios:", err);
+                document.getElementById('tablaSocios').innerHTML =
+                    `<tr><td colspan="7" class="sin-resultados" style="color:#ff4d4d;">No se pudieron cargar los socios.</td></tr>`;
             }
         }
+
+        function actualizarResumen() {
+            const socios = sociosSinAdmin();
+            const cuenta = { ok: 0, pronto: 0, vencido: 0, sin: 0 };
+            socios.forEach(s => cuenta[estadoSocio(s).clave]++);
+
+            document.getElementById('statTotal').textContent = socios.length;
+            // "Activos" incluye a los que vencen pronto (siguen al día)
+            document.getElementById('statActivos').textContent = cuenta.ok + cuenta.pronto;
+            document.getElementById('statPronto').textContent = cuenta.pronto;
+            document.getElementById('statVencidos').textContent = cuenta.vencido;
+        }
+
+        function renderTabla() {
+            const texto = document.getElementById('filtroTexto').value.trim().toLowerCase();
+            const plan = document.getElementById('filtroPlan').value;
+            const estadoFiltro = document.getElementById('filtroEstado').value;
+
+            const socios = sociosSinAdmin()
+                .map(s => ({ socio: s, estado: estadoSocio(s) }))
+                .filter(({ socio, estado }) => {
+                    if (texto) {
+                        const campos = `${socio.nombre} ${socio.email} ${socio.telefono}`.toLowerCase();
+                        if (!campos.includes(texto)) return false;
+                    }
+                    if (plan !== 'todos') {
+                        if (plan === 'otro') { if (PLANES_VALIDOS.includes(socio.planElegido)) return false; }
+                        else if (socio.planElegido !== plan) return false;
+                    }
+                    if (estadoFiltro === 'ok') return estado.clave === 'ok' || estado.clave === 'pronto';
+                    if (estadoFiltro !== 'todos' && estado.clave !== estadoFiltro) return false;
+                    return true;
+                })
+                // Primero los vencidos, después los que vencen antes
+                .sort((a, b) => {
+                    const fa = a.estado.fin ? a.estado.fin.getTime() : Infinity;
+                    const fb = b.estado.fin ? b.estado.fin.getTime() : Infinity;
+                    return fa - fb;
+                });
+
+            const tbody = document.getElementById('tablaSocios');
+            document.getElementById('contadorResultados').textContent =
+                `${socios.length} de ${sociosSinAdmin().length} socios`;
+
+            if (socios.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="sin-resultados">No hay socios que coincidan con la búsqueda.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = socios.map(({ socio, estado }) => {
+                const claseBadge = socio.planElegido === 'Premium' ? 'plan-badge plan-premium' : 'plan-badge';
+                const claseFila = estado.clave === 'vencido' ? 'fila-vencido' : estado.clave === 'pronto' ? 'fila-pronto' : '';
+                const claseEstado = { ok: 'estado-ok', pronto: 'estado-pronto', vencido: 'estado-vencido', sin: 'estado-sin' }[estado.clave];
+
+                return `
+                    <tr class="${claseFila}">
+                        <td>#${socio.id}</td>
+                        <td style="font-weight: bold;">${esc(socio.nombre)}</td>
+                        <td>${esc(socio.email)}</td>
+                        <td>${esc(socio.telefono)}</td>
+                        <td><span class="${claseBadge}">${esc(socio.planElegido || 'Sin plan')}</span></td>
+                        <td>
+                            <span class="venc-fecha">${formatearFecha(estado.fin)}</span>
+                            <span class="venc-estado ${claseEstado}">${textoEstado(estado)}</span>
+                        </td>
+                        <td class="acciones">
+                            <button class="btn btn-ficha" title="Ficha médica" onclick="verFichaSocio(${socio.id})"><i class="fa-solid fa-file-medical"></i></button>
+                            <button class="btn btn-plan" title="Plan y vencimiento" onclick="abrirEditorPlan(${socio.id})"><i class="fa-solid fa-calendar-check"></i> Plan</button>
+                            <button class="btn btn-rutina" title="Rutina" onclick="abrirCreadorRutina(${socio.id})"><i class="fa-solid fa-dumbbell"></i> Rutina</button>
+                            <button class="btn btn-baja" title="Dar de baja" onclick="darDeBaja(${socio.id})"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Filtros
+        document.getElementById('filtroTexto').addEventListener('input', renderTabla);
+        document.getElementById('filtroPlan').addEventListener('change', renderTabla);
+        document.getElementById('filtroEstado').addEventListener('change', () => { marcarStatActiva(); renderTabla(); });
+
+        // Tocar una tarjeta del resumen filtra por ese estado
+        document.querySelectorAll('.stat').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('filtroEstado').value = btn.dataset.estado;
+                marcarStatActiva();
+                renderTabla();
+            });
+        });
+
+        function marcarStatActiva() {
+            const valor = document.getElementById('filtroEstado').value;
+            document.querySelectorAll('.stat').forEach(b =>
+                b.classList.toggle('activo-filtro', b.dataset.estado === valor && valor !== 'todos'));
+        }
+
+        // ================= EDITAR PLAN Y VENCIMIENTO =================
+
+        function abrirEditorPlan(id) {
+            const socio = listaSociosGlobal.find(s => s.id === id);
+            if (!socio) return;
+
+            document.getElementById('planSocioId').value = socio.id;
+            document.getElementById('planSocioNombre').textContent = socio.nombre;
+
+            // Si tiene un plan viejo que no es Básico/Plus/Premium, se muestra para que lo corrijas
+            const select = document.getElementById('planEditar');
+            select.querySelectorAll('option[data-viejo]').forEach(o => o.remove());
+            if (socio.planElegido && !PLANES_VALIDOS.includes(socio.planElegido)) {
+                const opt = new Option(`${socio.planElegido} (plan anterior)`, socio.planElegido);
+                opt.dataset.viejo = '1';
+                select.add(opt);
+            }
+            select.value = socio.planElegido || 'Básico';
+
+            const inicio = soloDia(socio.fechaInicioPlan) || hoy();
+            const fin = soloDia(socio.fechaFinPlan) || sumarMeses(inicio, 1);
+            document.getElementById('planInicio').value = aInputFecha(inicio);
+            document.getElementById('planFin').value = aInputFecha(fin);
+
+            actualizarVistaPrevia();
+            document.getElementById('modalPlan').style.display = 'flex';
+        }
+
+        // desde: 'hoy' o 'vencimiento'
+        function renovarPlan(desde, meses) {
+            const id = Number(document.getElementById('planSocioId').value);
+            const socio = listaSociosGlobal.find(s => s.id === id);
+            const vencActual = soloDia(socio && socio.fechaFinPlan);
+
+            let base = hoy();
+            // Si todavía no venció, "desde el vencimiento" no le hace perder días pagos
+            if (desde === 'vencimiento' && vencActual) base = vencActual;
+
+            document.getElementById('planInicio').value = aInputFecha(base);
+            document.getElementById('planFin').value = aInputFecha(sumarMeses(base, meses));
+            actualizarVistaPrevia();
+        }
+
+        function actualizarVistaPrevia() {
+            const inicio = desdeInputFecha(document.getElementById('planInicio').value);
+            const fin = desdeInputFecha(document.getElementById('planFin').value);
+            const caja = document.getElementById('vistaPreviaPlan');
+
+            if (!inicio || !fin) { caja.textContent = 'Completá ambas fechas.'; return; }
+            if (fin < inicio) { caja.innerHTML = '<span style="color:#ff4d4d;">El vencimiento no puede ser anterior al inicio.</span>'; return; }
+
+            const estado = estadoSocio({ fechaFinPlan: fin });
+            caja.innerHTML = `Del <strong>${formatearFecha(inicio)}</strong> al <strong>${formatearFecha(fin)}</strong> · ${textoEstado(estado)}`;
+        }
+
+        document.getElementById('planInicio').addEventListener('change', actualizarVistaPrevia);
+        document.getElementById('planFin').addEventListener('change', actualizarVistaPrevia);
+
+        document.getElementById('formPlan').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('planSocioId').value;
+            const planElegido = document.getElementById('planEditar').value;
+            const inicioTxt = document.getElementById('planInicio').value;
+            const finTxt = document.getElementById('planFin').value;
+
+            if (desdeInputFecha(finTxt) < desdeInputFecha(inicioTxt)) {
+                alert('El vencimiento no puede ser anterior a la fecha de inicio.');
+                return;
+            }
+
+            try {
+                // Se guarda al mediodía para que la fecha no se corra un día por la zona horaria
+                const res = await fetch(`/api/socios/plan/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        planElegido,
+                        fechaInicioPlan: `${inicioTxt}T12:00:00`,
+                        fechaFinPlan: `${finTxt}T12:00:00`
+                    })
+                });
+
+                if (res.ok) {
+                    cerrarModal('modalPlan');
+                    await cargarSocios();
+                } else {
+                    const datos = await res.json().catch(() => ({}));
+                    alert(datos.error || 'No se pudo actualizar el plan.');
+                }
+            } catch (err) {
+                alert('Error de conexión.');
+            }
+        });
 
         function verFichaSocio(id) {
             const socio = listaSociosGlobal.find(s => s.id === id);
