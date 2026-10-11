@@ -3,9 +3,9 @@
   "name": "Forza Gym - Mi Perfil",
   "icons": [
     {
-      "src": "icono.png",
-      "type": "image/png",
-      "sizes": "512x512",
+      "src": "icono.jpeg",
+      "type": "image/jpeg",
+      "sizes": "500x500",
       "purpose": "any maskable"
     }
   ],

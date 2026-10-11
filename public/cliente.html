@@ -315,8 +315,9 @@
                 }
                 lista.innerHTML = '';
                 pesos.forEach(item => {
-                    let f = item.Fecha ? new Date(item.Fecha).toLocaleDateString([], {day: '2-digit', month: '2-digit'}) : "--/--";
-                    lista.innerHTML += `<li class="historial-item"><div><strong>${item.Ejercicio}</strong> <span class="fecha-tag">(${f})</span></div><span class="peso-tag">${item.Peso} Kg</span></li>`;
+                    // Postgres devuelve las columnas en minúscula: ejercicio, peso, fecha
+                    let f = item.fecha ? new Date(item.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'}) : "--/--";
+                    lista.innerHTML += `<li class="historial-item"><div><strong>${item.ejercicio}</strong> <span class="fecha-tag">(${f})</span></div><span class="peso-tag">${item.peso} Kg</span></li>`;
                 });
             } catch (err) { console.error(err); }
         }

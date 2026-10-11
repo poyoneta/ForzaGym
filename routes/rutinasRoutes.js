@@ -64,14 +64,24 @@ router.get("/:socioId", async (req, res) => {
 
         const rutinaRaw = result.rows[0];
 
-        // Mapeamos directo los campos al frontend. 
-        // Como 'ejercicios' ya es texto en la DB, pasa directo sin alterar.
+        // 'ejercicios' se guarda como texto (JSON en string) en la DB.
+        // Lo convertimos de nuevo a array para que el frontend pueda recorrerlo con forEach.
+        let ejercicios = [];
+        try {
+            const valor = rutinaRaw.ejercicios;
+            ejercicios = typeof valor === "string" ? JSON.parse(valor) : (valor || []);
+            if (!Array.isArray(ejercicios)) ejercicios = [];
+        } catch (e) {
+            console.error(`[Supabase] 'ejercicios' inválido para el socio #${socioId}:`, e.message);
+            ejercicios = [];
+        }
+
         const rutina = {
             id: rutinaRaw.id,
             socioId: rutinaRaw.socio_id,
             duracionSemanas: rutinaRaw.duracion_semanas,
             enfoque: rutinaRaw.enfoque,
-            ejercicios: rutinaRaw.ejercicios 
+            ejercicios
         };
 
         res.json(rutina);
