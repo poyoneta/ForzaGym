@@ -3,7 +3,7 @@
 // ==========================================================
 const CONFIG_GYM = {
     // Número con código de país, sin "+", espacios ni guiones. Ej: "5493571234567"
-    whatsapp: "549XXXXXXXXXX",
+    whatsapp: "5493572670648",
     // Dirección que se muestra escrita en la página
     direccion: "Pasaje Bolivia 1285, Villa del Rosario, Córdoba (CP 5963)",
     // Lo que se busca en Google Maps (con el nombre del gimnasio para que marque el local)
