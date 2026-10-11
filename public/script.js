@@ -1,7 +1,5 @@
 console.log("Script funcionando correctamente");
 
-alert("¡Bienvenido al Gimnasio Forza!");
-
 document
 .getElementById("formulario")
 .addEventListener("submit",
