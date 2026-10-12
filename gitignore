@@ -1,0 +1,16 @@
+# Dependencias (se instalan con "npm install")
+node_modules/
+
+# Variables de entorno: tienen la contraseña de la base de datos. NUNCA subirlas.
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
