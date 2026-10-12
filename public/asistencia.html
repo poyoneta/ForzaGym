@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forza Gym - Asistencia</title>
+    <meta name="theme-color" content="#0b0b0b">
+    <link rel="icon" type="image/jpeg" href="imagenes/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+        * { box-sizing: border-box; }
+        html, body {
+            background-color: #0b0b0b;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            margin: 0;
+            min-height: 100vh;
+        }
+        body { display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+        .tarjeta {
+            background: #1a1a1a;
+            border-radius: 14px;
+            border-top: 4px solid #39e4a5;
+            padding: 2.5rem 1.8rem 2rem;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        .marca { font-weight: 900; font-size: 1rem; letter-spacing: 1px; color: #888; margin-bottom: 1.5rem; }
+        .marca span { color: #39e4a5; }
+        .icono-grande {
+            width: 96px; height: 96px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.3rem; font-size: 2.8rem;
+        }
+        .icono-grande.ok { background: rgba(57,228,165,0.12); color: #39e4a5; border: 3px solid #39e4a5; animation: aparecer 0.4s ease; }
+        .icono-grande.info { background: rgba(255,176,32,0.12); color: #ffb020; border: 3px solid #ffb020; }
+        .icono-grande.error { background: rgba(255,77,77,0.12); color: #ff4d4d; border: 3px solid #ff4d4d; }
+        .icono-grande.cargando { color: #666; border: 3px solid #333; }
+        @keyframes aparecer { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        h1 { font-weight: 900; font-size: 1.5rem; margin: 0 0 0.5rem; text-transform: uppercase; line-height: 1.2; }
+        h1 span { color: #39e4a5; }
+        p { color: #bbb; margin: 0 0 1rem; line-height: 1.5; }
+
+        .contador {
+            background: #111; border: 1px solid #2d2d2d; border-radius: 10px;
+            padding: 1rem; margin: 1.2rem 0;
+        }
+        .contador strong { display: block; font-size: 2.4rem; font-weight: 900; color: #39e4a5; line-height: 1.1; }
+        .contador span { font-size: 0.8rem; color: #888; text-transform: uppercase; font-weight: bold; }
+
+        .aviso-plan { border-radius: 8px; padding: 0.8rem 1rem; font-size: 0.88rem; margin-bottom: 1.2rem; text-align: left; }
+        .aviso-plan.pronto { background: rgba(255,176,32,0.1); border: 1px solid rgba(255,176,32,0.4); color: #ffcf73; }
+        .aviso-plan.vencido { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.4); color: #ff9a9a; }
+
+        .botones { display: flex; flex-direction: column; gap: 0.7rem; margin-top: 0.5rem; }
+        .btn {
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            padding: 0.95rem; border-radius: 8px; font-weight: 900; font-size: 0.9rem;
+            text-transform: uppercase; text-decoration: none; font-family: 'Montserrat', sans-serif;
+            border: 2px solid #39e4a5; cursor: pointer;
+        }
+        .btn-principal { background: #39e4a5; color: #000; }
+        .btn-secundario { background: transparent; color: #39e4a5; }
+        .btn-whatsapp { background: #25d366; border-color: #25d366; color: #fff; }
+    </style>
+</head>
+<body>
+    <main class="tarjeta" id="tarjeta">
+        <div class="marca">FORZA <span>GYM</span></div>
+        <div class="icono-grande cargando"><i class="fa-solid fa-spinner fa-spin"></i></div>
+        <h1>Registrando...</h1>
+    </main>
+
+    <script src="datos-gym.js"></script>
+    <script>
+        const tarjeta = document.getElementById('tarjeta');
+        const codigo = new URLSearchParams(location.search).get('c');
+        const socioId = localStorage.getItem('usuarioId');
+        const rol = localStorage.getItem('usuarioRol');
+        const aqui = location.pathname.replace(/^\//, '') + location.search; // para volver acá después de entrar
+
+        const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        function mostrar({ icono, tipo, titulo, html = '', botones = '' }) {
+            tarjeta.innerHTML = `
+                <div class="marca">FORZA <span>GYM</span></div>
+                <div class="icono-grande ${tipo}"><i class="fa-solid ${icono}"></i></div>
+                <h1>${titulo}</h1>
+                ${html}
+                <div class="botones">${botones}</div>`;
+        }
+
+        // Días que faltan para el vencimiento (comparando solo fechas)
+        function diasHasta(fecha) {
+            if (!fecha) return null;
+            const f = new Date(fecha);
+            const hoy = new Date();
+            const a = Date.UTC(f.getFullYear(), f.getMonth(), f.getDate());
+            const b = Date.UTC(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
+            return Math.round((a - b) / 86400000);
+        }
+
+        async function registrar() {
+            // 1. Sin el código del QR no se puede marcar
+            if (!codigo) {
+                mostrar({
+                    icono: 'fa-qrcode', tipo: 'info', titulo: 'Escaneá el QR',
+                    html: '<p>Para registrar tu asistencia, escaneá con la cámara del celular el código QR que está en la entrada del gimnasio.</p>',
+                    botones: '<a class="btn btn-secundario" href="cliente.html">Ir a mi panel</a>'
+                });
+                return;
+            }
+
+            // 2. Si no inició sesión como socio, primero tiene que entrar (y vuelve solo a esta página)
+            if (!socioId || rol !== 'cliente') {
+                const volver = encodeURIComponent(aqui);
+                mostrar({
+                    icono: 'fa-user', tipo: 'info', titulo: 'Iniciá sesión',
+                    html: `<p>${rol === 'admin' ? 'Estás con la cuenta de administrador. ' : ''}Entrá con tu cuenta de socio para registrar tu asistencia. Después de entrar, se registra sola.</p>`,
+                    botones: `
+                        <a class="btn btn-principal" href="login.html?volver=${volver}"><i class="fa-solid fa-right-to-bracket"></i> Iniciar sesión</a>
+                        <a class="btn btn-secundario" href="registro.html?volver=${volver}">Crear mi cuenta</a>`
+                });
+                return;
+            }
+
+            // 3. Registrar
+            try {
+                const res = await fetch('/api/asistencias', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ socioId: Number(socioId), codigo })
+                });
+                const r = await res.json();
+                if (!res.ok) throw new Error(r.error || 'No se pudo registrar');
+
+                const nombre = (r.nombre || '').split(' ')[0];
+                const dias = diasHasta(r.fechaFinPlan);
+                let avisoPlan = '';
+                let botonRenovar = '';
+                const mensajeRenovar = `¡Hola! Soy ${r.nombre} y quiero renovar mi plan ${r.plan || ''} en Forza Gym.`;
+
+                if (dias !== null && dias < 0) {
+                    avisoPlan = `<div class="aviso-plan vencido"><i class="fa-solid fa-triangle-exclamation"></i> Tu plan venció hace ${-dias} ${-dias === 1 ? 'día' : 'días'}. Acercate a recepción o avisanos para renovarlo.</div>`;
+                } else if (dias !== null && dias <= 7) {
+                    avisoPlan = `<div class="aviso-plan pronto"><i class="fa-solid fa-clock"></i> ${dias === 0 ? 'Tu plan vence hoy' : `Tu plan vence en ${dias} ${dias === 1 ? 'día' : 'días'}`}.</div>`;
+                }
+                if (avisoPlan) {
+                    botonRenovar = `<a class="btn btn-whatsapp" href="${linkWhatsappGym(mensajeRenovar)}" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Quiero renovar</a>`;
+                }
+
+                mostrar({
+                    icono: 'fa-check', tipo: 'ok',
+                    titulo: r.yaRegistrada ? `Ya estabas, <span>${esc(nombre)}</span>` : `¡A entrenar, <span>${esc(nombre)}</span>!`,
+                    html: `
+                        <p>${r.yaRegistrada ? 'Tu asistencia de hoy ya estaba registrada.' : 'Tu asistencia de hoy quedó registrada.'}</p>
+                        <div class="contador"><strong>${r.asistenciasMes}</strong><span>${r.asistenciasMes === 1 ? 'vez' : 'veces'} este mes</span></div>
+                        ${avisoPlan}`,
+                    botones: `${botonRenovar}<a class="btn btn-secundario" href="cliente.html">Ver mi rutina</a>`
+                });
+            } catch (err) {
+                mostrar({
+                    icono: 'fa-xmark', tipo: 'error', titulo: 'No se pudo registrar',
+                    html: `<p>${esc(err.message)}</p>`,
+                    botones: '<button class="btn btn-secundario" onclick="location.reload()">Intentar de nuevo</button>'
+                });
+            }
+        }
+
+        registrar();
+    </script>
+</body>
+</html>

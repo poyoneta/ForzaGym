@@ -66,7 +66,8 @@ const LIMPIADORES = { planes: limpiarPlanes, horarios: limpiarHorarios, producto
 // 1. TODA LA CONFIGURACIÓN (GET /api/config) - la usa el index
 router.get("/", async (req, res) => {
     try {
-        const result = await db.query("SELECT clave, valor FROM configuracion");
+        // Solo lo público (el código del QR de asistencia también vive en esta tabla y no se muestra)
+        const result = await db.query("SELECT clave, valor FROM configuracion WHERE clave = ANY($1)", [CLAVES]);
         const config = {};
         result.rows.forEach(fila => { config[fila.clave] = fila.valor; });
         res.json(config);

@@ -131,6 +131,16 @@
 </div>
 
     <script>
+        // Si vino desde otra página del sitio (por ejemplo el QR de asistencia), vuelve ahí después de entrar.
+        // Solo se aceptan páginas propias (nada de "http://" ni "//otro-sitio").
+        const volverParam = new URLSearchParams(location.search).get('volver') || '';
+        const volver = /^[\w\-]+\.html(\?[\w=&%\-.]*)?$/.test(volverParam) ? volverParam : '';
+
+        // El link a "Registrate" también conserva a dónde volver
+        if (volver) {
+            document.querySelectorAll('a[href="registro.html"]').forEach(a => a.href = 'registro.html?volver=' + encodeURIComponent(volver));
+        }
+
         document.getElementById('formLogin').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -154,7 +164,9 @@
                     localStorage.setItem('usuarioNombre', datos.nombre);
                     localStorage.setItem('usuarioRol', datos.rol);
 
-                    if (datos.rol === 'admin') {
+                    if (volver) {
+                        window.location.href = volver;
+                    } else if (datos.rol === 'admin') {
                         window.location.href = 'admin.html';
                     } else {
                         window.location.href = 'cliente.html';

@@ -33,6 +33,12 @@ app.use(
     require("./routes/configRoutes")
 );
 
+// Asistencias con el QR de la entrada
+app.use(
+    "/api/asistencias",
+    require("./routes/asistenciasRoutes")
+);
+
 // Fotos subidas desde el backoffice
 app.use(
     "/api/imagenes",

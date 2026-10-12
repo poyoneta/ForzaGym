@@ -1,14 +1,4 @@
-// ==========================================================
-// ⚙️ DATOS DEL GIMNASIO: cambiá solo estas líneas
-// ==========================================================
-const CONFIG_GYM = {
-    // Número con código de país, sin "+", espacios ni guiones. Ej: "5493571234567"
-    whatsapp: "5493572670648",
-    // Dirección que se muestra escrita en la página
-    direccion: "Pasaje Bolivia 1285, Villa del Rosario, Córdoba (CP 5963)",
-    // Lo que se busca en Google Maps (con el nombre del gimnasio para que marque el local)
-    busquedaMapa: "Forza Gym, Pasaje Bolivia 1285, Villa del Rosario, Córdoba, Argentina"
-};
+// El WhatsApp y la dirección del gimnasio están en datos-gym.js (se carga antes que este archivo)
 
 const MENSAJE_WHATSAPP = "¡Hola! Quiero consultar por los planes de Forza Gym.";
 

@@ -58,9 +58,10 @@ router.get("/", async (req, res) => {
 
 // Guardar un nuevo socio (Inscripción pública)
 router.post("/", async (req, res) => {
-    const nombre = req.body.nombre || req.body.Nombre;
-    const email = req.body.email || req.body.Email;
-    const password = req.body.password || req.body.Password; 
+    const nombre = (req.body.nombre || req.body.Nombre || "").trim();
+    // El email se guarda sin espacios y en minúscula, así "Juan@Mail.com" y "juan@mail.com" son el mismo
+    const email = (req.body.email || req.body.Email || "").trim().toLowerCase();
+    const password = req.body.password || req.body.Password;
     const telefono = req.body.telefono || req.body.Telefono;
     const planElegido = req.body.planElegido || req.body.PlanElegido;
     const mensaje = req.body.mensaje || req.body.Mensaje;
@@ -70,10 +71,17 @@ router.post("/", async (req, res) => {
     }
 
     try {
+        // ¿Ya existe alguien con ese email?
+        const existente = await db.query("SELECT id FROM socios WHERE LOWER(TRIM(email)) = $1", [email]);
+        if (existente.rows.length > 0) {
+            return res.status(409).json({ error: "Ese email ya está registrado. Si es tuyo, iniciá sesión." });
+        }
+
         // En Postgres usamos $1, $2... y manejamos las fechas de forma nativa
         const queryTexto = `
-            INSERT INTO socios (nombre, email, password, rol, telefono, plan_elegido, mensaje, fecha_inscripcion, fecha_inicio_plan, fecha_fin_plan) 
+            INSERT INTO socios (nombre, email, password, rol, telefono, plan_elegido, mensaje, fecha_inscripcion, fecha_inicio_plan, fecha_fin_plan)
             VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW(), NOW() + INTERVAL '1 month')
+            RETURNING id
         `;
         
         const valores = [
@@ -86,7 +94,7 @@ router.post("/", async (req, res) => {
             mensaje || null
         ];
 
-        await db.query(queryTexto, valores);
+        const insertado = await db.query(queryTexto, valores);
 
         // Agregar la notificación al panel
         notificaciones.unshift({
@@ -95,7 +103,14 @@ router.post("/", async (req, res) => {
             fecha: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         });
 
-        res.status(201).json({ success: true, message: "Socio registrado con éxito." });
+        // Devolvemos los datos para que el registro inicie sesión solo
+        res.status(201).json({
+            success: true,
+            message: "Socio registrado con éxito.",
+            id: insertado.rows[0].id,
+            nombre,
+            rol: "cliente"
+        });
     } catch (error) {
         console.error("Error en POST /api/socios:", error);
         res.status(500).json({ error: "Error interno en la base de datos" });
@@ -125,7 +140,8 @@ router.post("/login", async (req, res) => {
     }
 
     try {
-        const queryTexto = "SELECT id, nombre, rol FROM socios WHERE email = $1 AND password = $2";
+        // El email no distingue mayúsculas ni espacios de más
+        const queryTexto = "SELECT id, nombre, rol FROM socios WHERE LOWER(TRIM(email)) = LOWER(TRIM($1)) AND password = $2";
         const result = await db.query(queryTexto, [email, password]);
 
         if (result.rows.length > 0) {

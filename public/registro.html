@@ -166,6 +166,13 @@
     <script>
         // Si viene desde un botón "Elegir plan" del index (registro.html?plan=Premium), lo dejamos preseleccionado
         const planUrl = new URLSearchParams(window.location.search).get('plan');
+
+        // Si vino desde el QR de asistencia, después de registrarse vuelve ahí (solo páginas propias)
+        const volverParam = new URLSearchParams(window.location.search).get('volver') || '';
+        const volverRegistro = /^[\w\-]+\.html(\?[\w=&%\-.]*)?$/.test(volverParam) ? volverParam : '';
+        if (volverRegistro) {
+            document.querySelectorAll('a[href="login.html"]').forEach(a => a.href = 'login.html?volver=' + encodeURIComponent(volverRegistro));
+        }
         const selectPlan = document.getElementById('planElegido');
 
         function preseleccionarPlan() {
@@ -217,11 +224,26 @@
                 const datos = await respuesta.json();
 
                 if (respuesta.ok) {
-                    successBox.textContent = '¡Cuenta creada con éxito! Redirigiendo al login...';
+                    // Inicia sesión solo y entra directo (o vuelve a la página de asistencia si vino del QR)
+                    localStorage.setItem('usuarioId', datos.id);
+                    localStorage.setItem('usuarioNombre', datos.nombre);
+                    localStorage.setItem('usuarioRol', datos.rol || 'cliente');
+
+                    successBox.textContent = '¡Cuenta creada! Entrando a tu panel...';
                     successBox.style.display = 'block';
                     setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 2000);
+                        window.location.href = volverRegistro || 'cliente.html';
+                    }, 1200);
+                } else if (respuesta.status === 409) {
+                    // Email repetido: le ofrecemos ir al login
+                    errorBox.innerHTML = '';
+                    errorBox.append(datos.error + ' ');
+                    const link = document.createElement('a');
+                    link.href = 'login.html' + (volverRegistro ? '?volver=' + encodeURIComponent(volverRegistro) : '');
+                    link.textContent = 'Ir a iniciar sesión';
+                    link.style.cssText = 'color:#39e4a5; font-weight:bold;';
+                    errorBox.append(link);
+                    errorBox.style.display = 'block';
                 } else {
                     errorBox.textContent = datos.error || 'Ocurrió un error al registrarse';
                     errorBox.style.display = 'block';

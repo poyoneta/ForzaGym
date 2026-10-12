@@ -107,6 +107,30 @@ async function inicializarBaseDeDatos() {
     } catch (error) {
         console.error("❌ No se pudo preparar la configuración del sitio:", error.message);
     }
+
+    try {
+        // Asistencias: una por socio por día (la fecha es la de Argentina)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS asistencias (
+                id SERIAL PRIMARY KEY,
+                socio_id INTEGER NOT NULL REFERENCES socios(id) ON DELETE CASCADE,
+                fecha DATE NOT NULL,
+                hora TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                UNIQUE (socio_id, fecha)
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_asistencias_fecha ON asistencias (fecha)`);
+
+        // Código secreto que lleva el QR de la entrada (se puede regenerar desde el backoffice)
+        const codigo = require("crypto").randomBytes(6).toString("hex");
+        await db.query(
+            `INSERT INTO configuracion (clave, valor) VALUES ('codigo_asistencia', $1) ON CONFLICT (clave) DO NOTHING`,
+            [JSON.stringify(codigo)]
+        );
+        console.log("✅ Tabla 'asistencias' lista");
+    } catch (error) {
+        console.error("❌ No se pudo crear la tabla 'asistencias':", error.message);
+    }
 }
 
 module.exports = inicializarBaseDeDatos;

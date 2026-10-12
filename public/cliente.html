@@ -78,7 +78,59 @@
         .capa-bloqueo i { color: #39e4a5; font-size: 2.5rem; margin-bottom: 1rem; }
         .capa-bloqueo p { font-weight: bold; text-transform: uppercase; font-size: 0.9rem; margin: 0; }
 
-        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        /* ===== Aviso de vencimiento ===== */
+        .aviso-vencimiento {
+            display: none; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+            border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; font-size: 0.92rem;
+        }
+        .aviso-vencimiento.pronto { display: flex; background: rgba(255,176,32,0.1); border: 1px solid rgba(255,176,32,0.45); color: #ffd68a; }
+        .aviso-vencimiento.vencido { display: flex; background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.45); color: #ffa3a3; }
+        .aviso-vencimiento strong { color: #fff; }
+        .btn-whatsapp {
+            background: #25d366; color: #fff; text-decoration: none; padding: 0.65rem 1rem; border-radius: 6px;
+            font-weight: bold; font-size: 0.82rem; text-transform: uppercase; display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;
+        }
+        .btn-whatsapp:hover { background: #1fb457; }
+
+        /* ===== Asistencias ===== */
+        .resumen-asistencia { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
+        .dato { background: #111; border: 1px solid #2d2d2d; border-radius: 8px; padding: 0.8rem; text-align: center; }
+        .dato strong { display: block; font-size: 1.6rem; font-weight: 900; color: #39e4a5; line-height: 1.2; }
+        .dato span { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: bold; }
+        .calendario { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .calendario .dia-semana { font-size: 0.68rem; color: #666; text-align: center; font-weight: bold; padding-bottom: 0.2rem; }
+        .calendario .dia {
+            aspect-ratio: 1 / 1; border-radius: 6px; background: #151515; color: #555;
+            display: flex; align-items: center; justify-content: center; font-size: 0.78rem;
+        }
+        .calendario .dia.vino { background: #39e4a5; color: #000; font-weight: 900; }
+        .calendario .dia.hoy { outline: 2px solid #fff; outline-offset: -2px; }
+        .calendario .dia.futuro { opacity: 0.35; }
+        .calendario .vacio { background: transparent; }
+        .ayuda-qr { font-size: 0.8rem; color: #777; margin: 1rem 0 0; }
+
+        /* ===== Progreso ===== */
+        .barra-progreso { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .barra-progreso select { width: auto; min-width: 200px; padding: 0.6rem 0.8rem; }
+        .stats-progreso { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-bottom: 1rem; }
+        .contenedor-grafico-progreso { position: relative; }
+        .contenedor-grafico-progreso svg text { font-family: 'Montserrat', sans-serif; }
+        .tooltip-progreso {
+            position: absolute; pointer-events: none; display: none;
+            background: #0b0b0b; border: 1px solid #333; border-radius: 6px; padding: 0.45rem 0.7rem;
+            font-size: 0.8rem; white-space: nowrap; box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+        }
+        .tooltip-progreso.visible { display: block; }
+        .tooltip-progreso b { color: #39e4a5; }
+        .sin-datos { color: #666; font-size: 0.9rem; background: #111; padding: 1rem; border-radius: 6px; border: 1px dashed #333; margin: 0; }
+        details.todas-cargas { margin-top: 1rem; }
+        details.todas-cargas summary { cursor: pointer; color: #888; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 0.8rem; }
+
+        @media (max-width: 600px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .stats-progreso .dato strong, .resumen-asistencia .dato strong { font-size: 1.3rem; }
+            .barra-progreso select { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -88,6 +140,12 @@
             <h1>Hola, <span id="nombreCliente">Cliente</span></h1>
             <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
         </header>
+
+        <!-- Aparece solo si el plan vence en 7 días o menos, o ya venció -->
+        <div class="aviso-vencimiento" id="avisoVencimiento">
+            <span id="textoVencimiento"></span>
+            <a class="btn-whatsapp" id="btnRenovar" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Quiero renovar</a>
+        </div>
 
         <section class="card">
             <h2><i class="fa-solid fa-id-card"></i> Mi Estado</h2>
@@ -101,6 +159,17 @@
                     <p style="margin: 0; font-size: 1.1rem;"><span id="venceCliente" style="color:#ff4d4d; font-weight:bold;">--/--/--</span></p>
                 </div>
             </div>
+        </section>
+
+        <section class="card">
+            <h2><i class="fa-solid fa-calendar-check"></i> Mis Asistencias</h2>
+            <div class="resumen-asistencia">
+                <div class="dato"><strong id="asisMes">0</strong><span>Este mes</span></div>
+                <div class="dato"><strong id="asisSemana">0</strong><span>Esta semana</span></div>
+                <div class="dato"><strong id="asisUltima" style="font-size:1.1rem; padding: 0.35rem 0;">--</strong><span>Última vez</span></div>
+            </div>
+            <div class="calendario" id="calendarioAsistencia" aria-label="Días que viniste este mes"></div>
+            <p class="ayuda-qr"><i class="fa-solid fa-qrcode"></i> Cada vez que vengas, escaneá el QR de la entrada con la cámara del celu para registrar tu asistencia.</p>
         </section>
 
         <section class="card">
@@ -161,7 +230,9 @@
                             <option value="Peso Muerto">Peso Muerto 🏋️‍♂️</option>
                             <option value="Press Militar">Press Militar 🏛️</option>
                             <option value="Bíceps con Barra">Bíceps con Barra 💪</option>
+                            <option value="__otro">Otro ejercicio...</option>
                         </select>
+                        <input type="text" id="ejercicioOtro" placeholder="Nombre del ejercicio" maxlength="60" style="display:none;">
                     </div>
                     <div class="form-group">
                         <label>Peso Máximo (Kg)</label>
@@ -173,8 +244,26 @@
         </section>
 
         <section class="card">
-            <h2><i class="fa-solid fa-chart-line"></i> Mi Historial de Progresos</h2>
-            <ul id="listaHistorial" class="historial-lista"></ul>
+            <h2><i class="fa-solid fa-chart-line"></i> Mi Progreso</h2>
+            <div id="contenidoProgreso">
+                <div class="barra-progreso">
+                    <select id="ejercicioProgreso" aria-label="Ejercicio a ver"></select>
+                </div>
+                <div class="stats-progreso">
+                    <div class="dato"><strong id="progresoRecord">--</strong><span>Récord</span></div>
+                    <div class="dato"><strong id="progresoMejora">--</strong><span>Mejora total</span></div>
+                    <div class="dato"><strong id="progresoRegistros">0</strong><span>Registros</span></div>
+                </div>
+                <div class="contenedor-grafico-progreso">
+                    <div id="graficoProgreso" role="img" aria-label="Gráfico de la evolución de tu carga"></div>
+                    <div class="tooltip-progreso" id="tooltipProgreso"></div>
+                </div>
+            </div>
+            <p class="sin-datos" id="sinProgreso" style="display:none;"><i class="fa-solid fa-circle-info"></i> Todavía no registraste cargas. Usá el formulario de arriba y acá vas a ver cómo vas mejorando.</p>
+            <details class="todas-cargas">
+                <summary>Ver todas mis cargas</summary>
+                <ul id="listaHistorial" class="historial-lista"></ul>
+            </details>
         </section>
 
         <section class="card" id="seccionNutricion">
@@ -192,6 +281,7 @@
         </section>
     </div>
 
+    <script src="datos-gym.js"></script>
     <script>
         const socioId = localStorage.getItem('usuarioId');
         const socioNombre = localStorage.getItem('usuarioNombre');
@@ -219,9 +309,11 @@
                         const fechaVencimiento = new Date(fechaFinStr);
                         const fechaActual = new Date();
 
-                        // Restamos las fechas y convertimos la diferencia de milisegundos a días
-                        const diferenciaMili = fechaVencimiento - fechaActual;
-                        const diasRestantes = Math.ceil(diferenciaMili / (1000 * 60 * 60 * 24));
+                        // Diferencia en días comparando solo las fechas (sin horas)
+                        const soloDia = d => Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+                        const diasRestantes = Math.round((soloDia(fechaVencimiento) - soloDia(fechaActual)) / 86400000);
+
+                        mostrarAvisoVencimiento(diasRestantes, miData);
 
                         if (diasRestantes > 0) {
                             vencimientoElemento.textContent = `${diasRestantes} días restantes`;
@@ -317,24 +409,212 @@
                 document.getElementById('contenedorRutinaCliente').innerHTML = `<p style="color: #ff4d4d; font-size: 0.9rem; margin:0;">Error al sincronizar tu rutina.</p>`;
             }
 
-            // Historial de pesos
+            await cargarHistorial();
+        }
+
+        const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const fechaCorta = d => d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
+        const kg = n => `${Number(n).toLocaleString('es-AR', { maximumFractionDigits: 1 })} kg`;
+
+        // ================= AVISO DE VENCIMIENTO =================
+        function mostrarAvisoVencimiento(dias, miData) {
+            const aviso = document.getElementById('avisoVencimiento');
+            const texto = document.getElementById('textoVencimiento');
+            aviso.className = 'aviso-vencimiento';
+            if (dias > 7) return;
+
+            if (dias < 0) {
+                aviso.classList.add('vencido');
+                texto.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Tu plan <strong>venció hace ${-dias} ${-dias === 1 ? 'día' : 'días'}</strong>. Renovalo para seguir entrenando.`;
+            } else {
+                aviso.classList.add('pronto');
+                const cuando = dias === 0 ? 'vence hoy' : dias === 1 ? 'vence mañana' : `vence en ${dias} días`;
+                texto.innerHTML = `<i class="fa-solid fa-clock"></i> Tu plan <strong>${cuando}</strong>. Avisanos y te lo renovamos.`;
+            }
+            const mensaje = `¡Hola! Soy ${miData.nombre} y quiero renovar mi plan ${miData.planElegido || ''} en Forza Gym.`;
+            document.getElementById('btnRenovar').href = linkWhatsappGym(mensaje);
+        }
+
+        // ================= ASISTENCIAS =================
+        async function cargarAsistencias() {
+            let fechas = [];
+            try {
+                const res = await fetch(`/api/asistencias/socio/${socioId}`);
+                if (res.ok) fechas = await res.json(); // ["2026-10-11", ...]
+            } catch (e) { /* se muestra vacío */ }
+
+            const hoy = new Date();
+            const claveDia = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            const vino = new Set(fechas);
+            const prefijoMes = claveDia(hoy).slice(0, 7);
+
+            // Semana: de lunes a hoy
+            const lunes = new Date(hoy);
+            lunes.setDate(hoy.getDate() - ((hoy.getDay() + 6) % 7));
+            const desdeLunes = claveDia(lunes);
+
+            document.getElementById('asisMes').textContent = fechas.filter(f => f.startsWith(prefijoMes)).length;
+            document.getElementById('asisSemana').textContent = fechas.filter(f => f >= desdeLunes && f <= claveDia(hoy)).length;
+
+            if (fechas.length) {
+                const [a, m, d] = fechas[0].split('-').map(Number);
+                const ultima = new Date(a, m - 1, d);
+                const hace = Math.round((Date.UTC(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()) - Date.UTC(a, m - 1, d)) / 86400000);
+                document.getElementById('asisUltima').textContent = hace === 0 ? 'Hoy' : hace === 1 ? 'Ayer' : fechaCorta(ultima);
+            }
+
+            // Calendario del mes (empieza en lunes)
+            const cal = document.getElementById('calendarioAsistencia');
+            const primero = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+            const diasMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
+            const huecos = (primero.getDay() + 6) % 7;
+            let html = ['L', 'M', 'M', 'J', 'V', 'S', 'D'].map(d => `<div class="dia-semana">${d}</div>`).join('');
+            html += '<div class="dia vacio"></div>'.repeat(huecos);
+            for (let d = 1; d <= diasMes; d++) {
+                const fecha = new Date(hoy.getFullYear(), hoy.getMonth(), d);
+                const clase = [
+                    vino.has(claveDia(fecha)) ? 'vino' : '',
+                    d === hoy.getDate() ? 'hoy' : '',
+                    d > hoy.getDate() ? 'futuro' : ''
+                ].join(' ');
+                html += `<div class="dia ${clase}" title="${vino.has(claveDia(fecha)) ? 'Viniste' : ''}">${d}</div>`;
+            }
+            cal.innerHTML = html;
+        }
+
+        // ================= PROGRESO (HISTORIAL DE CARGAS) =================
+        let historialCargas = [];
+
+        async function cargarHistorial() {
             try {
                 const resPesos = await fetch(`/api/socios/pesos/${socioId}`);
-                const pesos = await resPesos.json();
-                const lista = document.getElementById('listaHistorial');
-                if(!lista) return;
-                if(!pesos || pesos.length === 0) {
-                    lista.innerHTML = '<li style="color:#666; font-size:0.9rem; list-style:none;">Todavía no registraste cargas.</li>';
-                    return;
-                }
-                lista.innerHTML = '';
-                pesos.forEach(item => {
-                    // Postgres devuelve las columnas en minúscula: ejercicio, peso, fecha
-                    let f = item.fecha ? new Date(item.fecha).toLocaleDateString('es-AR', {day: '2-digit', month: '2-digit'}) : "--/--";
-                    lista.innerHTML += `<li class="historial-item"><div><strong>${item.ejercicio}</strong> <span class="fecha-tag">(${f})</span></div><span class="peso-tag">${item.peso} Kg</span></li>`;
-                });
-            } catch (err) { console.error(err); }
+                historialCargas = (await resPesos.json()) || [];
+            } catch (err) { console.error(err); historialCargas = []; }
+
+            const lista = document.getElementById('listaHistorial');
+            const hayDatos = historialCargas.length > 0;
+            document.getElementById('contenidoProgreso').style.display = hayDatos ? '' : 'none';
+            document.getElementById('sinProgreso').style.display = hayDatos ? 'none' : '';
+            document.querySelector('details.todas-cargas').style.display = hayDatos ? '' : 'none';
+            if (!hayDatos) { lista.innerHTML = ''; return; }
+
+            // Lista completa (más nuevas primero). Postgres devuelve: ejercicio, peso, fecha
+            lista.innerHTML = historialCargas.map(item => {
+                const f = item.fecha ? fechaCorta(new Date(item.fecha)) : '--/--';
+                return `<li class="historial-item"><div><strong>${esc(item.ejercicio)}</strong> <span class="fecha-tag">(${f})</span></div><span class="peso-tag">${item.peso} Kg</span></li>`;
+            }).join('');
+
+            // Selector de ejercicios: primero el que tiene más registros
+            const conteo = {};
+            historialCargas.forEach(c => { conteo[c.ejercicio] = (conteo[c.ejercicio] || 0) + 1; });
+            const ejercicios = Object.keys(conteo).sort((a, b) => conteo[b] - conteo[a]);
+            const select = document.getElementById('ejercicioProgreso');
+            const anterior = select.value;
+            select.innerHTML = ejercicios.map(e => `<option value="${esc(e)}">${esc(e)} (${conteo[e]})</option>`).join('');
+            if (ejercicios.includes(anterior)) select.value = anterior;
+            dibujarProgreso();
         }
+
+        function dibujarProgreso() {
+            const ejercicio = document.getElementById('ejercicioProgreso').value;
+            const puntos = historialCargas
+                .filter(c => c.ejercicio === ejercicio)
+                .map(c => ({ fecha: new Date(c.fecha), peso: Number(c.peso) }))
+                .sort((a, b) => a.fecha - b.fecha);
+
+            const record = Math.max(...puntos.map(p => p.peso));
+            const mejora = puntos[puntos.length - 1].peso - puntos[0].peso;
+            const pct = puntos[0].peso ? Math.round(mejora * 100 / puntos[0].peso) : 0;
+            document.getElementById('progresoRecord').textContent = kg(record);
+            document.getElementById('progresoMejora').textContent = puntos.length > 1 ? `${mejora >= 0 ? '+' : ''}${kg(mejora)}` : '--';
+            document.getElementById('progresoMejora').title = puntos.length > 1 ? `${pct >= 0 ? '+' : ''}${pct}% desde el primer registro` : '';
+            document.getElementById('progresoRegistros').textContent = puntos.length;
+
+            const cont = document.getElementById('graficoProgreso');
+            const tooltip = document.getElementById('tooltipProgreso');
+            tooltip.classList.remove('visible');
+            const ancho = cont.clientWidth || 600;
+            const alto = 230;
+            const m = { arriba: 24, derecha: 18, abajo: 28, izquierda: 44 };
+            const w = ancho - m.izquierda - m.derecha;
+            const h = alto - m.arriba - m.abajo;
+
+            // Escala vertical con números redondos y un poco de aire arriba y abajo
+            const min = Math.min(...puntos.map(p => p.peso));
+            const max = record;
+            const paso = [1, 2, 2.5, 5, 10, 20, 25, 50].find(s => (max - min + 1) / s <= 4) || 100;
+            const yMin = Math.max(0, Math.floor((min - paso / 2) / paso) * paso);
+            const yMax = Math.ceil((max + paso / 2) / paso) * paso;
+            const y = v => m.arriba + h - ((v - yMin) / (yMax - yMin)) * h;
+
+            // Eje horizontal por fecha real (si hay un solo registro, queda centrado)
+            const t0 = puntos[0].fecha.getTime();
+            const t1 = puntos[puntos.length - 1].fecha.getTime();
+            const x = t => puntos.length === 1 || t1 === t0 ? m.izquierda + w / 2 : m.izquierda + ((t - t0) / (t1 - t0)) * w;
+
+            let svg = `<svg width="${ancho}" height="${alto}" viewBox="0 0 ${ancho} ${alto}" xmlns="http://www.w3.org/2000/svg" style="display:block">`;
+            for (let v = yMin; v <= yMax + 0.001; v += paso) {
+                svg += `<line x1="${m.izquierda}" x2="${ancho - m.derecha}" y1="${y(v)}" y2="${y(v)}" stroke="${v === yMin ? '#333' : '#232323'}"/>`;
+                svg += `<text x="${m.izquierda - 8}" y="${y(v) + 4}" fill="#666" font-size="11" text-anchor="end">${Number(v.toFixed(1))}</text>`;
+            }
+            // Fechas: primera y última
+            svg += `<text x="${x(t0)}" y="${alto - 8}" fill="#888" font-size="11" text-anchor="${puntos.length === 1 ? 'middle' : 'start'}">${fechaCorta(puntos[0].fecha)}</text>`;
+            if (puntos.length > 1) svg += `<text x="${x(t1)}" y="${alto - 8}" fill="#888" font-size="11" text-anchor="end">${fechaCorta(puntos[puntos.length - 1].fecha)}</text>`;
+
+            // Línea y área suave debajo
+            if (puntos.length > 1) {
+                const linea = puntos.map((p, i) => `${i ? 'L' : 'M'}${x(p.fecha.getTime())},${y(p.peso)}`).join(' ');
+                svg += `<path d="${linea} L${x(t1)},${y(yMin)} L${x(t0)},${y(yMin)} Z" fill="#39e4a5" opacity="0.08"/>`;
+                svg += `<path d="${linea}" fill="none" stroke="#39e4a5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+            }
+
+            // Puntos (el récord se destaca y lleva su valor arriba)
+            let marcadoRecord = false;
+            puntos.forEach((p, i) => {
+                const esRecord = p.peso === record && !marcadoRecord;
+                if (esRecord) marcadoRecord = true;
+                const cx = x(p.fecha.getTime()), cy = y(p.peso);
+                svg += `<circle cx="${cx}" cy="${cy}" r="${esRecord ? 6 : 4}" fill="${esRecord ? '#39e4a5' : '#1a1a1a'}" stroke="#39e4a5" stroke-width="2"/>`;
+                if (esRecord) {
+                    // Si el punto está pegado a un borde, la etiqueta se alinea para no cortarse
+                    const anclaje = cx > ancho - 50 ? 'end' : cx < m.izquierda + 40 ? 'start' : 'middle';
+                    const xTexto = anclaje === 'end' ? cx + 6 : anclaje === 'start' ? cx - 6 : cx;
+                    svg += `<text x="${xTexto}" y="${cy - 12}" fill="#fff" font-size="12" font-weight="bold" text-anchor="${anclaje}">${kg(p.peso)}</text>`;
+                }
+                svg += `<circle class="zona-punto" data-i="${i}" cx="${cx}" cy="${cy}" r="14" fill="transparent" style="cursor:pointer"/>`;
+            });
+            svg += '</svg>';
+            cont.innerHTML = svg;
+
+            cont.querySelectorAll('.zona-punto').forEach(zona => {
+                const p = puntos[Number(zona.dataset.i)];
+                const mostrar = () => {
+                    tooltip.innerHTML = `${p.fecha.toLocaleDateString('es-AR')}: <b>${kg(p.peso)}</b>`;
+                    tooltip.classList.add('visible');
+                    const cx = Number(zona.getAttribute('cx'));
+                    tooltip.style.left = Math.min(Math.max(cx - tooltip.offsetWidth / 2, 0), ancho - tooltip.offsetWidth) + 'px';
+                    tooltip.style.top = Math.max(0, Number(zona.getAttribute('cy')) - tooltip.offsetHeight - 16) + 'px';
+                };
+                zona.addEventListener('mouseenter', mostrar);
+                zona.addEventListener('click', mostrar);
+                zona.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+            });
+        }
+
+        document.getElementById('ejercicioProgreso').addEventListener('change', dibujarProgreso);
+        let esperaRedibujo;
+        window.addEventListener('resize', () => {
+            clearTimeout(esperaRedibujo);
+            esperaRedibujo = setTimeout(() => { if (historialCargas.length) dibujarProgreso(); }, 150);
+        });
+
+        // "Otro ejercicio..." muestra un campo para escribirlo
+        document.getElementById('ejercicio').addEventListener('change', (e) => {
+            const otro = document.getElementById('ejercicioOtro');
+            otro.style.display = e.target.value === '__otro' ? '' : 'none';
+            otro.required = e.target.value === '__otro';
+            if (e.target.value === '__otro') otro.focus();
+        });
 
         document.getElementById('formFicha').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -353,18 +633,26 @@
 
         document.getElementById('formPesos').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const ejercicio = document.getElementById('ejercicio').value;
+            const elegido = document.getElementById('ejercicio').value;
+            const ejercicio = elegido === '__otro' ? document.getElementById('ejercicioOtro').value.trim() : elegido;
             const peso = document.getElementById('peso').value;
+            if (!ejercicio) return;
             const res = await fetch('/api/socios/pesos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ socioId, ejercicio, peso })
             });
-            if(res.ok) { document.getElementById('peso').value = ''; cargarDatosPerfil(); }
+            if (res.ok) {
+                document.getElementById('peso').value = '';
+                // Solo se recarga el progreso (antes se recargaba todo el panel)
+                await cargarHistorial();
+                const select = document.getElementById('ejercicioProgreso');
+                if ([...select.options].some(o => o.value === ejercicio)) { select.value = ejercicio; dibujarProgreso(); }
+            }
         });
 
         function cerrarSesion() { localStorage.clear(); window.location.href = 'login.html'; }
-        document.addEventListener('DOMContentLoaded', () => cargarDatosPerfil());
+        document.addEventListener('DOMContentLoaded', () => { cargarDatosPerfil(); cargarAsistencias(); });
     </script>
 </body>
 </html>
