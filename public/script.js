@@ -69,3 +69,42 @@ if (btnMenu && menu) {
     // Al tocar un link del menú, se cierra solo
     menu.querySelectorAll("a").forEach(a => a.addEventListener("click", cerrarMenu));
 }
+
+// ==========================================================
+// Tienda: cada botón "Consultar" abre WhatsApp con el nombre de la prenda
+// ==========================================================
+document.querySelectorAll("[data-producto]").forEach(boton => {
+    const mensaje = `¡Hola! Quiero consultar por la indumentaria oficial de Forza Gym: ${boton.dataset.producto}. ¿Qué talles y precio tienen?`;
+    boton.href = `https://wa.me/${CONFIG_GYM.whatsapp}?text=${encodeURIComponent(mensaje)}`;
+    boton.target = "_blank";
+    boton.rel = "noopener";
+});
+
+// ==========================================================
+// Visor: al tocar una foto de la tienda se ve en grande
+// ==========================================================
+const visor = document.getElementById("visorFoto");
+
+if (visor) {
+    const imgVisor = visor.querySelector("img");
+
+    const cerrarVisor = () => {
+        visor.classList.remove("abierto");
+        visor.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+    };
+
+    document.querySelectorAll("[data-ampliar]").forEach(boton => {
+        boton.addEventListener("click", () => {
+            const img = boton.querySelector("img");
+            imgVisor.src = img.src;
+            imgVisor.alt = img.alt;
+            visor.classList.add("abierto");
+            visor.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden"; // Evita que la página se mueva atrás
+        });
+    });
+
+    visor.addEventListener("click", cerrarVisor);
+    document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarVisor(); });
+}

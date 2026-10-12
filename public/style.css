@@ -557,6 +557,145 @@ section h2::after {
 }
 
 /* ==========================================================
+   TIENDA / INDUMENTARIA OFICIAL
+   ========================================================== */
+.subtitulo-seccion {
+  text-align: center;
+  color: var(--texto-suave);
+  margin: -1.5rem auto 2.5rem auto;
+  max-width: 560px;
+}
+
+/* Flex centrado: si la última fila queda incompleta, las prendas quedan al medio */
+.contenedor-tienda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.tarjeta-producto {
+  flex: 1 1 280px;
+  max-width: 360px;
+  background-color: var(--fondo-tarjeta);
+  border: 1px solid #2a2a2a;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-6px);
+  border-color: var(--verde);
+}
+
+/* La foto es un botón: al tocarla se abre en grande */
+.imagen-producto {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  border: none;
+  background-color: #0b0b0b;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+.imagen-producto.fondo-claro {
+  background-color: #fff;
+}
+
+.imagen-producto img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Se ve la prenda completa (frente y espalda) sin recortar */
+  transition: transform 0.4s ease;
+}
+
+.tarjeta-producto:hover .imagen-producto img {
+  transform: scale(1.04);
+}
+
+.info-producto {
+  padding: 1.3rem 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.info-producto h3 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.info-producto p {
+  margin: 0 0 1rem 0;
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  flex-grow: 1;
+}
+
+.info-producto .precio-producto {
+  flex-grow: 0;
+  color: var(--verde);
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.info-producto .precio-producto:empty {
+  display: none;
+}
+
+.info-producto .btn {
+  width: 100%;
+  padding: 0.8rem 1rem;
+}
+
+/* Visor de fotos en grande */
+.visor-foto {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background-color: rgba(0, 0, 0, 0.92);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  cursor: zoom-out;
+}
+
+.visor-foto.abierto {
+  display: flex;
+}
+
+.visor-foto img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.cerrar-visor {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cerrar-visor:hover {
+  color: var(--verde);
+}
+
+/* ==========================================================
    LLAMADO FINAL (reemplaza al viejo formulario)
    ========================================================== */
 .cta-final {
@@ -674,7 +813,7 @@ footer {
   }
 
   nav.abierto {
-    max-height: 480px;
+    max-height: 540px;
   }
 
   nav a {

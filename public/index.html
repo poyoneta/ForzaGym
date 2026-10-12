@@ -37,6 +37,7 @@
             <a href="#planes">Planes</a>
             <a href="#horarios">Horarios</a>
             <a href="#entrenadores">Entrenador</a>
+            <a href="#tienda">Tienda</a>
             <a href="#ubicacion">Ubicación</a>
             <a href="login.html" class="nav-ingresar"><i class="fa-solid fa-user"></i> Ingresar</a>
         </nav>
@@ -193,6 +194,82 @@
                 </article>
             </div>
         </section>
+
+        <!-- ===================== TIENDA / INDUMENTARIA OFICIAL ===================== -->
+        <!-- Para agregar una prenda: copiá un <article> y cambiá imagen, nombre, descripción y data-producto.
+             Si querés mostrar el precio, completá el <p class="precio-producto">; si lo dejás vacío no se ve. -->
+        <section id="tienda">
+            <h2>Indumentaria oficial</h2>
+            <p class="subtitulo-seccion">Entrená con los colores de Forza. Consultanos talles, stock y precio por WhatsApp.</p>
+
+            <div class="contenedor-tienda">
+                <article class="tarjeta-producto">
+                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto de la remera deportiva">
+                        <img src="imagenes/tienda-remera.jpg" alt="Remera deportiva Forza, frente y espalda" loading="lazy">
+                    </button>
+                    <div class="info-producto">
+                        <h3>Remera deportiva</h3>
+                        <p>Tela deportiva con vivos en verde y "Break Your Limits" en la espalda.</p>
+                        <p class="precio-producto"></p>
+                        <a href="#" class="btn btn-secundario" data-producto="Remera deportiva"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
+                    </div>
+                </article>
+
+                <article class="tarjeta-producto">
+                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto de la remera Team Forza">
+                        <img src="imagenes/tienda-remera-team.jpg" alt="Remera Team Forza One More Rep, frente y espalda" loading="lazy">
+                    </button>
+                    <div class="info-producto">
+                        <h3>Remera Team Forza</h3>
+                        <p>Logo grande en la espalda con "One More Rep" y "Team Forza".</p>
+                        <p class="precio-producto"></p>
+                        <a href="#" class="btn btn-secundario" data-producto="Remera Team Forza"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
+                    </div>
+                </article>
+
+                <article class="tarjeta-producto">
+                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto de la musculosa">
+                        <img src="imagenes/tienda-musculosa.jpg" alt="Musculosa Forza, frente y espalda" loading="lazy">
+                    </button>
+                    <div class="info-producto">
+                        <h3>Musculosa</h3>
+                        <p>Ideal para entrenar: franja vertical en verde y logo en el pecho.</p>
+                        <p class="precio-producto"></p>
+                        <a href="#" class="btn btn-secundario" data-producto="Musculosa"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
+                    </div>
+                </article>
+
+                <article class="tarjeta-producto">
+                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto del buzo con capucha">
+                        <img src="imagenes/tienda-buzo.jpg" alt="Buzo con capucha Forza, frente y espalda" loading="lazy">
+                    </button>
+                    <div class="info-producto">
+                        <h3>Buzo con capucha</h3>
+                        <p>"Forza" al frente y "Break Your Limits · Team Forza" en la espalda.</p>
+                        <p class="precio-producto"></p>
+                        <a href="#" class="btn btn-secundario" data-producto="Buzo con capucha"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
+                    </div>
+                </article>
+
+                <article class="tarjeta-producto">
+                    <button class="imagen-producto fondo-claro" data-ampliar aria-label="Ampliar foto del conjunto chomba y short">
+                        <img src="imagenes/tienda-chomba.jpg" alt="Conjunto chomba y short Forza" loading="lazy">
+                    </button>
+                    <div class="info-producto">
+                        <h3>Conjunto chomba + short</h3>
+                        <p>Chomba con vivos verdes y short a juego, con escudo y número.</p>
+                        <p class="precio-producto"></p>
+                        <a href="#" class="btn btn-secundario" data-producto="Conjunto chomba + short"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Visor para ver las fotos en grande -->
+        <div class="visor-foto" id="visorFoto" aria-hidden="true">
+            <button class="cerrar-visor" aria-label="Cerrar">&times;</button>
+            <img src="" alt="">
+        </div>
 
         <!-- ===================== UBICACIÓN ===================== -->
         <section id="ubicacion">
