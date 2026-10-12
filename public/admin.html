@@ -161,6 +161,38 @@
         .btn-remove-ejercicio { background: transparent; color: #ff4d4d; border: none; cursor: pointer; font-size: 1rem; padding: 0.5rem; }
         .btn-remove-ejercicio:hover { color: #fff; background: #ff4d4d; border-radius: 4px; }
         
+        /* Rutina por días */
+        .cabecera-dias { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin: 1.2rem 0 0.5rem; flex-wrap: wrap; }
+        .cabecera-dias label { font-size: 0.75rem; color: #39e4a5; font-weight: bold; text-transform: uppercase; }
+        .ayuda-dias { font-size: 0.75rem; color: #777; }
+        .tabs-dias { display: flex; gap: 0.35rem; flex-wrap: wrap; border-bottom: 1px solid #2d2d2d; }
+        .tab-dia {
+            background: #111; border: 1px solid #2d2d2d; border-bottom: none; color: #999;
+            padding: 0.55rem 0.9rem; border-radius: 6px 6px 0 0; cursor: pointer;
+            font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 0.78rem; text-transform: uppercase;
+            display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0.1rem; max-width: 170px;
+        }
+        .tab-dia small { font-weight: normal; text-transform: none; font-size: 0.7rem; color: #777; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .tab-dia.activo { background: #1f1f1f; color: #39e4a5; border-color: #39e4a5; }
+        .tab-dia.vacio small { color: #ff4d4d; }
+        .tab-dia.agregar { color: #39e4a5; border-style: dashed; justify-content: center; }
+        .panel-dia { background: #151515; border: 1px solid #2d2d2d; border-top: none; border-radius: 0 0 8px 8px; padding: 0.9rem; }
+        .meta-dia { display: flex; gap: 0.5rem; margin-bottom: 0.8rem; }
+        .meta-dia input { flex: 1; background: #111; border: 1px solid #333; color: #fff; padding: 0.55rem 0.7rem; border-radius: 4px; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; }
+        .meta-dia input:focus { border-color: #39e4a5; outline: none; }
+        .btn-dia { background: #222; border: 1px solid #444; color: #ccc; white-space: nowrap; }
+        .btn-dia:hover { border-color: #39e4a5; color: #39e4a5; }
+        .btn-dia-quitar:hover { border-color: #ff4d4d; color: #ff4d4d; }
+        .encabezado-ejercicios { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: 0.5rem; padding: 0 0.5rem 0.3rem; font-size: 0.68rem; color: #666; text-transform: uppercase; font-weight: bold; }
+        .encabezado-ejercicios span:last-child { width: 32px; }
+        @media (max-width: 600px) {
+            .encabezado-ejercicios { display: none; }
+            .fila-ejercicio { grid-template-columns: 1fr 1fr 1fr auto; }
+            .fila-ejercicio .ej-nombre { grid-column: 1 / -1; }
+            .meta-dia { flex-wrap: wrap; }
+            .meta-dia input { flex-basis: 100%; }
+        }
+
         .form-group-rutina { display: flex; flex-direction: column; gap: 0.3rem; margin-bottom: 1rem; }
         .form-group-rutina label { font-size: 0.75rem; color: #888; font-weight: bold; text-transform: uppercase; }
         .form-group-rutina input, .form-group-rutina select { background: #111; border: 1px solid #2d2d2d; color:#fff; padding: 0.6rem; border-radius: 4px; font-family: 'Montserrat';}
@@ -583,7 +615,7 @@
     </div>
 
     <div id="modalRutina" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 780px;">
             <span class="close-modal" onclick="cerrarModal('modalRutina')">&times;</span>
             <h2><i class="fa-solid fa-dumbbell"></i> Asignar Plan de Ejercicios</h2>
             <p style="margin: 0 0 1rem 0; font-size: 0.85rem; color: #aaa;">Socio: <strong id="rutinaSocioNombre" style="color: #39e4a5;"></strong> | Plan Mensual: <span id="rutinaSocioPlan" class="plan-badge"></span></p>
@@ -602,13 +634,25 @@
                     </div>
                 </div>
 
-                <label style="font-size: 0.75rem; color: #39e4a5; font-weight: bold; text-transform: uppercase; display: block; margin: 1rem 0 0.5rem 0;">Tabla de Ejercicios</label>
-                
-                <div id="contenedorEjercicios">
-                    </div>
+                <div class="cabecera-dias">
+                    <label>Rutina por día</label>
+                    <span class="ayuda-dias" id="ayudaDias"></span>
+                </div>
+                <div class="tabs-dias" id="tabsDias" role="tablist"></div>
 
-                <button type="button" class="btn btn-add-ejercicio" onclick="agregarFilaEjercicio()"><i class="fa-solid fa-plus"></i> Añadir Ejercicio</button>
-                
+                <div class="panel-dia">
+                    <div class="meta-dia">
+                        <input type="text" id="nombreDia" maxlength="60" placeholder="Nombre del día (opcional). Ej: Pecho y tríceps">
+                        <button type="button" class="btn btn-dia" onclick="duplicarDia()" title="Crea un día nuevo con los mismos ejercicios"><i class="fa-solid fa-copy"></i> Duplicar</button>
+                        <button type="button" class="btn btn-dia btn-dia-quitar" onclick="quitarDia()" title="Quitar este día"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <div class="encabezado-ejercicios">
+                        <span>Ejercicio</span><span>Series</span><span>Reps</span><span>Descanso</span><span></span>
+                    </div>
+                    <div id="contenedorEjercicios"></div>
+                    <button type="button" class="btn btn-add-ejercicio" onclick="agregarFilaEjercicio()"><i class="fa-solid fa-plus"></i> Añadir ejercicio a este día</button>
+                </div>
+
                 <div style="margin-top: 1.5rem; display: flex; justify-content: space-between; gap: 0.5rem;">
                     <button type="button" class="btn btn-baja" style="margin:0;" onclick="borrarRutinaCompleta()"><i class="fa-solid fa-trash-can"></i> Borrar Rutina</button>
                     <button type="submit" class="btn btn-ficha"><i class="fa-solid fa-floppy-disk"></i> Guardar y Publicar</button>
@@ -632,6 +676,7 @@
         let PLANES_VALIDOS = ['Básico', 'Plus', 'Premium'];
         let PRECIOS = { 'Básico': 18000, 'Plus': 23000, 'Premium': 30000 };
         let RESUMENES = {};
+        let DIAS_RUTINA = { 'Básico': 2, 'Plus': 3, 'Premium': 5 };
 
         async function cargarPlanesConfig() {
             try {
@@ -642,6 +687,12 @@
                 PLANES_VALIDOS = planes.map(p => p.nombre);
                 PRECIOS = Object.fromEntries(planes.map(p => [p.nombre, Number(p.precio) || 0]));
                 RESUMENES = Object.fromEntries(planes.map(p => [p.nombre, p.resumen || '']));
+                DIAS_RUTINA = Object.fromEntries(planes.map(p => {
+                    // Planes guardados antes de "Días de rutina": se deduce del resumen ("2 días/sem") o pase libre = 5
+                    const numero = String(p.resumen || '').match(/(\d)\s*d[ií]a/i);
+                    const deducido = numero ? Number(numero[1]) : (/libre/i.test(p.resumen || '') ? 5 : 3);
+                    return [p.nombre, p.diasRutina || deducido];
+                }));
             } catch (e) { /* se usan los valores de respaldo */ }
 
             // Filtro de la tabla
@@ -1016,13 +1067,23 @@
 
         // ================= GESTIÓN DINÁMICA DE RUTINAS =================
 
+        // La rutina se arma por día: [{ nombre: 'Pecho', ejercicios: [{ nombre, series, repeticiones, descanso }] }, ...]
+        let diasRutina = [];
+        let diaActivo = 0;
+        const ejercicioVacio = () => ({ nombre: '', series: '', repeticiones: '', descanso: '' });
+
+        // Cuántos días de rutina corresponden al plan del socio (se configura en "Editar sitio")
+        function diasDelPlan(nombrePlan) {
+            return DIAS_RUTINA[nombrePlan] || 3;
+        }
+
         async function abrirCreadorRutina(id) {
             const socio = listaSociosGlobal.find(s => s.id === id);
             if (!socio) return;
 
             document.getElementById('rutinaSocioId').value = socio.id;
             document.getElementById('rutinaSocioNombre').textContent = socio.nombre;
-            
+
             const badgePlan = document.getElementById('rutinaSocioPlan');
             badgePlan.textContent = socio.planElegido || 'Regular';
             badgePlan.className = socio.planElegido === 'Premium' ? 'plan-badge plan-premium' : 'plan-badge';
@@ -1030,48 +1091,127 @@
             // Resetear el formulario básico
             document.getElementById('rutinaDuracion').value = '';
             document.getElementById('rutinaEnfoque').value = '';
-            document.getElementById('contenedorEjercicios').innerHTML = '';
+            diasRutina = [];
+            diaActivo = 0;
 
-            // Intentar cargar si el socio ya posee una rutina guardada en la API
+            const sugeridos = diasDelPlan(socio.planElegido);
+            document.getElementById('ayudaDias').textContent = `Plan ${socio.planElegido || ''}: ${sugeridos} ${sugeridos === 1 ? 'día' : 'días'} por semana`;
+
+            // Si el socio ya tiene rutina, se carga para editarla
             try {
                 const res = await fetch(`/api/rutinas/${socio.id}`);
                 if (res.ok) {
                     const dataRutina = await res.json();
-                    if(dataRutina && dataRutina.ejercicios) {
-                        document.getElementById('rutinaDuracion').value = dataRutina.duracionSemanas || '';
-                        document.getElementById('rutinaEnfoque').value = dataRutina.enfoque || '';
-                        
-                        // Renderizar las filas existentes
-                        dataRutina.ejercicios.forEach(ej => {
-                            agregarFilaEjercicio(ej.nombre, ej.series, ej.repeticiones, ej.descanso);
-                        });
-                    }
+                    document.getElementById('rutinaDuracion').value = dataRutina.duracionSemanas || '';
+                    document.getElementById('rutinaEnfoque').value = dataRutina.enfoque || '';
+                    diasRutina = (dataRutina.dias || []).map(d => ({
+                        nombre: d.nombre || '',
+                        ejercicios: d.ejercicios.length ? d.ejercicios.map(e => ({ ...e })) : [ejercicioVacio()]
+                    }));
                 }
             } catch (err) {
                 console.log("El socio no tiene rutina previa o error de servidor:", err);
             }
 
-            // Si quedó vacía la lista de ejercicios, le agregamos una por defecto
-            if(document.getElementById('contenedorEjercicios').children.length === 0) {
-                agregarFilaEjercicio();
+            // Rutina nueva: tantos días como tenga el plan, cada uno con un ejercicio vacío
+            if (diasRutina.length === 0) {
+                diasRutina = Array.from({ length: sugeridos }, () => ({ nombre: '', ejercicios: [ejercicioVacio()] }));
             }
 
+            renderDias();
             document.getElementById('modalRutina').style.display = 'flex';
         }
 
-        function agregarFilaEjercicio(nombre='', series='', repeticiones='', descanso='') {
-            const contenedor = document.getElementById('contenedorEjercicios');
-            const div = document.createElement('div');
-            div.className = 'fila-ejercicio';
-            div.innerHTML = `
-                <input type="text" class="ej-nombre" placeholder="Nombre Ejercicio" value="${nombre}" required>
-                <input type="number" class="ej-series" placeholder="Series" value="${series}" required min="1">
-                <input type="text" class="ej-reps" placeholder="Reps (ej: 12 o 10-12)" value="${repeticiones}" required>
-                <input type="text" class="ej-descanso" placeholder="Descanso (ej: 1m)" value="${descanso}">
-                <button type="button" class="btn-remove-ejercicio" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>
-            `;
-            contenedor.appendChild(div);
+        function renderDias() {
+            // Pestañas
+            const tabs = document.getElementById('tabsDias');
+            tabs.innerHTML = diasRutina.map((d, i) => {
+                const cargados = d.ejercicios.filter(e => e.nombre.trim()).length;
+                const detalle = d.nombre.trim() || (cargados ? `${cargados} ${cargados === 1 ? 'ejercicio' : 'ejercicios'}` : 'Sin ejercicios');
+                return `<button type="button" class="tab-dia ${i === diaActivo ? 'activo' : ''} ${cargados ? '' : 'vacio'}" role="tab" onclick="elegirDia(${i})">
+                            Día ${i + 1}<small>${esc(detalle)}</small>
+                        </button>`;
+            }).join('') + (diasRutina.length < 7
+                ? `<button type="button" class="tab-dia agregar" onclick="agregarDia()" title="Agregar un día"><i class="fa-solid fa-plus"></i> Día</button>`
+                : '');
+
+            // Contenido del día elegido
+            const dia = diasRutina[diaActivo];
+            document.getElementById('nombreDia').value = dia.nombre;
+            document.querySelector('.btn-dia-quitar').disabled = diasRutina.length === 1;
+            document.querySelector('.btn-dia-quitar').style.opacity = diasRutina.length === 1 ? 0.3 : 1;
+
+            const cont = document.getElementById('contenedorEjercicios');
+            cont.innerHTML = dia.ejercicios.map((e, k) => `
+                <div class="fila-ejercicio">
+                    <input type="text" class="ej-nombre" placeholder="Nombre del ejercicio" value="${esc(e.nombre)}" oninput="cambiarEjercicio(${k}, 'nombre', this.value)">
+                    <input type="number" class="ej-series" placeholder="Series" min="1" value="${esc(e.series)}" oninput="cambiarEjercicio(${k}, 'series', this.value)">
+                    <input type="text" class="ej-reps" placeholder="Reps (ej: 10-12)" value="${esc(e.repeticiones)}" oninput="cambiarEjercicio(${k}, 'repeticiones', this.value)">
+                    <input type="text" class="ej-descanso" placeholder="Descanso (ej: 1m)" value="${esc(e.descanso)}" oninput="cambiarEjercicio(${k}, 'descanso', this.value)">
+                    <button type="button" class="btn-remove-ejercicio" title="Quitar ejercicio" onclick="quitarEjercicio(${k})"><i class="fa-solid fa-xmark"></i></button>
+                </div>`).join('');
         }
+
+        // Actualiza solo la pestaña activa (para no perder el foco mientras se escribe)
+        function refrescarPestana() {
+            const d = diasRutina[diaActivo];
+            const tab = document.querySelectorAll('#tabsDias .tab-dia')[diaActivo];
+            if (!tab) return;
+            const cargados = d.ejercicios.filter(e => e.nombre.trim()).length;
+            tab.querySelector('small').textContent = d.nombre.trim() || (cargados ? `${cargados} ${cargados === 1 ? 'ejercicio' : 'ejercicios'}` : 'Sin ejercicios');
+            tab.classList.toggle('vacio', cargados === 0);
+        }
+
+        function elegirDia(i) { diaActivo = i; renderDias(); }
+        function cambiarEjercicio(k, campo, valor) { diasRutina[diaActivo].ejercicios[k][campo] = valor; refrescarPestana(); }
+
+        function agregarFilaEjercicio() {
+            diasRutina[diaActivo].ejercicios.push(ejercicioVacio());
+            renderDias();
+            const filas = document.querySelectorAll('#contenedorEjercicios .ej-nombre');
+            filas[filas.length - 1]?.focus();
+        }
+
+        function quitarEjercicio(k) {
+            const lista = diasRutina[diaActivo].ejercicios;
+            lista.splice(k, 1);
+            if (lista.length === 0) lista.push(ejercicioVacio());
+            renderDias();
+        }
+
+        function agregarDia() {
+            if (diasRutina.length >= 7) return;
+            diasRutina.push({ nombre: '', ejercicios: [ejercicioVacio()] });
+            diaActivo = diasRutina.length - 1;
+            renderDias();
+            document.getElementById('nombreDia').focus();
+        }
+
+        function duplicarDia() {
+            if (diasRutina.length >= 7) { alert('La rutina puede tener hasta 7 días.'); return; }
+            const original = diasRutina[diaActivo];
+            diasRutina.splice(diaActivo + 1, 0, {
+                nombre: original.nombre ? `${original.nombre} (copia)` : '',
+                ejercicios: original.ejercicios.map(e => ({ ...e }))
+            });
+            diaActivo++;
+            renderDias();
+        }
+
+        function quitarDia() {
+            if (diasRutina.length === 1) return;
+            const d = diasRutina[diaActivo];
+            const tieneDatos = d.nombre.trim() || d.ejercicios.some(e => e.nombre.trim());
+            if (tieneDatos && !confirm(`¿Quitar el Día ${diaActivo + 1}${d.nombre ? ` (${d.nombre})` : ''} con sus ejercicios?`)) return;
+            diasRutina.splice(diaActivo, 1);
+            diaActivo = Math.min(diaActivo, diasRutina.length - 1);
+            renderDias();
+        }
+
+        document.getElementById('nombreDia').addEventListener('input', (e) => {
+            diasRutina[diaActivo].nombre = e.target.value;
+            refrescarPestana();
+        });
 
         document.getElementById('formRutina').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -1079,31 +1219,41 @@
             const duracionSemanas = document.getElementById('rutinaDuracion').value;
             const enfoque = document.getElementById('rutinaEnfoque').value;
 
-            // Mapeamos las filas dinámicas
-            const filas = document.querySelectorAll('.fila-ejercicio');
-            const ejercicios = [];
+            // Se descartan las filas vacías; cada ejercicio cargado necesita series y repeticiones
+            const dias = diasRutina.map(d => ({
+                nombre: d.nombre.trim(),
+                ejercicios: d.ejercicios
+                    .filter(ej => ej.nombre.trim() || String(ej.series).trim() || ej.repeticiones.trim())
+                    .map(ej => ({ nombre: ej.nombre.trim(), series: String(ej.series).trim(), repeticiones: ej.repeticiones.trim(), descanso: ej.descanso.trim() }))
+            }));
 
-            filas.forEach(fil => {
-                ejercicios.push({
-                    nombre: fil.querySelector('.ej-nombre').value,
-                    series: fil.querySelector('.ej-series').value,
-                    repeticiones: fil.querySelector('.ej-reps').value,
-                    descanso: fil.querySelector('.ej-descanso').value
-                });
-            });
+            for (let i = 0; i < dias.length; i++) {
+                const incompleto = dias[i].ejercicios.find(ej => !ej.nombre || !ej.series || !ej.repeticiones);
+                if (incompleto) {
+                    elegirDia(i);
+                    alert(`En el Día ${i + 1} hay un ejercicio incompleto: completá nombre, series y repeticiones (o borralo).`);
+                    return;
+                }
+                if (dias[i].ejercicios.length === 0) {
+                    elegirDia(i);
+                    alert(`El Día ${i + 1} no tiene ejercicios. Cargale al menos uno o quitá ese día.`);
+                    return;
+                }
+            }
 
             try {
                 const res = await fetch('/api/rutinas', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ socioId, duracionSemanas, enfoque, ejercicios })
+                    body: JSON.stringify({ socioId, duracionSemanas, enfoque, dias })
                 });
 
-                if(res.ok) {
-                    alert('¡Rutina asignada y publicada con éxito!');
+                if (res.ok) {
+                    alert(`¡Rutina de ${dias.length} ${dias.length === 1 ? 'día' : 'días'} asignada y publicada!`);
                     cerrarModal('modalRutina');
                 } else {
-                    alert('Error en el servidor al intentar guardar la rutina.');
+                    const r = await res.json().catch(() => ({}));
+                    alert(r.error || 'Error en el servidor al intentar guardar la rutina.');
                 }
             } catch (err) {
                 alert('Error de conexión.');

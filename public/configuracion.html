@@ -275,10 +275,15 @@
                             <label>Precio por mes</label>
                             <div class="precio-input"><span>$</span><input type="number" min="0" step="500" value="${p.precio ?? ''}" oninput="cambiarPlan(${i}, 'precio', this.value === '' ? 0 : Number(this.value))"></div>
                         </div>
-                        <div class="campo completo">
+                        <div class="campo">
                             <label>Resumen corto</label>
                             <input value="${esc(p.resumen)}" maxlength="60" oninput="cambiarPlan(${i}, 'resumen', this.value)" placeholder="Ej: 3 días/sem">
                             <span class="ayuda">Aparece en el formulario de registro, al lado del nombre.</span>
+                        </div>
+                        <div class="campo">
+                            <label>Días de rutina</label>
+                            <input type="number" min="1" max="7" step="1" value="${p.diasRutina ?? 3}" oninput="cambiarPlan(${i}, 'diasRutina', Math.min(7, Math.max(1, Number(this.value) || 1)))">
+                            <span class="ayuda">Cuántos días trae la rutina al crearla para un socio de este plan.</span>
                         </div>
                         <div class="campo completo">
                             <label>Qué incluye (uno por renglón)</label>
@@ -307,9 +312,15 @@
                 actualizarEstado();
             }
         }
+        function diasSugeridos(p) {
+            const numero = String(p.resumen || '').match(/(\d)\s*d[ií]a/i) || (p.beneficios || []).join(' ').match(/(\d)\s*d[ií]as/i);
+            if (numero) return Math.min(7, Math.max(1, Number(numero[1])));
+            return /libre/i.test(`${p.resumen} ${(p.beneficios || []).join(' ')}`) ? 5 : 3;
+        }
+
         function moverPlan(i, dir) { mover(datos.planes, i, dir); renderPlanes(); }
         function agregarPlan() {
-            datos.planes.push({ nombre: '', precio: 0, resumen: '', beneficios: [], destacado: false, nutricion: false });
+            datos.planes.push({ nombre: '', precio: 0, resumen: '', beneficios: [], destacado: false, nutricion: false, diasRutina: 3 });
             renderPlanes();
             const ultimo = [...document.querySelectorAll('#listaPlanes .item')].pop();
             ultimo?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -524,7 +535,11 @@
 
         function cargarEnPantalla(clave, valor) {
             datos[clave] = JSON.parse(JSON.stringify(valor || []));
-            if (clave === 'planes') datos.planes.forEach(p => { p._original = p.nombre; }); // Para detectar renombres
+            if (clave === 'planes') datos.planes.forEach(p => {
+                p._original = p.nombre; // Para detectar renombres
+                // Planes guardados antes de que existiera "Días de rutina": se deduce del resumen ("2 días/sem")
+                if (!p.diasRutina) p.diasRutina = diasSugeridos(p);
+            });
             guardado[clave] = JSON.stringify(datos[clave]);
             ({ planes: renderPlanes, horarios: renderHorarios, productos: renderProductos })[clave]();
         }

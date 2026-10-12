@@ -18,7 +18,9 @@ function limpiarPlanes(lista) {
         resumen: texto(p.resumen, 60),
         beneficios: (Array.isArray(p.beneficios) ? p.beneficios : []).map(b => texto(b, 120)).filter(Boolean).slice(0, 12),
         destacado: Boolean(p.destacado),
-        nutricion: Boolean(p.nutricion)
+        nutricion: Boolean(p.nutricion),
+        // Cuántos días tiene la rutina de este plan (1 a 7)
+        diasRutina: Math.min(7, Math.max(1, Math.round(Number(p.diasRutina)) || 3))
     }));
     if (planes.some(p => !p.nombre)) throw new Error("Todos los planes necesitan un nombre");
     const nombres = planes.map(p => p.nombre.toLowerCase());

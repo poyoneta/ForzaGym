@@ -73,6 +73,22 @@
         .tabla-rutina-cliente th, .tabla-rutina-cliente td { padding: 0.75rem; border-bottom: 1px solid #2d2d2d; text-align: left; font-size: 0.9rem; }
         .tabla-rutina-cliente th { color: #39e4a5; font-size: 0.8rem; text-transform: uppercase; }
 
+        .tabs-rutina { display: flex; gap: 0.4rem; overflow-x: auto; padding-bottom: 0.3rem; margin-bottom: 0.8rem; scrollbar-width: thin; }
+        .tab-rutina {
+            flex: 0 0 auto; background: #111; border: 1px solid #2d2d2d; color: #aaa; border-radius: 8px;
+            padding: 0.55rem 0.85rem; cursor: pointer; font-family: 'Montserrat', sans-serif; text-align: left;
+            display: flex; flex-direction: column; gap: 0.1rem; max-width: 160px;
+        }
+        .tab-rutina span { font-weight: 900; font-size: 0.8rem; text-transform: uppercase; }
+        .tab-rutina small { font-size: 0.72rem; color: #777; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tab-rutina em, .titulo-dia-rutina em {
+            font-style: normal; background: #39e4a5; color: #000; font-size: 0.62rem; font-weight: 900;
+            padding: 0.1rem 0.35rem; border-radius: 4px; margin-left: 0.3rem; vertical-align: middle; text-transform: uppercase;
+        }
+        .tab-rutina.activa { border-color: #39e4a5; background: #1f1f1f; color: #fff; }
+        .tab-rutina.activa small { color: #39e4a5; }
+        .titulo-dia-rutina { margin: 0.2rem 0 0; font-weight: 900; text-transform: uppercase; font-size: 0.95rem; }
+        .titulo-dia-rutina span { color: #39e4a5; }
         .bloqueado { filter: blur(4px); pointer-events: none; opacity: 0.3; }
         .capa-bloqueo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; text-align: center; padding: 1rem; box-sizing: border-box; }
         .capa-bloqueo i { color: #39e4a5; font-size: 2.5rem; margin-bottom: 1rem; }
@@ -130,7 +146,10 @@
             .grid-2 { grid-template-columns: 1fr; }
             .stats-progreso .dato strong, .resumen-asistencia .dato strong { font-size: 1.3rem; }
             .barra-progreso select { width: 100%; }
+            .tabla-rutina-cliente th, .tabla-rutina-cliente td { padding: 0.6rem 0.4rem; font-size: 0.82rem; }
+            .tabla-rutina-cliente th { font-size: 0.68rem; }
         }
+        .tabla-scroll { overflow-x: auto; }
     </style>
 </head>
 <body>
@@ -368,37 +387,13 @@
                 
                 if (resRutina.ok) {
                     const rutina = await resRutina.json();
-                    if(rutina && rutina.ejercicios && rutina.ejercicios.length > 0) {
+                    const dias = (rutina && rutina.dias ? rutina.dias : []).filter(d => d.ejercicios && d.ejercicios.length);
+                    if (dias.length > 0) {
                         document.getElementById('metaRutinaCliente').style.display = 'block';
                         document.getElementById('clienteEnfoque').textContent = rutina.enfoque || 'General';
                         document.getElementById('clienteDuracion').textContent = rutina.duracionSemanas || '4';
-                        
-                        let tablaHtml = `
-                            <table class="tabla-rutina-cliente">
-                                <thead>
-                                    <tr>
-                                        <th>Ejercicio</th>
-                                        <th>Series</th>
-                                        <th>Repeticiones</th>
-                                        <th>Descanso</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `;
-                        
-                        rutina.ejercicios.forEach(ej => {
-                            tablaHtml += `
-                                <tr>
-                                    <td style="font-weight:bold; color:#fff;">${ej.nombre}</td>
-                                    <td>${ej.series}</td>
-                                    <td style="color:#39e4a5; font-weight:bold;">${ej.repeticiones}</td>
-                                    <td style="color:#aaa;">${ej.descanso || '--'}</td>
-                                </tr>
-                            `;
-                        });
-                        
-                        tablaHtml += `</tbody></table>`;
-                        contenedor.innerHTML = tablaHtml;
+                        rutinaDias = dias;
+                        renderRutina();
                     } else {
                         contenedor.innerHTML = `<p style="color: #888; font-size: 0.9rem; margin: 0; background:#111; padding:1rem; border-radius:6px; border: 1px dashed #333;"><i class="fa-solid fa-circle-info"></i> No tenés un plan de ejercicios asignado actualmente. Consultá con el administrador.</p>`;
                     }
@@ -415,6 +410,58 @@
         const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const fechaCorta = d => d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit' });
         const kg = n => `${Number(n).toLocaleString('es-AR', { maximumFractionDigits: 1 })} kg`;
+
+        // ================= RUTINA POR DÍA =================
+        let rutinaDias = [];
+        let diaElegido = null;      // el que tocó el socio
+        let diaSugerido = null;     // el que le toca hoy según cuántas veces vino esta semana
+        let visitasSemanaPrevias = null;
+
+        // Si esta semana ya vino 2 veces (antes de hoy), hoy le toca el Día 3; después vuelve a empezar
+        function calcularSugerido() {
+            if (!rutinaDias.length || visitasSemanaPrevias === null) return null;
+            return visitasSemanaPrevias % rutinaDias.length;
+        }
+
+        function renderRutina() {
+            const contenedor = document.getElementById('contenedorRutinaCliente');
+            if (!rutinaDias.length) return;
+            diaSugerido = calcularSugerido();
+            let activo = diaElegido ?? diaSugerido ?? 0;
+            if (activo >= rutinaDias.length) activo = 0;
+
+            const tabs = rutinaDias.length > 1 ? `
+                <div class="tabs-rutina" role="tablist">
+                    ${rutinaDias.map((d, i) => `
+                        <button type="button" class="tab-rutina ${i === activo ? 'activa' : ''}" role="tab" onclick="elegirDiaRutina(${i})">
+                            <span>Día ${i + 1}${i === diaSugerido ? ' <em>Hoy</em>' : ''}</span>
+                            ${d.nombre ? `<small>${esc(d.nombre)}</small>` : ''}
+                        </button>`).join('')}
+                </div>` : '';
+
+            const dia = rutinaDias[activo];
+            const titulo = rutinaDias.length > 1 || dia.nombre
+                ? `<p class="titulo-dia-rutina">Día ${activo + 1}${dia.nombre ? ` · <span>${esc(dia.nombre)}</span>` : ''}${activo === diaSugerido && rutinaDias.length > 1 ? ' <em>Te toca hoy</em>' : ''}</p>`
+                : '';
+
+            contenedor.innerHTML = `
+                ${tabs}
+                ${titulo}
+                <div class="tabla-scroll"><table class="tabla-rutina-cliente">
+                    <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr></thead>
+                    <tbody>
+                        ${dia.ejercicios.map(ej => `
+                            <tr>
+                                <td style="font-weight:bold; color:#fff;">${esc(ej.nombre)}</td>
+                                <td>${esc(ej.series)}</td>
+                                <td style="color:#39e4a5; font-weight:bold;">${esc(ej.repeticiones)}</td>
+                                <td style="color:#aaa;">${esc(ej.descanso) || '--'}</td>
+                            </tr>`).join('')}
+                    </tbody>
+                </table></div>`;
+        }
+
+        function elegirDiaRutina(i) { diaElegido = i; renderRutina(); }
 
         // ================= AVISO DE VENCIMIENTO =================
         function mostrarAvisoVencimiento(dias, miData) {
@@ -455,6 +502,8 @@
 
             document.getElementById('asisMes').textContent = fechas.filter(f => f.startsWith(prefijoMes)).length;
             document.getElementById('asisSemana').textContent = fechas.filter(f => f >= desdeLunes && f <= claveDia(hoy)).length;
+            visitasSemanaPrevias = fechas.filter(f => f >= desdeLunes && f < claveDia(hoy)).length;
+            if (rutinaDias.length) renderRutina();
 
             if (fechas.length) {
                 const [a, m, d] = fechas[0].split('-').map(Number);

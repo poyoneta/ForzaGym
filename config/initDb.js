@@ -8,6 +8,7 @@ const CONFIG_INICIAL = {
     planes: [
         {
             nombre: "Básico",
+            diasRutina: 2,
             precio: 18000,
             resumen: "2 días/sem",
             beneficios: ["2 días por semana", "Rutina personalizada en la app", "Registro de cargas y progreso"],
@@ -16,6 +17,7 @@ const CONFIG_INICIAL = {
         },
         {
             nombre: "Plus",
+            diasRutina: 3,
             precio: 23000,
             resumen: "3 días/sem",
             beneficios: ["3 días por semana", "Rutina personalizada en la app", "Registro de cargas y progreso"],
@@ -24,6 +26,7 @@ const CONFIG_INICIAL = {
         },
         {
             nombre: "Premium",
+            diasRutina: 5,
             precio: 30000,
             resumen: "Pase libre + Nutrición",
             beneficios: ["Pase libre todos los días", "Asesoramiento nutricional", "Rutina personalizada en la app", "Registro de cargas y progreso"],
