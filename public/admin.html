@@ -240,6 +240,100 @@
         .btn-chip:hover { background: #39e4a5; color: #000; }
         .vista-previa-plan { font-size: 0.85rem; color: #aaa; background: #111; border: 1px dashed #333; padding: 0.7rem 0.9rem; border-radius: 6px; margin-bottom: 1rem; }
 
+        /* ================= GRÁFICO DE PAGOS POR MES ================= */
+        .card-pagos {
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            margin-bottom: 1.5rem;
+        }
+        .card-pagos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .card-pagos-header h3 { margin: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.5px; color: #aaa; }
+        .controles-pagos { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .controles-pagos select {
+            background: #111; border: 1px solid #2d2d2d; color: #fff;
+            padding: 0.55rem 0.8rem; border-radius: 6px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.85rem;
+        }
+        .controles-pagos select:focus { border-color: #39e4a5; outline: none; }
+
+        .leyenda-pagos { display: flex; gap: 1.2rem; font-size: 0.8rem; color: #aaa; margin-bottom: 0.6rem; }
+        .leyenda-pagos span { display: inline-flex; align-items: center; gap: 0.4rem; }
+        .leyenda-pagos i.muestra { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+        .contenedor-grafico { position: relative; height: 280px; font-family: 'Montserrat', sans-serif; }
+        .contenedor-grafico svg text { font-family: 'Montserrat', sans-serif; }
+        .zona-mes { cursor: pointer; outline: none; }
+        .zona-mes:focus-visible { stroke: #39e4a5; stroke-width: 1; stroke-dasharray: 4 3; }
+        .tooltip-grafico {
+            position: absolute;
+            pointer-events: none;
+            background: #0b0b0b;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.8rem;
+            color: #ccc;
+            display: none;
+            flex-direction: column;
+            gap: 0.25rem;
+            white-space: nowrap;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+            z-index: 5;
+        }
+        .tooltip-grafico.visible { display: flex; }
+        .tooltip-grafico strong { color: #fff; font-size: 0.85rem; }
+        .tooltip-grafico b { color: #fff; }
+        .tooltip-grafico i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 0.4rem; }
+        .tooltip-grafico .recaudado { border-top: 1px solid #222; padding-top: 0.25rem; margin-top: 0.1rem; }
+        .aviso-historial { font-size: 0.8rem; color: #777; margin: 0.8rem 0 0 0; }
+
+        /* Detalle del mes elegido */
+        .detalle-mes { margin-top: 1.5rem; border-top: 1px solid #2d2d2d; padding-top: 1.3rem; }
+        .detalle-mes h4 { margin: 0 0 1rem 0; font-size: 1.05rem; text-transform: uppercase; }
+        .detalle-mes h4 span { color: #39e4a5; }
+        .kpis-mes { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.8rem; }
+        .kpi { background: #111; border: 1px solid #2d2d2d; border-radius: 8px; padding: 0.8rem 1rem; }
+        .kpi span { display: block; font-size: 0.7rem; text-transform: uppercase; color: #888; font-weight: bold; letter-spacing: 0.4px; }
+        .kpi strong { display: block; font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1.3; }
+        .kpi small { font-size: 0.75rem; color: #888; }
+        .kpi small.sube { color: #39e4a5; }
+        .kpi small.baja { color: #ff4d4d; }
+
+        .listas-mes { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        .lista-mes { background: #111; border: 1px solid #2d2d2d; border-radius: 8px; padding: 0.9rem 1rem; }
+        .lista-mes summary { cursor: pointer; font-weight: bold; font-size: 0.85rem; text-transform: uppercase; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .lista-mes summary::-webkit-details-marker { display: none; }
+        .lista-mes summary::after { content: '▾'; color: #666; }
+        .lista-mes[open] summary::after { content: '▴'; }
+        .lista-mes ul { list-style: none; padding: 0; margin: 0.8rem 0 0 0; max-height: 220px; overflow-y: auto; }
+        .lista-mes li { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.45rem 0; border-bottom: 1px solid #1f1f1f; font-size: 0.85rem; }
+        .lista-mes li:last-child { border-bottom: none; }
+        .lista-mes li em { font-style: normal; color: #888; font-size: 0.8rem; white-space: nowrap; }
+        .lista-mes .vacia { color: #666; font-size: 0.85rem; }
+        .punto-estado { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.4rem; }
+
+        /* Registro del pago dentro del modal de plan */
+        .bloque-pago { background: #111; border: 1px solid #2d2d2d; border-radius: 6px; padding: 0.9rem 1rem; margin-bottom: 1rem; }
+        .bloque-pago label.check { display: flex; align-items: center; gap: 0.6rem; font-size: 0.85rem; font-weight: bold; cursor: pointer; }
+        .bloque-pago input[type=checkbox] { width: 18px; height: 18px; accent-color: #39e4a5; }
+        .bloque-pago .monto { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.8rem; }
+        .bloque-pago .monto input { background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 0.55rem; border-radius: 4px; font-family: 'Montserrat', sans-serif; width: 140px; }
+        .bloque-pago .monto small { color: #777; font-size: 0.75rem; }
+
+        @media (max-width: 900px) {
+            .kpis-mes { grid-template-columns: repeat(2, 1fr); }
+            .listas-mes { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 760px) {
             body { padding: 1rem; }
             .resumen { grid-template-columns: 1fr 1fr; }
@@ -263,6 +357,51 @@
             <button class="stat ok" data-estado="ok"><span>Activos</span><strong id="statActivos">0</strong></button>
             <button class="stat pronto" data-estado="pronto"><span>Vencen en 7 días</span><strong id="statPronto">0</strong></button>
             <button class="stat vencido" data-estado="vencido"><span>Vencidos</span><strong id="statVencidos">0</strong></button>
+        </div>
+
+        <!-- ================= PAGOS POR MES ================= -->
+        <div class="card-pagos">
+            <div class="card-pagos-header">
+                <h3><i class="fa-solid fa-chart-column"></i> Pagos por mes</h3>
+                <div class="controles-pagos">
+                    <select id="rangoMeses" aria-label="Cantidad de meses del gráfico">
+                        <option value="6">Últimos 6 meses</option>
+                        <option value="12">Últimos 12 meses</option>
+                    </select>
+                    <select id="mesElegido" aria-label="Mes a ver en detalle"></select>
+                </div>
+            </div>
+
+            <div class="leyenda-pagos">
+                <span><i class="muestra" style="background:#39e4a5"></i> Pagaron</span>
+                <span><i class="muestra" style="background:#ff4d4d"></i> No pagaron</span>
+            </div>
+            <div class="contenedor-grafico">
+                <div id="graficoPagos" role="img" aria-label="Gráfico de socios que pagaron y no pagaron por mes"></div>
+                <div class="tooltip-grafico" id="tooltipGrafico" role="status"></div>
+            </div>
+            <p class="aviso-historial" id="avisoHistorial"></p>
+
+            <div class="detalle-mes">
+                <h4>Detalle de <span id="tituloMes"></span></h4>
+                <div class="kpis-mes">
+                    <div class="kpi"><span>Socios</span><strong id="kpiSocios">0</strong><small id="kpiSociosDif"></small></div>
+                    <div class="kpi"><span>Pagaron</span><strong id="kpiPagaron">0</strong><small id="kpiPagaronDif"></small></div>
+                    <div class="kpi"><span>No pagaron</span><strong id="kpiNoPagaron">0</strong><small id="kpiNoPagaronDif"></small></div>
+                    <div class="kpi"><span>Nuevos socios</span><strong id="kpiNuevos">0</strong><small id="kpiNuevosDif"></small></div>
+                    <div class="kpi"><span>Recaudado</span><strong id="kpiRecaudado">$0</strong><small id="kpiRecaudadoDif"></small></div>
+                </div>
+                <div class="listas-mes">
+                    <details class="lista-mes" open>
+                        <summary><span><i class="punto-estado" style="background:#39e4a5"></i>Pagaron (<span id="cantPagaron">0</span>)</span></summary>
+                        <ul id="listaPagaron"></ul>
+                    </details>
+                    <details class="lista-mes" open>
+                        <summary><span><i class="punto-estado" style="background:#ff4d4d"></i>No pagaron (<span id="cantNoPagaron">0</span>)</span></summary>
+                        <ul id="listaNoPagaron"></ul>
+                    </details>
+                </div>
+            </div>
         </div>
 
         <div class="card-tabla">
@@ -352,6 +491,15 @@
 
                 <div class="vista-previa-plan" id="vistaPreviaPlan"></div>
 
+                <div class="bloque-pago">
+                    <label class="check"><input type="checkbox" id="registrarPago" checked> Registrar como pago (cuenta para el gráfico)</label>
+                    <div class="monto" id="bloqueMonto">
+                        <span>$</span>
+                        <input type="number" id="montoPago" min="0" step="100">
+                        <small id="ayudaMonto"></small>
+                    </div>
+                </div>
+
                 <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
                     <button type="button" class="btn btn-baja" style="margin:0;" onclick="cerrarModal('modalPlan')">Cancelar</button>
                     <button type="submit" class="btn btn-ficha"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
@@ -406,6 +554,8 @@
         let listaSociosGlobal = [];
         const DIAS_AVISO = 7; // Cuántos días antes del vencimiento se marca en naranja
         const PLANES_VALIDOS = ['Básico', 'Plus', 'Premium'];
+        // Precio mensual de cada plan (se usa para sugerir el monto al registrar un pago)
+        const PRECIOS = { 'Básico': 18000, 'Plus': 23000, 'Premium': 30000 };
 
         // ================= UTILIDADES DE FECHAS =================
 
@@ -615,6 +765,11 @@
             document.getElementById('planInicio').value = aInputFecha(inicio);
             document.getElementById('planFin').value = aInputFecha(fin);
 
+            // Por defecto se registra el pago, con el monto sugerido según plan y meses
+            document.getElementById('registrarPago').checked = true;
+            document.getElementById('bloqueMonto').style.display = '';
+            montoEditadoAMano = false;
+
             actualizarVistaPrevia();
             document.getElementById('modalPlan').style.display = 'flex';
         }
@@ -644,10 +799,35 @@
 
             const estado = estadoSocio({ fechaFinPlan: fin });
             caja.innerHTML = `Del <strong>${formatearFecha(inicio)}</strong> al <strong>${formatearFecha(fin)}</strong> · ${textoEstado(estado)}`;
+            sugerirMonto();
+        }
+
+        // ---- Monto del pago ----
+        let montoEditadoAMano = false;
+
+        function sugerirMonto() {
+            const inicio = desdeInputFecha(document.getElementById('planInicio').value);
+            const fin = desdeInputFecha(document.getElementById('planFin').value);
+            const plan = document.getElementById('planEditar').value;
+            const meses = (inicio && fin && fin >= inicio) ? Math.max(1, mesesCubiertos(inicio, fin).length) : 1;
+            const precio = PRECIOS[plan];
+
+            document.getElementById('ayudaMonto').textContent = precio
+                ? `${meses} ${meses === 1 ? 'mes' : 'meses'} × ${formatearPesos(precio)}`
+                : 'Cargá el monto cobrado';
+
+            if (!montoEditadoAMano) {
+                document.getElementById('montoPago').value = precio ? precio * meses : '';
+            }
         }
 
         document.getElementById('planInicio').addEventListener('change', actualizarVistaPrevia);
         document.getElementById('planFin').addEventListener('change', actualizarVistaPrevia);
+        document.getElementById('planEditar').addEventListener('change', sugerirMonto);
+        document.getElementById('montoPago').addEventListener('input', () => { montoEditadoAMano = true; });
+        document.getElementById('registrarPago').addEventListener('change', (e) => {
+            document.getElementById('bloqueMonto').style.display = e.target.checked ? '' : 'none';
+        });
 
         document.getElementById('formPlan').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -674,8 +854,24 @@
                 });
 
                 if (res.ok) {
+                    // Si está tildado, también queda registrado el pago para el historial
+                    if (document.getElementById('registrarPago').checked) {
+                        const resPago = await fetch('/api/pagos', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                socioId: Number(id),
+                                plan: planElegido,
+                                monto: Number(document.getElementById('montoPago').value) || 0,
+                                periodoDesde: inicioTxt,
+                                periodoHasta: finTxt
+                            })
+                        });
+                        if (!resPago.ok) alert('El plan se guardó, pero no se pudo registrar el pago.');
+                    }
                     cerrarModal('modalPlan');
                     await cargarSocios();
+                    await cargarPagos();
                 } else {
                     const datos = await res.json().catch(() => ({}));
                     alert(datos.error || 'No se pudo actualizar el plan.');
@@ -831,12 +1027,293 @@
             }
         }
 
+        // ================= PAGOS POR MES (GRÁFICO) =================
+
+        let listaPagos = [];
+        let mesSeleccionado = null;
+        const VERDE = '#39e4a5';
+        const ROJO = '#ff4d4d';
+        const NOMBRES_MES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+        // "2026-10" <-> fecha
+        function claveMes(fecha) { return `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}`; }
+        function inicioMes(clave) { const [a, m] = clave.split('-').map(Number); return new Date(a, m - 1, 1); }
+        function finMes(clave) { const [a, m] = clave.split('-').map(Number); return new Date(a, m, 0, 23, 59, 59); }
+        function mesAnterior(clave) { const d = inicioMes(clave); d.setMonth(d.getMonth() - 1); return claveMes(d); }
+        function nombreMes(clave, corto = false) {
+            const d = inicioMes(clave);
+            const nombre = NOMBRES_MES[d.getMonth()];
+            return corto ? `${nombre.slice(0, 3)} ${String(d.getFullYear()).slice(2)}` : `${nombre} ${d.getFullYear()}`;
+        }
+
+        function formatearPesos(n) {
+            return '$' + Math.round(n || 0).toLocaleString('es-AR');
+        }
+
+        // Qué cuotas mensuales cubre un pago.
+        // Del 11/10 al 11/11 = cuota de octubre. Del 11/10 al 11/01 = octubre, noviembre y diciembre.
+        function mesesCubiertos(desde, hasta) {
+            const meses = [];
+            const cursor = new Date(desde.getFullYear(), desde.getMonth(), 1);
+            const tope = new Date(hasta.getFullYear(), hasta.getMonth(), 1);
+            while (cursor < tope) {
+                meses.push(claveMes(cursor));
+                cursor.setMonth(cursor.getMonth() + 1);
+            }
+            if (meses.length === 0) meses.push(claveMes(desde)); // pago dentro del mismo mes
+            return meses;
+        }
+
+        async function cargarPagos() {
+            try {
+                const res = await fetch('/api/pagos');
+                if (!res.ok) throw new Error('respuesta ' + res.status);
+                listaPagos = (await res.json()).map(p => ({
+                    ...p,
+                    meses: mesesCubiertos(desdeInputFecha(p.periodoDesde), desdeInputFecha(p.periodoHasta)),
+                    mesPago: claveMes(new Date(p.fechaPago))
+                }));
+            } catch (err) {
+                console.error('Error al traer los pagos:', err);
+                listaPagos = [];
+            }
+            armarSeccionPagos();
+        }
+
+        // Meses con historial: desde el primer pago registrado hasta el mes actual
+        function mesesDisponibles() {
+            const actual = claveMes(new Date());
+            let primero = actual;
+            listaPagos.forEach(p => {
+                [p.mesPago, ...p.meses].forEach(m => { if (m < primero) primero = m; });
+            });
+            const lista = [];
+            for (let m = actual; m >= primero; m = mesAnterior(m)) lista.push(m);
+            return lista; // del más nuevo al más viejo
+        }
+
+        // Todo lo que pasó en un mes
+        function calcularMes(clave) {
+            const desde = inicioMes(clave);
+            const hasta = finMes(clave);
+
+            // Socios que ya estaban inscriptos ese mes
+            const socios = sociosSinAdmin().filter(s => {
+                const insc = s.fechaInscripcion ? new Date(s.fechaInscripcion) : null;
+                return !insc || insc <= hasta;
+            });
+
+            const pagosDelMes = listaPagos.filter(p => p.meses.includes(clave));
+            const pagaron = [];
+            const noPagaron = [];
+
+            socios.forEach(s => {
+                const pago = pagosDelMes.find(p => p.socioId === s.id);
+                if (pago) pagaron.push({ socio: s, pago });
+                else noPagaron.push({ socio: s });
+            });
+
+            const nuevos = socios.filter(s => {
+                const insc = s.fechaInscripcion ? new Date(s.fechaInscripcion) : null;
+                return insc && insc >= desde && insc <= hasta;
+            }).length;
+
+            // Plata que entró ese mes (según la fecha en que se registró el pago)
+            const recaudado = listaPagos
+                .filter(p => p.mesPago === clave)
+                .reduce((total, p) => total + p.monto, 0);
+
+            return { clave, socios: socios.length, pagaron, noPagaron, nuevos, recaudado };
+        }
+
+        function armarSeccionPagos() {
+            const disponibles = mesesDisponibles();
+            const selectMes = document.getElementById('mesElegido');
+
+            if (!mesSeleccionado || !disponibles.includes(mesSeleccionado)) mesSeleccionado = disponibles[0];
+            selectMes.innerHTML = disponibles
+                .map(m => `<option value="${m}">${nombreMes(m)}</option>`)
+                .join('');
+            selectMes.value = mesSeleccionado;
+
+            document.getElementById('avisoHistorial').textContent = listaPagos.length === 0
+                ? 'Todavía no hay pagos registrados. El historial arranca cuando guardes un plan con "Registrar como pago" tildado.'
+                : (disponibles.length === 1 ? 'El gráfico va a ir sumando meses a medida que registres pagos.' : '');
+
+            dibujarGrafico();
+            mostrarDetalleMes(mesSeleccionado);
+        }
+
+        // Gráfico de barras apiladas hecho a mano en SVG (no depende de ninguna librería)
+        function dibujarGrafico() {
+            const rango = Number(document.getElementById('rangoMeses').value);
+            const meses = mesesDisponibles().slice(0, rango).reverse(); // del más viejo al más nuevo
+            const datos = meses.map(calcularMes);
+            const cont = document.getElementById('graficoPagos');
+            const tooltip = document.getElementById('tooltipGrafico');
+            tooltip.classList.remove('visible');
+
+            const ancho = cont.clientWidth || 600;
+            const alto = 280;
+            const m = { arriba: 22, derecha: 8, abajo: 30, izquierda: 34 };
+            const anchoUtil = ancho - m.izquierda - m.derecha;
+            const altoUtil = alto - m.arriba - m.abajo;
+
+            // Escala vertical con números redondos
+            const maximo = Math.max(1, ...datos.map(d => d.socios));
+            const paso = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500].find(p => maximo / p <= 5) || 1000;
+            const tope = Math.ceil(maximo / paso) * paso;
+            const y = v => m.arriba + altoUtil - (v / tope) * altoUtil;
+
+            const banda = anchoUtil / meses.length;
+            const anchoBarra = Math.min(48, banda * 0.6);
+            const NS = 'http://www.w3.org/2000/svg';
+            let svg = `<svg width="${ancho}" height="${alto}" viewBox="0 0 ${ancho} ${alto}" xmlns="${NS}" style="display:block">`;
+
+            // Grilla y números del eje (recesivos)
+            for (let v = 0; v <= tope; v += paso) {
+                svg += `<line x1="${m.izquierda}" x2="${ancho - m.derecha}" y1="${y(v)}" y2="${y(v)}" stroke="${v === 0 ? '#333' : '#262626'}" stroke-width="1"/>`;
+                svg += `<text x="${m.izquierda - 8}" y="${y(v) + 4}" fill="#666" font-size="11" text-anchor="end">${v}</text>`;
+            }
+
+            // Rectángulo con las esquinas de arriba redondeadas
+            const barraRedondeada = (x, yArriba, w, h, r) => {
+                if (h <= 0) return '';
+                r = Math.min(r, h, w / 2);
+                return `M${x},${yArriba + h} V${yArriba + r} Q${x},${yArriba} ${x + r},${yArriba} H${x + w - r} Q${x + w},${yArriba} ${x + w},${yArriba + r} V${yArriba + h} Z`;
+            };
+
+            datos.forEach((d, i) => {
+                const x = m.izquierda + banda * i + (banda - anchoBarra) / 2;
+                const elegido = meses[i] === mesSeleccionado;
+                const opacidad = elegido ? 1 : 0.45;
+                const pag = d.pagaron.length;
+                const nop = d.noPagaron.length;
+                const yBase = y(0);
+                const yPag = y(pag);
+                const yTotal = y(pag + nop);
+
+                // Verde abajo (pagaron); rojo arriba (no pagaron), con 2px de separación
+                if (pag > 0) {
+                    const radio = nop > 0 ? 0 : 4;
+                    svg += `<path d="${barraRedondeada(x, yPag, anchoBarra, yBase - yPag, radio)}" fill="${VERDE}" opacity="${opacidad}"/>`;
+                }
+                if (nop > 0) {
+                    const separacion = pag > 0 ? 2 : 0;
+                    svg += `<path d="${barraRedondeada(x, yTotal, anchoBarra, yPag - yTotal - separacion, 4)}" fill="${ROJO}" opacity="${opacidad}"/>`;
+                }
+
+                // Total arriba de la barra y nombre del mes abajo
+                svg += `<text x="${x + anchoBarra / 2}" y="${yTotal - 6}" fill="${elegido ? '#fff' : '#888'}" font-size="11" font-weight="bold" text-anchor="middle">${pag + nop}</text>`;
+                svg += `<text x="${x + anchoBarra / 2}" y="${alto - 10}" fill="${elegido ? '#39e4a5' : '#888'}" font-size="11" font-weight="${elegido ? 'bold' : 'normal'}" text-anchor="middle">${nombreMes(meses[i], true)}</text>`;
+
+                // Zona invisible (más grande que la barra) para pasar el mouse, tocar o usar el teclado
+                svg += `<rect class="zona-mes" data-i="${i}" x="${m.izquierda + banda * i}" y="${m.arriba}" width="${banda}" height="${altoUtil}" fill="transparent" tabindex="0" role="button" aria-label="${nombreMes(meses[i])}: ${pag} pagaron, ${nop} no pagaron"/>`;
+            });
+
+            svg += '</svg>';
+            cont.innerHTML = svg;
+
+            // Tooltip y selección
+            cont.querySelectorAll('.zona-mes').forEach(zona => {
+                const i = Number(zona.dataset.i);
+                const d = datos[i];
+                const mostrar = () => {
+                    const pct = d.socios ? Math.round(d.pagaron.length * 100 / d.socios) : 0;
+                    tooltip.innerHTML = `
+                        <strong>${nombreMes(meses[i])}</strong>
+                        <span><i style="background:${VERDE}"></i>Pagaron: <b>${d.pagaron.length}</b> (${pct}%)</span>
+                        <span><i style="background:${ROJO}"></i>No pagaron: <b>${d.noPagaron.length}</b></span>
+                        <span class="recaudado">Recaudado: <b>${formatearPesos(d.recaudado)}</b></span>`;
+                    const centro = m.izquierda + banda * i + banda / 2;
+                    tooltip.classList.add('visible');
+                    const izquierda = Math.min(Math.max(centro - tooltip.offsetWidth / 2, 0), ancho - tooltip.offsetWidth);
+                    tooltip.style.left = izquierda + 'px';
+                    tooltip.style.top = Math.max(0, y(d.socios) - tooltip.offsetHeight - 14) + 'px';
+                };
+                zona.addEventListener('mouseenter', mostrar);
+                zona.addEventListener('focus', mostrar);
+                zona.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+                zona.addEventListener('blur', () => tooltip.classList.remove('visible'));
+                zona.addEventListener('click', () => seleccionarMes(meses[i]));
+                zona.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); seleccionarMes(meses[i]); } });
+            });
+        }
+
+        // Si cambia el ancho de la pantalla, se redibuja
+        let esperaRedibujo;
+        window.addEventListener('resize', () => {
+            clearTimeout(esperaRedibujo);
+            esperaRedibujo = setTimeout(() => { if (mesSeleccionado) dibujarGrafico(); }, 150);
+        });
+
+        function seleccionarMes(clave) {
+            mesSeleccionado = clave;
+            document.getElementById('mesElegido').value = clave;
+            dibujarGrafico();
+            mostrarDetalleMes(clave);
+        }
+
+        // Diferencia contra el mes anterior: "+3 vs Sep" en verde o "-2 vs Sep" en rojo
+        function mostrarDiferencia(idElemento, actual, anterior, nombreAnterior, { esPlata = false, menosEsMejor = false } = {}) {
+            const el = document.getElementById(idElemento);
+            if (anterior === null) { el.textContent = ''; el.className = ''; return; }
+            const dif = actual - anterior;
+            if (dif === 0) { el.textContent = `= vs ${nombreAnterior}`; el.className = ''; return; }
+            const texto = esPlata ? formatearPesos(Math.abs(dif)) : Math.abs(dif);
+            el.textContent = `${dif > 0 ? '▲ +' : '▼ -'}${texto} vs ${nombreAnterior}`;
+            const esBueno = menosEsMejor ? dif < 0 : dif > 0;
+            el.className = esBueno ? 'sube' : 'baja';
+        }
+
+        function mostrarDetalleMes(clave) {
+            const d = calcularMes(clave);
+            const claveAnt = mesAnterior(clave);
+            const hayAnterior = mesesDisponibles().includes(claveAnt);
+            const ant = hayAnterior ? calcularMes(claveAnt) : null;
+            const nombreAnt = NOMBRES_MES[inicioMes(claveAnt).getMonth()].slice(0, 3);
+            const pct = d.socios ? Math.round(d.pagaron.length * 100 / d.socios) : 0;
+
+            document.getElementById('tituloMes').textContent = nombreMes(clave);
+            document.getElementById('kpiSocios').textContent = d.socios;
+            document.getElementById('kpiPagaron').innerHTML = `${d.pagaron.length} <small>${pct}%</small>`;
+            document.getElementById('kpiNoPagaron').textContent = d.noPagaron.length;
+            document.getElementById('kpiNuevos').textContent = d.nuevos;
+            document.getElementById('kpiRecaudado').textContent = formatearPesos(d.recaudado);
+
+            mostrarDiferencia('kpiSociosDif', d.socios, ant && ant.socios, nombreAnt);
+            mostrarDiferencia('kpiPagaronDif', d.pagaron.length, ant && ant.pagaron.length, nombreAnt);
+            mostrarDiferencia('kpiNoPagaronDif', d.noPagaron.length, ant && ant.noPagaron.length, nombreAnt, { menosEsMejor: true });
+            mostrarDiferencia('kpiNuevosDif', d.nuevos, ant && ant.nuevos, nombreAnt);
+            mostrarDiferencia('kpiRecaudadoDif', d.recaudado, ant && ant.recaudado, nombreAnt, { esPlata: true });
+
+            document.getElementById('cantPagaron').textContent = d.pagaron.length;
+            document.getElementById('cantNoPagaron').textContent = d.noPagaron.length;
+
+            document.getElementById('listaPagaron').innerHTML = d.pagaron.length
+                ? d.pagaron
+                    .sort((a, b) => a.socio.nombre.localeCompare(b.socio.nombre))
+                    .map(({ socio, pago }) => `<li><span>${esc(socio.nombre)}</span><em>${esc(pago.plan || '')} · ${formatearPesos(pago.monto)}</em></li>`)
+                    .join('')
+                : '<li class="vacia">Nadie registró pago este mes.</li>';
+
+            document.getElementById('listaNoPagaron').innerHTML = d.noPagaron.length
+                ? d.noPagaron
+                    .sort((a, b) => a.socio.nombre.localeCompare(b.socio.nombre))
+                    .map(({ socio }) => `<li><span>${esc(socio.nombre)}</span><em>${esc(socio.telefono)}</em></li>`)
+                    .join('')
+                : '<li class="vacia">¡Todos pagaron! 🎉</li>';
+        }
+
+        document.getElementById('rangoMeses').addEventListener('change', dibujarGrafico);
+        document.getElementById('mesElegido').addEventListener('change', (e) => seleccionarMes(e.target.value));
+
         function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
 
         async function darDeBaja(id) {
             if (confirm("¿Estás seguro de dar de baja a este socio del gimnasio?")) {
                 const res = await fetch(`/api/socios/${id}`, { method: 'DELETE' });
-                if (res.ok) cargarSocios();
+                if (res.ok) { await cargarSocios(); await cargarPagos(); }
             }
         }
 
@@ -848,7 +1325,8 @@
             }
         }
 
-        cargarSocios();
+        // Primero los socios (el gráfico los necesita) y después los pagos
+        cargarSocios().then(cargarPagos);
     </script>
 </body>
 </html>

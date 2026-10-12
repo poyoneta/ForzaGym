@@ -21,8 +21,19 @@ app.use(
     require("./routes/rutinasRoutes")
 );
 
-app.listen(process.env.PORT, () => {
-    console.log(
-        `Servidor iniciado en puerto ${process.env.PORT}`
-    );
+// Historial de pagos (gráfico mensual del backoffice)
+app.use(
+    "/api/pagos",
+    require("./routes/pagosRoutes")
+);
+
+// Crea la tabla de pagos si no existe y después arranca el servidor
+const inicializarBaseDeDatos = require("./config/initDb");
+
+inicializarBaseDeDatos().finally(() => {
+    app.listen(process.env.PORT, () => {
+        console.log(
+            `Servidor iniciado en puerto ${process.env.PORT}`
+        );
+    });
 });
