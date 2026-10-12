@@ -245,12 +245,26 @@
                     document.getElementById('fichaLesiones').value = miData.lesiones || '';
                     document.getElementById('fichaActividadExtra').value = miData.actividadExtra || '';
 
-                    // Nutrición Premium
+                    // Nutrición: se desbloquea si el plan tiene "Incluye nutrición" (se configura en "Editar sitio")
+                    let planesConNutricion = ['Premium'];
+                    try {
+                        const resPlanes = await fetch('/api/config/planes');
+                        if (resPlanes.ok) {
+                            const planes = await resPlanes.json();
+                            if (Array.isArray(planes) && planes.length) planesConNutricion = planes.filter(p => p.nutricion).map(p => p.nombre);
+                        }
+                    } catch (e) { /* queda el valor de respaldo */ }
+
                     const seccionNutricion = document.getElementById('seccionNutricion');
                     const contenido = document.getElementById('contenidoNutricion');
-                    if (miData.planElegido !== 'Premium' && seccionNutricion && contenido) {
+                    if (!planesConNutricion.includes(miData.planElegido) && seccionNutricion && contenido) {
+                        const nombresPlanes = planesConNutricion.length ? planesConNutricion.map(n => 'Plan ' + n).join(' / ') : 'planes con nutrición';
                         contenido.classList.add('bloqueado');
-                        seccionNutricion.innerHTML += `<div class="capa-bloqueo"><i class="fa-solid fa-lock"></i><p>Módulo de Nutrición Exclusivo para el <span style="color:#39e4a5;">Plan Premium</span></p></div>`;
+                        const capa = document.createElement('div');
+                        capa.className = 'capa-bloqueo';
+                        capa.innerHTML = '<i class="fa-solid fa-lock"></i><p>Módulo de Nutrición exclusivo para el <span style="color:#39e4a5;"></span></p>';
+                        capa.querySelector('span').textContent = nombresPlanes;
+                        seccionNutricion.appendChild(capa);
                     }
                 }
             } catch (err) { console.error("Error:", err); }

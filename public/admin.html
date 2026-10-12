@@ -89,6 +89,8 @@
         .btn-baja:hover { background-color: #ff4d4d; color: #fff; }
         .btn-logout { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.5rem 1rem; font-size: 0.85rem;}
         .btn-logout:hover { background: #ff4d4d; color: #fff; }
+        .btn-sitio { background: transparent; border: 1px solid #39e4a5; color: #39e4a5; padding: 0.5rem 1rem; font-size: 0.85rem; text-decoration: none; }
+        .btn-sitio:hover { background: #39e4a5; color: #000; }
         .btn-add-ejercicio { background-color: #333; color: #fff; margin-top: 0.5rem; border: 1px dashed #666; width: 100%; justify-content: center;}
         .btn-add-ejercicio:hover { background-color: #444; border-color: #39e4a5;}
 
@@ -348,7 +350,10 @@
     <div class="container">
         <header class="header">
             <h1>Panel <span>Backoffice</span></h1>
-            <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <a href="configuracion.html" class="btn btn-sitio"><i class="fa-solid fa-pen-to-square"></i> Editar sitio</a>
+                <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+            </div>
         </header>
 
         <!-- Resumen: al tocar una tarjeta se filtra la tabla -->
@@ -553,9 +558,36 @@
 
         let listaSociosGlobal = [];
         const DIAS_AVISO = 7; // Cuántos días antes del vencimiento se marca en naranja
-        const PLANES_VALIDOS = ['Básico', 'Plus', 'Premium'];
-        // Precio mensual de cada plan (se usa para sugerir el monto al registrar un pago)
-        const PRECIOS = { 'Básico': 18000, 'Plus': 23000, 'Premium': 30000 };
+        // Planes y precios: se cargan de la base (se editan en "Editar sitio").
+        // Estos valores son solo el respaldo si la base no responde.
+        let PLANES_VALIDOS = ['Básico', 'Plus', 'Premium'];
+        let PRECIOS = { 'Básico': 18000, 'Plus': 23000, 'Premium': 30000 };
+        let RESUMENES = {};
+
+        async function cargarPlanesConfig() {
+            try {
+                const res = await fetch('/api/config/planes');
+                if (!res.ok) return;
+                const planes = await res.json();
+                if (!Array.isArray(planes) || planes.length === 0) return;
+                PLANES_VALIDOS = planes.map(p => p.nombre);
+                PRECIOS = Object.fromEntries(planes.map(p => [p.nombre, Number(p.precio) || 0]));
+                RESUMENES = Object.fromEntries(planes.map(p => [p.nombre, p.resumen || '']));
+            } catch (e) { /* se usan los valores de respaldo */ }
+
+            // Filtro de la tabla
+            const filtro = document.getElementById('filtroPlan');
+            const valorFiltro = filtro.value;
+            filtro.innerHTML = '<option value="todos">Todos los planes</option>' +
+                PLANES_VALIDOS.map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('') +
+                '<option value="otro">Otro / Sin plan</option>';
+            filtro.value = [...filtro.options].some(o => o.value === valorFiltro) ? valorFiltro : 'todos';
+
+            // Selector del modal de plan
+            document.getElementById('planEditar').innerHTML = PLANES_VALIDOS
+                .map(n => `<option value="${esc(n)}">Plan ${esc(n)}${RESUMENES[n] ? ' (' + esc(RESUMENES[n]) + ')' : ''}</option>`)
+                .join('');
+        }
 
         // ================= UTILIDADES DE FECHAS =================
 
@@ -1325,8 +1357,8 @@
             }
         }
 
-        // Primero los socios (el gráfico los necesita) y después los pagos
-        cargarSocios().then(cargarPagos);
+        // Primero los planes, después los socios (el gráfico los necesita) y por último los pagos
+        cargarPlanesConfig().then(cargarSocios).then(cargarPagos);
     </script>
 </body>
 </html>

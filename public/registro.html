@@ -166,10 +166,30 @@
     <script>
         // Si viene desde un botón "Elegir plan" del index (registro.html?plan=Premium), lo dejamos preseleccionado
         const planUrl = new URLSearchParams(window.location.search).get('plan');
-        if (planUrl) {
-            const selectPlan = document.getElementById('planElegido');
-            if ([...selectPlan.options].some(o => o.value === planUrl)) selectPlan.value = planUrl;
+        const selectPlan = document.getElementById('planElegido');
+
+        function preseleccionarPlan() {
+            if (planUrl && [...selectPlan.options].some(o => o.value === planUrl)) selectPlan.value = planUrl;
         }
+        preseleccionarPlan();
+
+        // Los planes se leen de la base (se editan desde el backoffice). Si falla, quedan los de arriba.
+        fetch('/api/config/planes')
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(planes => {
+                if (!Array.isArray(planes) || planes.length === 0) return;
+                const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+                const elegido = selectPlan.value;
+                selectPlan.innerHTML = '<option value="" disabled selected>Seleccioná tu Plan...</option>' +
+                    planes.map(p => {
+                        const precio = '$' + Math.round(p.precio || 0).toLocaleString('es-AR');
+                        const detalle = p.resumen ? `${p.resumen} · ${precio}` : precio;
+                        return `<option value="${esc(p.nombre)}">Plan ${esc(p.nombre)} (${esc(detalle)})</option>`;
+                    }).join('');
+                if (elegido && [...selectPlan.options].some(o => o.value === elegido)) selectPlan.value = elegido;
+                else preseleccionarPlan();
+            })
+            .catch(() => {});
 
         document.getElementById('formRegistro').addEventListener('submit', async (e) => {
             e.preventDefault();

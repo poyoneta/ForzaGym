@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forza Gym - Editar sitio</title>
+    <link rel="icon" type="image/jpeg" href="imagenes/logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
+
+        :root { --verde: #39e4a5; --rojo: #ff4d4d; --naranja: #ffb020; }
+
+        * { box-sizing: border-box; }
+        body {
+            background-color: #0b0b0b;
+            padding: 1.5rem;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            margin: 0;
+        }
+        .container { max-width: 1000px; margin: 0 auto; padding-bottom: 5rem; }
+
+        .header {
+            border-bottom: 2px solid var(--verde);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .header h1 { font-weight: 900; margin: 0; font-size: 1.6rem; text-transform: uppercase; }
+        .header h1 span { color: var(--verde); }
+        .header-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        /* Botones */
+        .btn {
+            padding: 0.55rem 0.9rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-family: 'Montserrat', sans-serif;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            text-decoration: none;
+        }
+        .btn-principal { background: var(--verde); color: #000; }
+        .btn-principal:hover { background: #2ec78f; }
+        .btn-principal:disabled { background: #2a2a2a; color: #666; cursor: not-allowed; }
+        .btn-borde { background: transparent; border: 1px solid #444; color: #ccc; }
+        .btn-borde:hover { border-color: var(--verde); color: var(--verde); }
+        .btn-agregar { background: #151515; border: 1px dashed #555; color: #ccc; width: 100%; justify-content: center; padding: 0.9rem; }
+        .btn-agregar:hover { border-color: var(--verde); color: var(--verde); }
+        .btn-icono { background: transparent; border: 1px solid #333; color: #aaa; padding: 0.45rem 0.6rem; }
+        .btn-icono:hover { border-color: #888; color: #fff; }
+        .btn-icono:disabled { opacity: 0.3; cursor: default; }
+        .btn-eliminar { background: transparent; border: 1px solid var(--rojo); color: var(--rojo); padding: 0.45rem 0.6rem; }
+        .btn-eliminar:hover { background: var(--rojo); color: #fff; }
+
+        /* Pestañas */
+        .pestanas { display: flex; gap: 0.4rem; margin-bottom: 1.5rem; border-bottom: 1px solid #2a2a2a; flex-wrap: wrap; }
+        .pestana {
+            background: none; border: none; color: #888;
+            font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 0.9rem; text-transform: uppercase;
+            padding: 0.8rem 1.1rem; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px;
+        }
+        .pestana:hover { color: #fff; }
+        .pestana.activa { color: var(--verde); border-bottom-color: var(--verde); }
+        .pestana .punto-cambios { display: none; width: 8px; height: 8px; border-radius: 50%; background: var(--naranja); margin-left: 0.4rem; vertical-align: middle; }
+        .pestana.con-cambios .punto-cambios { display: inline-block; }
+
+        .panel { display: none; }
+        .panel.activo { display: block; }
+        .panel-intro { color: #888; font-size: 0.9rem; margin: 0 0 1.2rem 0; }
+
+        /* Tarjetas editables */
+        .item {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-left: 4px solid #444;
+            border-radius: 8px;
+            padding: 1.2rem 1.3rem;
+            margin-bottom: 1rem;
+        }
+        .item.destacado { border-left-color: var(--verde); }
+        .item.oculto { opacity: 0.6; }
+        .item-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .item-titulo { font-weight: 900; text-transform: uppercase; font-size: 1rem; }
+        .item-titulo small { color: #888; font-weight: normal; text-transform: none; font-size: 0.8rem; margin-left: 0.5rem; }
+        .item-acciones { display: flex; gap: 0.35rem; }
+
+        .campos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.9rem 1rem; }
+        .campo { display: flex; flex-direction: column; gap: 0.3rem; }
+        .campo.completo { grid-column: 1 / -1; }
+        .campo label { font-size: 0.72rem; color: #888; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px; }
+        .campo input, .campo textarea {
+            background: #111; border: 1px solid #2d2d2d; color: #fff;
+            padding: 0.65rem 0.75rem; border-radius: 6px;
+            font-family: 'Montserrat', sans-serif; font-size: 0.9rem; width: 100%;
+        }
+        .campo textarea { resize: vertical; min-height: 90px; line-height: 1.5; }
+        .campo input:focus, .campo textarea:focus { border-color: var(--verde); outline: none; }
+        .campo .ayuda { font-size: 0.72rem; color: #666; }
+        .precio-input { position: relative; }
+        .precio-input span { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #888; }
+        .precio-input input { padding-left: 1.6rem; }
+
+        .checks { display: flex; gap: 1.5rem; flex-wrap: wrap; grid-column: 1 / -1; }
+        .check { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; cursor: pointer; }
+        .check input { width: 17px; height: 17px; accent-color: var(--verde); }
+
+        /* Turnos de horarios */
+        .turno { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.6rem; margin-bottom: 0.5rem; }
+        .turno input { background: #111; border: 1px solid #2d2d2d; color: #fff; padding: 0.6rem 0.7rem; border-radius: 6px; font-family: 'Montserrat', sans-serif; font-size: 0.88rem; }
+        .turno input:focus { border-color: var(--verde); outline: none; }
+        .btn-agregar-turno { background: none; border: none; color: var(--verde); font-family: 'Montserrat', sans-serif; font-weight: bold; font-size: 0.8rem; cursor: pointer; padding: 0.3rem 0; }
+
+        /* Indumentaria */
+        .producto-grid { display: grid; grid-template-columns: 170px 1fr; gap: 1.2rem; }
+        .foto-producto {
+            width: 170px; aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden;
+            background: #0b0b0b; border: 1px solid #2d2d2d;
+            display: flex; align-items: center; justify-content: center; color: #555; font-size: 0.8rem; text-align: center;
+        }
+        .foto-producto.claro { background: #fff; }
+        .foto-producto img { width: 100%; height: 100%; object-fit: contain; }
+        .acciones-foto { margin-top: 0.5rem; }
+        .acciones-foto label { width: 170px; justify-content: center; }
+        .acciones-foto input { display: none; }
+        .subiendo { font-size: 0.75rem; color: var(--naranja); margin-top: 0.3rem; }
+
+        /* Barra de guardado fija abajo */
+        .barra-guardar {
+            position: fixed; left: 0; right: 0; bottom: 0;
+            background: rgba(11,11,11,0.96); border-top: 1px solid #2a2a2a;
+            padding: 0.8rem 1.5rem; display: flex; justify-content: center; z-index: 50;
+        }
+        .barra-guardar-contenido { max-width: 1000px; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        .estado-guardado { font-size: 0.85rem; color: #888; }
+        .estado-guardado.pendiente { color: var(--naranja); }
+        .estado-guardado.ok { color: var(--verde); }
+        .estado-guardado.error { color: var(--rojo); }
+
+        .cargando { color: #888; padding: 2rem; text-align: center; }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .campos { grid-template-columns: 1fr; }
+            .producto-grid { grid-template-columns: 1fr; }
+            .foto-producto, .acciones-foto label { width: 100%; max-width: 260px; }
+            .turno { grid-template-columns: 1fr auto; }
+            .turno input:first-child { grid-column: 1 / -1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <h1>Editar <span>sitio</span></h1>
+            <div class="header-links">
+                <a href="admin.html" class="btn btn-borde"><i class="fa-solid fa-arrow-left"></i> Volver al panel</a>
+                <a href="index.html" target="_blank" class="btn btn-borde"><i class="fa-solid fa-eye"></i> Ver sitio</a>
+            </div>
+        </header>
+
+        <nav class="pestanas" role="tablist">
+            <button class="pestana activa" data-panel="planes" role="tab"><i class="fa-solid fa-tags"></i> Planes<span class="punto-cambios"></span></button>
+            <button class="pestana" data-panel="horarios" role="tab"><i class="fa-solid fa-clock"></i> Horarios<span class="punto-cambios"></span></button>
+            <button class="pestana" data-panel="productos" role="tab"><i class="fa-solid fa-shirt"></i> Indumentaria<span class="punto-cambios"></span></button>
+        </nav>
+
+        <section class="panel activo" id="panel-planes">
+            <p class="panel-intro">Los cambios se ven en la página principal, en el formulario de registro y en el panel. El plan "Destacado" aparece como recomendado, y los que tienen "Nutrición" desbloquean ese módulo en el panel del socio.</p>
+            <div id="listaPlanes"><p class="cargando">Cargando...</p></div>
+            <button class="btn btn-agregar" onclick="agregarPlan()"><i class="fa-solid fa-plus"></i> Agregar plan</button>
+        </section>
+
+        <section class="panel" id="panel-horarios">
+            <p class="panel-intro">Cada bloque es una tarjeta en la sección "Horarios" (por ejemplo "Lunes a Viernes" o "Sábado"), con uno o más turnos.</p>
+            <div id="listaHorarios"><p class="cargando">Cargando...</p></div>
+            <button class="btn btn-agregar" onclick="agregarHorario()"><i class="fa-solid fa-plus"></i> Agregar días</button>
+        </section>
+
+        <section class="panel" id="panel-productos">
+            <p class="panel-intro">Si dejás el precio vacío, en la página no se muestra y la gente lo consulta por WhatsApp. Las prendas ocultas no aparecen en el sitio pero quedan guardadas acá.</p>
+            <div id="listaProductos"><p class="cargando">Cargando...</p></div>
+            <button class="btn btn-agregar" onclick="agregarProducto()"><i class="fa-solid fa-plus"></i> Agregar prenda</button>
+        </section>
+    </div>
+
+    <div class="barra-guardar">
+        <div class="barra-guardar-contenido">
+            <span class="estado-guardado" id="estadoGuardado">Sin cambios</span>
+            <button class="btn btn-principal" id="btnGuardar" onclick="guardarPestanaActual()" disabled><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+        </div>
+    </div>
+
+    <script>
+        // Solo el admin puede entrar
+        if (localStorage.getItem('usuarioRol') !== 'admin') window.location.href = 'login.html';
+
+        // ================= ESTADO =================
+        const datos = { planes: [], horarios: [], productos: [] };
+        const guardado = { planes: '', horarios: '', productos: '' }; // copia de lo guardado, para detectar cambios
+        let pestanaActual = 'planes';
+        let sociosPorPlan = {};
+
+        function esc(t) {
+            return String(t ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        const hayCambios = clave => JSON.stringify(datos[clave]) !== guardado[clave];
+
+        function actualizarEstado(mensaje, tipo) {
+            document.querySelectorAll('.pestana').forEach(p => p.classList.toggle('con-cambios', hayCambios(p.dataset.panel)));
+            const estado = document.getElementById('estadoGuardado');
+            const pendiente = hayCambios(pestanaActual);
+            document.getElementById('btnGuardar').disabled = !pendiente;
+            if (mensaje) { estado.textContent = mensaje; estado.className = 'estado-guardado ' + (tipo || ''); return; }
+            estado.textContent = pendiente ? 'Hay cambios sin guardar' : 'Sin cambios';
+            estado.className = 'estado-guardado ' + (pendiente ? 'pendiente' : '');
+        }
+
+        // Avisar antes de salir si quedó algo sin guardar
+        window.addEventListener('beforeunload', e => {
+            if (['planes', 'horarios', 'productos'].some(hayCambios)) { e.preventDefault(); e.returnValue = ''; }
+        });
+
+        // ================= PESTAÑAS =================
+        document.querySelectorAll('.pestana').forEach(boton => {
+            boton.addEventListener('click', () => {
+                pestanaActual = boton.dataset.panel;
+                document.querySelectorAll('.pestana').forEach(b => b.classList.toggle('activa', b === boton));
+                document.querySelectorAll('.panel').forEach(p => p.classList.toggle('activo', p.id === 'panel-' + pestanaActual));
+                actualizarEstado();
+            });
+        });
+
+        // Mover un elemento de una lista hacia arriba o abajo
+        function mover(lista, i, dir) {
+            const j = i + dir;
+            if (j < 0 || j >= lista.length) return;
+            [lista[i], lista[j]] = [lista[j], lista[i]];
+        }
+
+        // ================= PLANES =================
+        function renderPlanes() {
+            const cont = document.getElementById('listaPlanes');
+            cont.innerHTML = datos.planes.map((p, i) => {
+                const cantidad = sociosPorPlan[p._original || p.nombre] || 0;
+                return `
+                <div class="item ${p.destacado ? 'destacado' : ''}">
+                    <div class="item-cabecera">
+                        <div class="item-titulo">${esc(p.nombre) || 'Plan nuevo'} <small>${cantidad} ${cantidad === 1 ? 'socio' : 'socios'}</small></div>
+                        <div class="item-acciones">
+                            <button class="btn btn-icono" title="Subir" onclick="moverPlan(${i}, -1)" ${i === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                            <button class="btn btn-icono" title="Bajar" onclick="moverPlan(${i}, 1)" ${i === datos.planes.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                            <button class="btn btn-eliminar" title="Eliminar plan" onclick="eliminarPlan(${i})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="campos">
+                        <div class="campo">
+                            <label>Nombre del plan</label>
+                            <input value="${esc(p.nombre)}" maxlength="50" oninput="cambiarPlan(${i}, 'nombre', this.value)" placeholder="Ej: Plus">
+                        </div>
+                        <div class="campo">
+                            <label>Precio por mes</label>
+                            <div class="precio-input"><span>$</span><input type="number" min="0" step="500" value="${p.precio ?? ''}" oninput="cambiarPlan(${i}, 'precio', this.value === '' ? 0 : Number(this.value))"></div>
+                        </div>
+                        <div class="campo completo">
+                            <label>Resumen corto</label>
+                            <input value="${esc(p.resumen)}" maxlength="60" oninput="cambiarPlan(${i}, 'resumen', this.value)" placeholder="Ej: 3 días/sem">
+                            <span class="ayuda">Aparece en el formulario de registro, al lado del nombre.</span>
+                        </div>
+                        <div class="campo completo">
+                            <label>Qué incluye (uno por renglón)</label>
+                            <textarea oninput="cambiarPlan(${i}, 'beneficios', this.value.split('\\n'))" placeholder="3 días por semana&#10;Rutina personalizada en la app">${esc((p.beneficios || []).join('\n'))}</textarea>
+                        </div>
+                        <div class="checks">
+                            <label class="check"><input type="checkbox" ${p.destacado ? 'checked' : ''} onchange="cambiarPlan(${i}, 'destacado', this.checked, true)"> Destacado ("Recomendado")</label>
+                            <label class="check"><input type="checkbox" ${p.nutricion ? 'checked' : ''} onchange="cambiarPlan(${i}, 'nutricion', this.checked)"> Incluye nutrición</label>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('') || '<p class="cargando">No hay planes. Agregá al menos uno.</p>';
+            actualizarEstado();
+        }
+
+        function cambiarPlan(i, campo, valor, redibujar = false) {
+            datos.planes[i][campo] = valor;
+            if (campo === 'destacado' && valor) {
+                datos.planes.forEach((p, j) => { if (j !== i) p.destacado = false; }); // Un solo destacado
+                redibujar = true;
+            }
+            if (redibujar) renderPlanes();
+            else {
+                // Actualizar solo el título sin perder el foco del input
+                if (campo === 'nombre') document.querySelectorAll('#listaPlanes .item-titulo')[i].firstChild.textContent = (valor || 'Plan nuevo') + ' ';
+                actualizarEstado();
+            }
+        }
+        function moverPlan(i, dir) { mover(datos.planes, i, dir); renderPlanes(); }
+        function agregarPlan() {
+            datos.planes.push({ nombre: '', precio: 0, resumen: '', beneficios: [], destacado: false, nutricion: false });
+            renderPlanes();
+            const ultimo = [...document.querySelectorAll('#listaPlanes .item')].pop();
+            ultimo?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            ultimo?.querySelector('input')?.focus();
+        }
+        function eliminarPlan(i) {
+            const p = datos.planes[i];
+            const cantidad = sociosPorPlan[p._original || p.nombre] || 0;
+            const aviso = cantidad
+                ? `"${p.nombre}" tiene ${cantidad} socio(s). Van a seguir con ese plan pero ya no se va a poder elegir. ¿Eliminarlo igual?`
+                : `¿Eliminar el plan "${p.nombre || 'nuevo'}"?`;
+            if (!confirm(aviso)) return;
+            datos.planes.splice(i, 1);
+            renderPlanes();
+        }
+
+        // ================= HORARIOS =================
+        function renderHorarios() {
+            const cont = document.getElementById('listaHorarios');
+            cont.innerHTML = datos.horarios.map((h, i) => `
+                <div class="item">
+                    <div class="item-cabecera">
+                        <div class="item-titulo">${esc(h.dias) || 'Días nuevos'}</div>
+                        <div class="item-acciones">
+                            <button class="btn btn-icono" title="Subir" onclick="moverHorario(${i}, -1)" ${i === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                            <button class="btn btn-icono" title="Bajar" onclick="moverHorario(${i}, 1)" ${i === datos.horarios.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                            <button class="btn btn-eliminar" title="Eliminar" onclick="eliminarHorario(${i})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="campos">
+                        <div class="campo completo">
+                            <label>Días</label>
+                            <input value="${esc(h.dias)}" maxlength="60" oninput="cambiarDias(${i}, this.value)" placeholder="Ej: Lunes a Viernes">
+                        </div>
+                        <div class="campo completo">
+                            <label>Turnos</label>
+                            ${h.turnos.map((t, k) => `
+                                <div class="turno">
+                                    <input value="${esc(t.nombre)}" maxlength="60" placeholder="Ej: Por la mañana" oninput="cambiarTurno(${i}, ${k}, 'nombre', this.value)">
+                                    <input value="${esc(t.horario)}" maxlength="60" placeholder="Ej: 8:00 a 12:00" oninput="cambiarTurno(${i}, ${k}, 'horario', this.value)">
+                                    <button class="btn btn-eliminar" title="Quitar turno" onclick="eliminarTurno(${i}, ${k})"><i class="fa-solid fa-xmark"></i></button>
+                                </div>`).join('')}
+                            <button class="btn-agregar-turno" onclick="agregarTurno(${i})"><i class="fa-solid fa-plus"></i> Agregar turno</button>
+                        </div>
+                    </div>
+                </div>`).join('') || '<p class="cargando">No hay horarios cargados.</p>';
+            actualizarEstado();
+        }
+
+        function cambiarDias(i, valor) {
+            datos.horarios[i].dias = valor;
+            document.querySelectorAll('#listaHorarios .item-titulo')[i].textContent = valor || 'Días nuevos';
+            actualizarEstado();
+        }
+        function cambiarTurno(i, k, campo, valor) { datos.horarios[i].turnos[k][campo] = valor; actualizarEstado(); }
+        function agregarTurno(i) { datos.horarios[i].turnos.push({ nombre: '', horario: '' }); renderHorarios(); }
+        function eliminarTurno(i, k) { datos.horarios[i].turnos.splice(k, 1); renderHorarios(); }
+        function moverHorario(i, dir) { mover(datos.horarios, i, dir); renderHorarios(); }
+        function agregarHorario() { datos.horarios.push({ dias: '', turnos: [{ nombre: '', horario: '' }] }); renderHorarios(); }
+        function eliminarHorario(i) {
+            if (!confirm(`¿Eliminar "${datos.horarios[i].dias || 'este bloque'}" de los horarios?`)) return;
+            datos.horarios.splice(i, 1); renderHorarios();
+        }
+
+        // ================= INDUMENTARIA =================
+        function renderProductos() {
+            const cont = document.getElementById('listaProductos');
+            cont.innerHTML = datos.productos.map((p, i) => `
+                <div class="item ${p.visible ? '' : 'oculto'}">
+                    <div class="item-cabecera">
+                        <div class="item-titulo">${esc(p.nombre) || 'Prenda nueva'} ${p.visible ? '' : '<small>(oculta)</small>'}</div>
+                        <div class="item-acciones">
+                            <button class="btn btn-icono" title="Subir" onclick="moverProducto(${i}, -1)" ${i === 0 ? 'disabled' : ''}><i class="fa-solid fa-arrow-up"></i></button>
+                            <button class="btn btn-icono" title="Bajar" onclick="moverProducto(${i}, 1)" ${i === datos.productos.length - 1 ? 'disabled' : ''}><i class="fa-solid fa-arrow-down"></i></button>
+                            <button class="btn btn-eliminar" title="Eliminar prenda" onclick="eliminarProducto(${i})"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="producto-grid">
+                        <div>
+                            <div class="foto-producto ${p.fondoClaro ? 'claro' : ''}">
+                                ${p.imagen ? `<img src="${esc(p.imagen)}" alt="">` : 'Sin foto'}
+                            </div>
+                            <div class="acciones-foto">
+                                <label class="btn btn-borde"><i class="fa-solid fa-camera"></i> ${p.imagen ? 'Cambiar foto' : 'Subir foto'}
+                                    <input type="file" accept="image/jpeg,image/png,image/webp" onchange="subirFoto(${i}, this)">
+                                </label>
+                                <div class="subiendo" id="subiendo-${i}"></div>
+                            </div>
+                        </div>
+                        <div class="campos">
+                            <div class="campo">
+                                <label>Nombre</label>
+                                <input value="${esc(p.nombre)}" maxlength="80" oninput="cambiarProducto(${i}, 'nombre', this.value)" placeholder="Ej: Remera deportiva">
+                            </div>
+                            <div class="campo">
+                                <label>Precio (opcional)</label>
+                                <div class="precio-input"><span>$</span><input type="number" min="0" step="500" value="${p.precio ?? ''}" placeholder="Consultar" oninput="cambiarProducto(${i}, 'precio', this.value === '' ? null : Number(this.value))"></div>
+                            </div>
+                            <div class="campo completo">
+                                <label>Descripción</label>
+                                <textarea maxlength="300" style="min-height:70px" oninput="cambiarProducto(${i}, 'descripcion', this.value)">${esc(p.descripcion)}</textarea>
+                            </div>
+                            <div class="checks">
+                                <label class="check"><input type="checkbox" ${p.visible ? 'checked' : ''} onchange="cambiarProducto(${i}, 'visible', this.checked, true)"> Mostrar en el sitio</label>
+                                <label class="check"><input type="checkbox" ${p.fondoClaro ? 'checked' : ''} onchange="cambiarProducto(${i}, 'fondoClaro', this.checked, true)"> Foto con fondo blanco</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>`).join('') || '<p class="cargando">No hay prendas cargadas.</p>';
+            actualizarEstado();
+        }
+
+        function cambiarProducto(i, campo, valor, redibujar = false) {
+            datos.productos[i][campo] = valor;
+            if (redibujar) renderProductos();
+            else {
+                if (campo === 'nombre') document.querySelectorAll('#listaProductos .item-titulo')[i].firstChild.textContent = (valor || 'Prenda nueva') + ' ';
+                actualizarEstado();
+            }
+        }
+        function moverProducto(i, dir) { mover(datos.productos, i, dir); renderProductos(); }
+        function agregarProducto() {
+            datos.productos.push({ nombre: '', descripcion: '', precio: null, imagen: '', fondoClaro: false, visible: true });
+            renderProductos();
+            document.querySelectorAll('#listaProductos .item')[datos.productos.length - 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        function eliminarProducto(i) {
+            if (!confirm(`¿Eliminar "${datos.productos[i].nombre || 'esta prenda'}"? Si solo querés sacarla un tiempo, destildá "Mostrar en el sitio".`)) return;
+            datos.productos.splice(i, 1); renderProductos();
+        }
+
+        // Achica la foto en el navegador (máx. 1000 px) antes de subirla
+        function achicarImagen(archivo, maximo = 1000) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const escala = Math.min(1, maximo / Math.max(img.width, img.height));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.round(img.width * escala);
+                    canvas.height = Math.round(img.height * escala);
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#ffffff'; // Por si es un PNG con transparencia
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(img.src);
+                    resolve(canvas.toDataURL('image/jpeg', 0.82));
+                };
+                img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+                img.src = URL.createObjectURL(archivo);
+            });
+        }
+
+        async function subirFoto(i, input) {
+            const archivo = input.files[0];
+            if (!archivo) return;
+            const aviso = document.getElementById('subiendo-' + i);
+            aviso.textContent = 'Subiendo foto...';
+            try {
+                const imagen = await achicarImagen(archivo);
+                const res = await fetch('/api/imagenes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ imagen })
+                });
+                const r = await res.json();
+                if (!res.ok) throw new Error(r.error || 'Error al subir');
+                datos.productos[i].imagen = r.url;
+                renderProductos();
+                actualizarEstado('Foto subida. Guardá los cambios para publicarla.', 'pendiente');
+            } catch (err) {
+                aviso.textContent = '';
+                alert('No se pudo subir la foto: ' + err.message);
+            }
+        }
+
+        // ================= GUARDAR =================
+        async function guardarPestanaActual() {
+            const clave = pestanaActual;
+            const btn = document.getElementById('btnGuardar');
+            btn.disabled = true;
+            actualizarEstado('Guardando...', 'pendiente');
+
+            // Limpiar renglones vacíos de los beneficios
+            if (clave === 'planes') {
+                datos.planes.forEach(p => { p.beneficios = (p.beneficios || []).map(b => b.trim()).filter(Boolean); });
+            }
+
+            const cuerpo = { valor: datos[clave].map(({ _original, ...resto }) => resto) };
+            if (clave === 'planes') {
+                cuerpo.renombres = datos.planes
+                    .filter(p => p._original && p._original !== p.nombre.trim())
+                    .map(p => ({ de: p._original, a: p.nombre.trim() }));
+            }
+
+            try {
+                const res = await fetch('/api/config/' + clave, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(cuerpo)
+                });
+                const r = await res.json();
+                if (!res.ok) throw new Error(r.error || 'Error al guardar');
+
+                cargarEnPantalla(clave, r.valor);
+                if (clave === 'planes') await contarSocios();
+                actualizarEstado('✓ Cambios guardados y publicados', 'ok');
+            } catch (err) {
+                actualizarEstado('No se pudo guardar: ' + err.message, 'error');
+                btn.disabled = false;
+            }
+        }
+
+        function cargarEnPantalla(clave, valor) {
+            datos[clave] = JSON.parse(JSON.stringify(valor || []));
+            if (clave === 'planes') datos.planes.forEach(p => { p._original = p.nombre; }); // Para detectar renombres
+            guardado[clave] = JSON.stringify(datos[clave]);
+            ({ planes: renderPlanes, horarios: renderHorarios, productos: renderProductos })[clave]();
+        }
+
+        async function contarSocios() {
+            try {
+                const socios = await (await fetch('/api/socios')).json();
+                sociosPorPlan = {};
+                socios.filter(s => s.rol !== 'admin').forEach(s => {
+                    sociosPorPlan[s.planElegido] = (sociosPorPlan[s.planElegido] || 0) + 1;
+                });
+                renderPlanes();
+            } catch (e) { /* si falla, solo no se muestra la cantidad */ }
+        }
+
+        async function iniciar() {
+            try {
+                const config = await (await fetch('/api/config')).json();
+                ['planes', 'horarios', 'productos'].forEach(c => cargarEnPantalla(c, config[c]));
+                contarSocios();
+            } catch (err) {
+                document.querySelectorAll('.cargando').forEach(el => { el.textContent = 'No se pudo cargar la configuración.'; el.style.color = '#ff4d4d'; });
+            }
+        }
+
+        iniciar();
+    </script>
+</body>
+</html>

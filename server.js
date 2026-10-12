@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "5mb" })); // 5mb para poder subir fotos de indumentaria
 app.use(express.static("public"));
 
 // Ruta existente de socios
@@ -27,7 +27,19 @@ app.use(
     require("./routes/pagosRoutes")
 );
 
-// Crea la tabla de pagos si no existe y después arranca el servidor
+// Configuración editable del sitio (planes, horarios, indumentaria)
+app.use(
+    "/api/config",
+    require("./routes/configRoutes")
+);
+
+// Fotos subidas desde el backoffice
+app.use(
+    "/api/imagenes",
+    require("./routes/imagenesRoutes")
+);
+
+// Crea las tablas nuevas si no existen y después arranca el servidor
 const inicializarBaseDeDatos = require("./config/initDb");
 
 inicializarBaseDeDatos().finally(() => {
