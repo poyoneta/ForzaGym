@@ -6,6 +6,9 @@
     <title>Forza Gym - Iniciar Sesión</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <!-- Animación de inicio de la app instalada (va en el head para que no se vea el login antes) -->
+    <script src="splash.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
         
@@ -139,6 +142,17 @@
         // El link a "Registrate" también conserva a dónde volver
         if (volver) {
             document.querySelectorAll('a[href="registro.html"]').forEach(a => a.href = 'registro.html?volver=' + encodeURIComponent(volver));
+        }
+
+        // En la app instalada: si ya había iniciado sesión, entra directo a su panel (después de la animación)
+        const esApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const rolGuardado = localStorage.getItem('usuarioRol');
+        if (esApp && !volver && localStorage.getItem('usuarioId') && rolGuardado) {
+            const panel = rolGuardado === 'admin' ? 'admin.html' : 'cliente.html';
+            window.forzaSplashDestino = panel;
+            (window.forzaSplash || Promise.resolve(false)).then(mostrada => {
+                if (!mostrada) location.replace(panel);
+            });
         }
 
         document.getElementById('formLogin').addEventListener('submit', async (e) => {
