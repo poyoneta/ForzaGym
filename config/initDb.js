@@ -153,6 +153,27 @@ async function inicializarBaseDeDatos() {
     } catch (error) {
         console.error("❌ No se pudo crear la tabla 'planes_nutricion':", error.message);
     }
+
+    try {
+        // Peso corporal del socio: un registro por día, con foto opcional (privada)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS registros_peso_corporal (
+                id SERIAL PRIMARY KEY,
+                socio_id INTEGER NOT NULL REFERENCES socios(id) ON DELETE CASCADE,
+                fecha DATE NOT NULL,
+                peso NUMERIC(5, 1) NOT NULL,
+                nota VARCHAR(200),
+                foto BYTEA,
+                foto_tipo VARCHAR(30),
+                foto_clave VARCHAR(32) UNIQUE,
+                creado TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                UNIQUE (socio_id, fecha)
+            )
+        `);
+        console.log("✅ Tabla 'registros_peso_corporal' lista");
+    } catch (error) {
+        console.error("❌ No se pudo crear la tabla 'registros_peso_corporal':", error.message);
+    }
 }
 
 module.exports = inicializarBaseDeDatos;

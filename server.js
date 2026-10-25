@@ -45,6 +45,12 @@ app.use(
     require("./routes/nutricionRoutes")
 );
 
+// Peso corporal del socio con fotos de progreso (privadas)
+app.use(
+    "/api/peso-corporal",
+    require("./routes/pesoCorporalRoutes")
+);
+
 // Fotos subidas desde el backoffice
 app.use(
     "/api/imagenes",

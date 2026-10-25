@@ -331,6 +331,46 @@
         .total-dia strong { color: #fff; }
         .nutri-aviso { color: #666; font-size: 0.72rem; line-height: 1.5; margin: 1rem 0 0; }
 
+        /* ================= PESO CORPORAL Y FOTOS ================= */
+        .cabecera-peso { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+        .cabecera-peso h2 { margin: 0; }
+        .btn-registrar-peso { padding: 0.55rem 0.9rem; font-size: 0.78rem; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.4rem; flex: 0 0 auto; }
+        .dato strong.baja { color: #39e4a5; }
+        .dato strong.neutro { color: #fff; }
+        .titulo-fotos { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; margin: 1.3rem 0 0.7rem; }
+        .titulo-fotos h3 { margin: 0; font-size: 0.85rem; color: #ccc; text-transform: uppercase; letter-spacing: 0.3px; }
+        .titulo-fotos .btn-chico { flex: 0 0 auto; }
+        .tira-fotos { display: flex; gap: 0.6rem; overflow-x: auto; padding-bottom: 0.4rem; scroll-snap-type: x mandatory; }
+        .foto-mini { flex: 0 0 92px; scroll-snap-align: start; background: #111; border: 1px solid #2d2d2d; border-radius: 10px; overflow: hidden; cursor: pointer; padding: 0; color: #fff; font-family: inherit; text-align: center; }
+        .foto-mini img { width: 100%; height: 120px; object-fit: cover; display: block; background: #222; }
+        .foto-mini span { display: block; font-size: 0.68rem; color: #888; padding: 0.3rem 0 0.1rem; }
+        .foto-mini b { display: block; font-size: 0.8rem; padding-bottom: 0.35rem; }
+        .registro-peso-item { cursor: pointer; }
+        .registro-peso-item .icono-foto { color: #888; font-size: 0.8rem; margin-left: 0.4rem; }
+
+        .elegir-foto { display: flex; gap: 0.6rem; }
+        .elegir-foto label { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.4rem; border: 1px dashed #444; border-radius: 8px; padding: 0.8rem 0.5rem; color: #ccc; font-size: 0.8rem; cursor: pointer; text-transform: none; font-weight: 600; }
+        .elegir-foto label:hover { border-color: #39e4a5; color: #39e4a5; }
+        .elegir-foto input { display: none; }
+        .vista-previa-foto { position: relative; margin-top: 0.6rem; display: none; }
+        .vista-previa-foto img { width: 100%; max-height: 320px; object-fit: contain; border-radius: 10px; background: #0b0b0b; display: block; }
+        .vista-previa-foto button { position: absolute; top: 0.4rem; right: 0.4rem; background: rgba(0,0,0,0.7); border: none; color: #fff; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; }
+        .nota-privada { color: #777; font-size: 0.72rem; line-height: 1.5; margin: 0.5rem 0 0; }
+        .error-hoja { color: #ff4d4d; font-size: 0.85rem; margin: 0.6rem 0 0; min-height: 1em; }
+
+        .foto-grande { width: 100%; max-height: 62vh; object-fit: contain; border-radius: 10px; background: #0b0b0b; display: block; margin-bottom: 0.8rem; }
+        .comparacion { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        .comparacion figure { margin: 0; }
+        .comparacion img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 10px; background: #0b0b0b; display: block; }
+        .comparacion figcaption { text-align: center; font-size: 0.78rem; color: #888; margin-top: 0.4rem; }
+        .comparacion figcaption b { display: block; color: #fff; font-size: 0.95rem; }
+        .comparacion select { padding: 0.5rem; font-size: 0.8rem; margin-bottom: 0.5rem; }
+        .diferencia-comparacion { text-align: center; margin: 1rem 0 0.2rem; font-size: 0.9rem; color: #ccc; }
+        .diferencia-comparacion b { color: #39e4a5; font-size: 1.1rem; }
+        .acciones-hoja { display: flex; gap: 0.6rem; margin-top: 1rem; }
+        .btn-peligro { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; }
+        .btn-peligro:hover { background: #ff4d4d; color: #fff; }
+
         /* Hoja que sube desde abajo (receta / lista de compras) */
         .hoja-fondo { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
         .hoja-fondo.abierta { opacity: 1; pointer-events: auto; }
@@ -438,6 +478,39 @@
 
         <!-- ================= PROGRESO ================= -->
         <main class="vista" id="vista-progreso" data-titulo="Mi progreso">
+            <!-- Peso corporal + fotos de progreso -->
+            <section class="card" id="cardPesoCorporal">
+                <div class="cabecera-peso">
+                    <h2><i class="fa-solid fa-scale-balanced"></i> Mi peso corporal</h2>
+                    <button type="button" class="btn btn-registrar-peso" onclick="abrirRegistroPeso()"><i class="fa-solid fa-plus"></i> Registrar</button>
+                </div>
+                <div id="contenidoPesoCorporal" style="display:none;">
+                    <div class="stats-progreso">
+                        <div class="dato"><strong id="pcActual">--</strong><span>Peso actual</span></div>
+                        <div class="dato"><strong id="pcCambio">--</strong><span id="pcCambioTexto">Desde el inicio</span></div>
+                        <div class="dato"><strong id="pcFotos">0</strong><span>Fotos</span></div>
+                    </div>
+                    <div class="contenedor-grafico-progreso">
+                        <div id="graficoPesoCorporal" role="img" aria-label="Gráfico de la evolución de tu peso corporal"></div>
+                        <div class="tooltip-progreso" id="tooltipPesoCorporal"></div>
+                    </div>
+                    <div id="bloqueFotosProgreso" style="display:none;">
+                        <div class="titulo-fotos">
+                            <h3><i class="fa-solid fa-camera"></i> Fotos de progreso</h3>
+                            <button type="button" class="btn btn-chico btn-borde-app" id="btnAntesAhora" onclick="abrirAntesYAhora()">Antes y ahora</button>
+                        </div>
+                        <div class="tira-fotos" id="tiraFotos"></div>
+                    </div>
+                    <details class="todas-cargas">
+                        <summary>Ver todos mis registros</summary>
+                        <ul id="listaPesoCorporal" class="historial-lista"></ul>
+                    </details>
+                </div>
+                <div class="sin-datos" id="sinPesoCorporal">
+                    <i class="fa-solid fa-circle-info"></i> Registrá tu peso cada semana o cada quince días, siempre a la misma hora (lo ideal es a la mañana y en ayunas). Si querés, sumá una foto: comparar fotos muestra cambios que la balanza no ve.
+                </div>
+            </section>
+
             <section class="card">
                 <h2><i class="fa-solid fa-weight-hanging"></i> Registrar Récord de Carga</h2>
                 <form id="formPesos" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -480,7 +553,7 @@
                     </div>
                 </div>
                 <p class="sin-datos" id="sinProgreso" style="display:none;"><i class="fa-solid fa-circle-info"></i> Todavía no registraste cargas. Usá el formulario de arriba y acá vas a ver cómo vas mejorando.</p>
-                <details class="todas-cargas">
+                <details class="todas-cargas" id="detallesCargas">
                     <summary>Ver todas mis cargas</summary>
                     <ul id="listaHistorial" class="historial-lista"></ul>
                 </details>
@@ -828,7 +901,7 @@
             const hayDatos = historialCargas.length > 0;
             document.getElementById('contenidoProgreso').style.display = hayDatos ? '' : 'none';
             document.getElementById('sinProgreso').style.display = hayDatos ? 'none' : '';
-            document.querySelector('details.todas-cargas').style.display = hayDatos ? '' : 'none';
+            document.getElementById('detallesCargas').style.display = hayDatos ? '' : 'none';
             if (!hayDatos) { lista.innerHTML = ''; return; }
 
             // Lista completa (más nuevas primero). Postgres devuelve: ejercicio, peso, fecha
@@ -938,7 +1011,10 @@
         let esperaRedibujo;
         window.addEventListener('resize', () => {
             clearTimeout(esperaRedibujo);
-            esperaRedibujo = setTimeout(() => { if (historialCargas.length) dibujarProgreso(); }, 150);
+            esperaRedibujo = setTimeout(() => {
+                if (historialCargas.length) dibujarProgreso();
+                if (registrosPeso.length) dibujarPesoCorporal();
+            }, 150);
         });
 
         // "Otro ejercicio..." muestra un campo para escribirlo
@@ -988,6 +1064,340 @@
         });
 
 
+
+        // ================= PESO CORPORAL Y FOTOS DE PROGRESO =================
+        let registrosPeso = [];      // [{ id, fecha: 'YYYY-MM-DD', peso, nota, foto (url o null) }] del más viejo al más nuevo
+        let fotoElegida = null;      // foto achicada (dataURL) lista para subir
+
+        const hoyISO = () => {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        };
+        const fechaLarga = t => fechaDe(t).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
+        const kgConSigno = n => `${n > 0 ? '+' : ''}${kg(n)}`;
+        const redondeo1 = n => Math.round(n * 10) / 10;
+
+        function tiempoEntre(desde, hasta) {
+            const dias = Math.round((fechaDe(hasta) - fechaDe(desde)) / 86400000);
+            if (dias < 14) return `${dias} ${dias === 1 ? 'día' : 'días'}`;
+            if (dias < 60) return `${Math.round(dias / 7)} semanas`;
+            const meses = Math.round(dias / 30.4);
+            return `${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+        }
+
+        async function cargarPesoCorporal() {
+            try {
+                const res = await fetch(`/api/peso-corporal/${socioId}`);
+                registrosPeso = res.ok ? await res.json() : [];
+            } catch (e) { registrosPeso = []; }
+            renderPesoCorporal();
+        }
+
+        function renderPesoCorporal() {
+            const hay = registrosPeso.length > 0;
+            document.getElementById('contenidoPesoCorporal').style.display = hay ? '' : 'none';
+            document.getElementById('sinPesoCorporal').style.display = hay ? 'none' : '';
+            if (!hay) return;
+
+            const primero = registrosPeso[0];
+            const ultimo = registrosPeso[registrosPeso.length - 1];
+            const cambio = redondeo1(ultimo.peso - primero.peso);
+            document.getElementById('pcActual').textContent = kg(ultimo.peso);
+
+            // El color del cambio depende del objetivo del plan de nutrición (si lo tiene)
+            const objetivo = nutri && nutri.perfil ? nutri.perfil.objetivo : null;
+            const vaBien = (objetivo === 'bajar' && cambio < 0) || (objetivo === 'subir' && cambio > 0) || (objetivo === 'mantener' && Math.abs(cambio) <= 1);
+            const elCambio = document.getElementById('pcCambio');
+            elCambio.textContent = registrosPeso.length > 1 ? kgConSigno(cambio) : '--';
+            elCambio.className = vaBien ? 'baja' : 'neutro';
+            document.getElementById('pcCambioTexto').textContent = registrosPeso.length > 1 ? `En ${tiempoEntre(primero.fecha, ultimo.fecha)}` : 'Desde el inicio';
+
+            // Fotos: la más nueva primero
+            const conFoto = registrosPeso.filter(r => r.foto);
+            document.getElementById('pcFotos').textContent = conFoto.length;
+            document.getElementById('bloqueFotosProgreso').style.display = conFoto.length ? '' : 'none';
+            document.getElementById('btnAntesAhora').style.display = conFoto.length >= 2 ? '' : 'none';
+            document.getElementById('tiraFotos').innerHTML = conFoto.slice().reverse().map(r => `
+                <button type="button" class="foto-mini" onclick="verRegistroPeso(${r.id})">
+                    <img src="${r.foto}" loading="lazy" alt="Foto del ${fechaCorta(fechaDe(r.fecha))}">
+                    <span>${fechaCorta(fechaDe(r.fecha))}</span><b>${kg(r.peso)}</b>
+                </button>`).join('');
+
+            // Lista completa (más nuevos primero)
+            document.getElementById('listaPesoCorporal').innerHTML = registrosPeso.slice().reverse().map((r, i, lista) => {
+                const anterior = lista[i + 1];
+                const dif = anterior ? redondeo1(r.peso - anterior.peso) : null;
+                return `<li class="historial-item registro-peso-item" onclick="verRegistroPeso(${r.id})">
+                    <div><strong>${fechaCorta(fechaDe(r.fecha))}</strong>${r.foto ? '<i class="fa-solid fa-camera icono-foto"></i>' : ''}
+                    ${dif !== null && dif !== 0 ? `<span class="fecha-tag"> (${kgConSigno(dif)})</span>` : ''}</div>
+                    <span class="peso-tag">${kg(r.peso)}</span></li>`;
+            }).join('');
+
+            dibujarPesoCorporal();
+        }
+
+        function dibujarPesoCorporal() {
+            const puntos = registrosPeso.map(r => ({ ...r, t: fechaDe(r.fecha).getTime() }));
+            if (!puntos.length) return;
+            const cont = document.getElementById('graficoPesoCorporal');
+            const tooltip = document.getElementById('tooltipPesoCorporal');
+            tooltip.classList.remove('visible');
+            const ancho = cont.clientWidth || 600;
+            const alto = 210;
+            const m = { arriba: 26, derecha: 18, abajo: 28, izquierda: 44 };
+            const w = ancho - m.izquierda - m.derecha;
+            const h = alto - m.arriba - m.abajo;
+
+            // Escala vertical ajustada al rango de pesos (con números redondos)
+            const min = Math.min(...puntos.map(p => p.peso));
+            const max = Math.max(...puntos.map(p => p.peso));
+            const paso = [0.5, 1, 2, 2.5, 5, 10, 20].find(s => (max - min + s) / s <= 4) || 50;
+            const yMin = Math.floor((min - paso / 2) / paso) * paso;
+            const yMax = Math.ceil((max + paso / 2) / paso) * paso;
+            const y = v => m.arriba + h - ((v - yMin) / (yMax - yMin)) * h;
+
+            const t0 = puntos[0].t, t1 = puntos[puntos.length - 1].t;
+            const x = t => t1 === t0 ? m.izquierda + w / 2 : m.izquierda + ((t - t0) / (t1 - t0)) * w;
+
+            let svg = `<svg width="${ancho}" height="${alto}" viewBox="0 0 ${ancho} ${alto}" xmlns="http://www.w3.org/2000/svg" style="display:block">`;
+            for (let v = yMin; v <= yMax + 0.001; v += paso) {
+                svg += `<line x1="${m.izquierda}" x2="${ancho - m.derecha}" y1="${y(v)}" y2="${y(v)}" stroke="${v === yMin ? '#333' : '#232323'}"/>`;
+                svg += `<text x="${m.izquierda - 8}" y="${y(v) + 4}" fill="#666" font-size="11" text-anchor="end">${Number(v.toFixed(1)).toLocaleString('es-AR')}</text>`;
+            }
+            svg += `<text x="${x(t0)}" y="${alto - 8}" fill="#888" font-size="11" text-anchor="${puntos.length === 1 ? 'middle' : 'start'}">${fechaCorta(fechaDe(puntos[0].fecha))}</text>`;
+            if (puntos.length > 1) svg += `<text x="${x(t1)}" y="${alto - 8}" fill="#888" font-size="11" text-anchor="end">${fechaCorta(fechaDe(puntos[puntos.length - 1].fecha))}</text>`;
+
+            if (puntos.length > 1) {
+                const linea = puntos.map((p, i) => `${i ? 'L' : 'M'}${x(p.t)},${y(p.peso)}`).join(' ');
+                svg += `<path d="${linea} L${x(t1)},${y(yMin)} L${x(t0)},${y(yMin)} Z" fill="#39e4a5" opacity="0.08"/>`;
+                svg += `<path d="${linea}" fill="none" stroke="#39e4a5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+            }
+
+            // Puntos: los que tienen foto van rellenos; el último lleva su peso arriba
+            puntos.forEach((p, i) => {
+                const cx = x(p.t), cy = y(p.peso);
+                const esUltimo = i === puntos.length - 1;
+                svg += `<circle cx="${cx}" cy="${cy}" r="${esUltimo ? 6 : 4}" fill="${p.foto || esUltimo ? '#39e4a5' : '#1a1a1a'}" stroke="#39e4a5" stroke-width="2"/>`;
+                if (esUltimo) {
+                    const anclaje = cx > ancho - 50 ? 'end' : cx < m.izquierda + 40 ? 'start' : 'middle';
+                    const xTexto = anclaje === 'end' ? cx + 6 : anclaje === 'start' ? cx - 6 : cx;
+                    svg += `<text x="${xTexto}" y="${cy - 12}" fill="#fff" font-size="12" font-weight="bold" text-anchor="${anclaje}">${kg(p.peso)}</text>`;
+                }
+                svg += `<circle class="zona-punto" data-i="${i}" cx="${cx}" cy="${cy}" r="14" fill="transparent" style="cursor:pointer"/>`;
+            });
+            svg += '</svg>';
+            cont.innerHTML = svg;
+
+            cont.querySelectorAll('.zona-punto').forEach(zona => {
+                const p = puntos[Number(zona.dataset.i)];
+                zona.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = `${fechaDe(p.fecha).toLocaleDateString('es-AR')}: <b>${kg(p.peso)}</b>${p.foto ? ' 📷' : ''}`;
+                    tooltip.classList.add('visible');
+                    const cx = Number(zona.getAttribute('cx'));
+                    tooltip.style.left = Math.min(Math.max(cx - tooltip.offsetWidth / 2, 0), ancho - tooltip.offsetWidth) + 'px';
+                    tooltip.style.top = Math.max(0, Number(zona.getAttribute('cy')) - tooltip.offsetHeight - 16) + 'px';
+                });
+                zona.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+                zona.addEventListener('click', () => verRegistroPeso(p.id));   // tocar un punto abre ese día
+            });
+        }
+
+        // ---------- Registrar (o editar) el peso de un día ----------
+        function abrirRegistroPeso(fecha) {
+            fotoElegida = null;
+            const dia = fecha || hoyISO();
+            const existente = registrosPeso.find(r => r.fecha === dia);
+            const ultimo = registrosPeso[registrosPeso.length - 1];
+            const pesoInicial = existente ? existente.peso : ultimo ? ultimo.peso : (document.getElementById('fichaPeso').value || '');
+            abrirHoja(`
+                <h3>${existente ? 'Editar registro' : 'Registrar mi peso'}</h3>
+                <form id="formPesoCorporal" onsubmit="guardarPesoCorporal(event)" style="margin-top:1rem">
+                    <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
+                        <div class="form-group">
+                            <label for="pcPeso">Peso (kg)</label>
+                            <input type="number" id="pcPeso" step="0.1" min="30" max="300" inputmode="decimal" required value="${esc(pesoInicial)}">
+                        </div>
+                        <div class="form-group">
+                            <label for="pcFecha">Fecha</label>
+                            <input type="date" id="pcFecha" max="${hoyISO()}" value="${dia}" required onchange="cambioFechaPeso(this.value)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="pcNota">Nota (opcional)</label>
+                        <input type="text" id="pcNota" maxlength="200" placeholder="Ej: arranqué la dieta, volví de vacaciones..." value="${esc(existente ? existente.nota : '')}">
+                    </div>
+                    <div class="form-group">
+                        <label>Foto de cómo estás (opcional)</label>
+                        <div class="elegir-foto">
+                            <label><input type="file" accept="image/*" capture onchange="elegirFotoPeso(this)"><i class="fa-solid fa-camera"></i> Sacar foto</label>
+                            <label><input type="file" accept="image/*" onchange="elegirFotoPeso(this)"><i class="fa-solid fa-image"></i> Galería</label>
+                        </div>
+                        <div class="vista-previa-foto" id="pcVistaPrevia">
+                            <img id="pcImgPrevia" alt="Vista previa de la foto">
+                            <button type="button" onclick="quitarFotoPeso()" aria-label="Quitar foto">✕</button>
+                        </div>
+                        <p class="nota-privada" id="pcAvisoFoto">${existente && existente.foto ? '<i class="fa-solid fa-camera"></i> Ese día ya tiene una foto: si elegís otra, la reemplaza.<br>' : ''}<i class="fa-solid fa-lock"></i> Tus fotos son privadas: no aparecen en el backoffice ni en ningún otro lado, solo en tu panel. Tip: sacalas siempre en el mismo lugar, con la misma luz y la misma pose.</p>
+                    </div>
+                    <p class="error-hoja" id="pcError"></p>
+                    <button type="submit" class="btn" style="width:100%" id="pcGuardar">Guardar</button>
+                </form>`);
+        }
+
+        // Si elegís un día que ya registraste, se cargan sus datos
+        function cambioFechaPeso(fecha) {
+            const existente = registrosPeso.find(r => r.fecha === fecha);
+            if (existente) {
+                document.getElementById('pcPeso').value = existente.peso;
+                document.getElementById('pcNota').value = existente.nota || '';
+            }
+            const aviso = document.getElementById('pcAvisoFoto');
+            const yaTiene = '<i class="fa-solid fa-camera"></i> Ese día ya tiene una foto: si elegís otra, la reemplaza.<br>';
+            aviso.innerHTML = (existente && existente.foto ? yaTiene : '') + aviso.innerHTML.replace(yaTiene, '');
+        }
+
+        async function elegirFotoPeso(input) {
+            const archivo = input.files[0];
+            input.value = '';
+            if (!archivo) return;
+            const error = document.getElementById('pcError');
+            error.textContent = '';
+            try {
+                fotoElegida = await achicarImagen(archivo, 1000);
+                document.getElementById('pcImgPrevia').src = fotoElegida;
+                document.getElementById('pcVistaPrevia').style.display = 'block';
+            } catch (e) {
+                fotoElegida = null;
+                error.textContent = 'No se pudo leer esa foto. Probá con otra.';
+            }
+        }
+
+        function quitarFotoPeso() {
+            fotoElegida = null;
+            document.getElementById('pcVistaPrevia').style.display = 'none';
+            document.getElementById('pcImgPrevia').removeAttribute('src');
+        }
+
+        // Achica la foto en el celular antes de subirla (más rápido y ocupa menos)
+        function achicarImagen(archivo, maximo = 1000) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    const escala = Math.min(1, maximo / Math.max(img.width, img.height));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.round(img.width * escala);
+                    canvas.height = Math.round(img.height * escala);
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(img.src);
+                    resolve(canvas.toDataURL('image/jpeg', 0.82));
+                };
+                img.onerror = () => reject(new Error('No se pudo leer la imagen'));
+                img.src = URL.createObjectURL(archivo);
+            });
+        }
+
+        async function guardarPesoCorporal(e) {
+            e.preventDefault();
+            const boton = document.getElementById('pcGuardar');
+            const error = document.getElementById('pcError');
+            error.textContent = '';
+            boton.disabled = true;
+            boton.textContent = fotoElegida ? 'Subiendo foto...' : 'Guardando...';
+            try {
+                const res = await fetch(`/api/peso-corporal/${socioId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        peso: document.getElementById('pcPeso').value,
+                        fecha: document.getElementById('pcFecha').value,
+                        nota: document.getElementById('pcNota').value,
+                        foto: fotoElegida
+                    })
+                });
+                const datos = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(datos.error || 'No se pudo guardar');
+                fotoElegida = null;
+                cerrarHoja();
+                await cargarPesoCorporal();
+                // La ficha del perfil queda con el último peso
+                const ultimo = registrosPeso[registrosPeso.length - 1];
+                if (ultimo) document.getElementById('fichaPeso').value = ultimo.peso;
+            } catch (err) {
+                error.textContent = err.message;
+                boton.disabled = false;
+                boton.textContent = 'Guardar';
+            }
+        }
+
+        // ---------- Ver un registro (con su foto) ----------
+        function verRegistroPeso(id) {
+            const i = registrosPeso.findIndex(r => r.id === id);
+            if (i < 0) return;
+            const r = registrosPeso[i];
+            const anterior = registrosPeso[i - 1];
+            const primero = registrosPeso[0];
+            const detalles = [];
+            if (anterior) detalles.push(`<span>${kgConSigno(redondeo1(r.peso - anterior.peso))} vs. registro anterior</span>`);
+            if (i > 0) detalles.push(`<span>${kgConSigno(redondeo1(r.peso - primero.peso))} desde el inicio</span>`);
+            abrirHoja(`
+                <h3>${fechaLarga(r.fecha)}</h3>
+                <div class="receta-meta"><span style="color:#39e4a5; font-weight:700">${kg(r.peso)}</span>${detalles.join('')}</div>
+                ${r.foto ? `<img class="foto-grande" src="${r.foto}" alt="Foto del ${fechaLarga(r.fecha)}">` : ''}
+                ${r.nota ? `<p style="color:#ddd; font-size:0.92rem; margin:0 0 0.5rem">📝 ${esc(r.nota)}</p>` : ''}
+                <div class="acciones-hoja">
+                    <button type="button" class="btn btn-chico" onclick="abrirRegistroPeso('${r.fecha}')"><i class="fa-solid fa-pen"></i> ${r.foto ? 'Editar' : 'Editar / sumar foto'}</button>
+                    ${r.foto ? `<button type="button" class="btn btn-chico btn-borde-app" onclick="borrarFotoPeso(${r.id})"><i class="fa-solid fa-image"></i> Quitar foto</button>` : ''}
+                    <button type="button" class="btn btn-chico btn-peligro" onclick="borrarRegistroPeso(${r.id})" ><i class="fa-solid fa-trash"></i> Borrar</button>
+                </div>`);
+        }
+
+        async function borrarFotoPeso(id) {
+            if (!confirm('¿Quitar la foto de este día? El peso queda guardado.')) return;
+            const res = await fetch(`/api/peso-corporal/${socioId}/${id}/foto`, { method: 'DELETE' });
+            if (!res.ok) { alert('No se pudo quitar la foto'); return; }
+            await cargarPesoCorporal();
+            verRegistroPeso(id);
+        }
+
+        async function borrarRegistroPeso(id) {
+            if (!confirm('¿Borrar este registro? Si tiene foto, también se borra.')) return;
+            const res = await fetch(`/api/peso-corporal/${socioId}/${id}`, { method: 'DELETE' });
+            if (!res.ok) { alert('No se pudo borrar'); return; }
+            cerrarHoja();
+            await cargarPesoCorporal();
+        }
+
+        // ---------- Antes y ahora: dos fotos lado a lado ----------
+        function abrirAntesYAhora(idAntes, idAhora) {
+            const fotos = registrosPeso.filter(r => r.foto);
+            if (fotos.length < 2) return;
+            const antes = fotos.find(r => r.id === idAntes) || fotos[0];
+            const ahora = fotos.find(r => r.id === idAhora) || fotos[fotos.length - 1];
+            const opciones = elegida => fotos.map(r =>
+                `<option value="${r.id}" ${r.id === elegida.id ? 'selected' : ''}>${fechaCorta(fechaDe(r.fecha))} · ${kg(r.peso)}</option>`).join('');
+            const dif = redondeo1(ahora.peso - antes.peso);
+            const figura = (r, rotulo, idSelect) => `
+                <figure>
+                    <select id="${idSelect}" onchange="cambiarComparacion()" aria-label="Foto ${rotulo}">${opciones(r)}</select>
+                    <img src="${r.foto}" alt="Foto ${rotulo}: ${fechaLarga(r.fecha)}">
+                    <figcaption><b>${kg(r.peso)}</b>${rotulo} · ${fechaCorta(fechaDe(r.fecha))}</figcaption>
+                </figure>`;
+            abrirHoja(`
+                <h3>Antes y ahora</h3>
+                <p style="color:#888; font-size:0.85rem; margin:0 0 1rem">Elegí qué dos fotos comparar.</p>
+                <div class="comparacion">
+                    ${figura(antes, 'Antes', 'cmpAntes')}
+                    ${figura(ahora, 'Ahora', 'cmpAhora')}
+                </div>
+                <p class="diferencia-comparacion">${antes.id === ahora.id ? 'Elegiste la misma foto' :
+                    `<b>${dif === 0 ? 'Mismo peso' : kgConSigno(dif)}</b> en ${tiempoEntre(antes.fecha < ahora.fecha ? antes.fecha : ahora.fecha, antes.fecha < ahora.fecha ? ahora.fecha : antes.fecha)}`}</p>`);
+        }
+
+        function cambiarComparacion() {
+            abrirAntesYAhora(Number(document.getElementById('cmpAntes').value), Number(document.getElementById('cmpAhora').value));
+        }
 
         // ================= NUTRICIÓN =================
         let datosSocioActual = null;
@@ -1118,6 +1528,7 @@
 
         // ---------- Vista del plan ----------
         function renderPlanNutricion(mensaje = '') {
+            if (registrosPeso.length) renderPesoCorporal();   // el color del cambio de peso depende del objetivo
             const plan = nutri.plan;
             const desde = fechaDe(nutri.desde), hasta = fechaDe(nutri.hasta);
             const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
@@ -1275,12 +1686,14 @@
         }
 
         function abrirHoja(html) {
+            const yaAbierta = document.getElementById('hoja').classList.contains('abierta');
             document.getElementById('hojaContenido').innerHTML = html;
             document.getElementById('hoja').scrollTop = 0;
             document.getElementById('hoja').classList.add('abierta');
             document.getElementById('hojaFondo').classList.add('abierta');
             document.body.style.overflow = 'hidden';
-            history.pushState({ vista: vistaActual, hoja: true }, '', location.hash);   // "atrás" cierra la hoja
+            // "atrás" cierra la hoja (si ya estaba abierta solo se cambia el contenido)
+            if (!yaAbierta) history.pushState({ vista: vistaActual, hoja: true }, '', location.hash);
         }
         function cerrarHoja(desdeAtras = false) {
             const hoja = document.getElementById('hoja');
@@ -1320,6 +1733,7 @@
 
             // El gráfico necesita estar visible para medir el ancho
             if (nombre === 'progreso' && historialCargas.length) dibujarProgreso();
+            if (nombre === 'progreso' && registrosPeso.length) dibujarPesoCorporal();
 
             // El botón "atrás" del celular vuelve a la pestaña anterior
             if (guardarHistorial) history.pushState({ vista: nombre }, '', '#' + nombre);
@@ -1382,7 +1796,7 @@
         })();
 
         function cerrarSesion() { localStorage.clear(); window.location.href = 'login.html'; }
-        document.addEventListener('DOMContentLoaded', () => { cargarDatosPerfil(); cargarAsistencias(); });
+        document.addEventListener('DOMContentLoaded', () => { cargarDatosPerfil(); cargarAsistencias(); cargarPesoCorporal(); });
     </script>
 </body>
 </html>
