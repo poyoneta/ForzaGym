@@ -255,6 +255,113 @@
             .nav-app { justify-content: center; gap: 1.5rem; }
             .nav-item { flex: 0 0 96px; }
         }
+
+        /* ================= NUTRICIÓN ================= */
+        .nutri-intro { color: #aaa; font-size: 0.9rem; margin: 0 0 1rem; line-height: 1.5; }
+        .nutri-teaser { display: flex; flex-direction: column; gap: 0.5rem; }
+        .nutri-cargando { color: #888; text-align: center; padding: 2rem 0; }
+
+        /* Formulario */
+        .objetivos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1.2rem; }
+        .objetivo-opcion { position: relative; }
+        .objetivo-opcion input { position: absolute; opacity: 0; pointer-events: none; }
+        .objetivo-opcion label {
+            display: flex; flex-direction: column; align-items: center; gap: 0.3rem; text-align: center;
+            background: #111; border: 2px solid #2d2d2d; border-radius: 10px; padding: 0.9rem 0.4rem; cursor: pointer;
+            font-size: 0.75rem; color: #ccc; text-transform: none; font-weight: 700; transition: 0.15s;
+        }
+        .objetivo-opcion label span { font-size: 1.6rem; }
+        .objetivo-opcion input:checked + label { border-color: #39e4a5; background: rgba(57, 228, 165, 0.08); color: #fff; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; }
+        .chips-check { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+        .chip-check input { position: absolute; opacity: 0; pointer-events: none; }
+        .chip-check label {
+            display: inline-block; padding: 0.5rem 0.9rem; border-radius: 20px; border: 1px solid #333; background: #111;
+            color: #ccc; font-size: 0.82rem; font-weight: 700; text-transform: none; cursor: pointer;
+        }
+        .chip-check input:checked + label { border-color: #39e4a5; color: #39e4a5; background: rgba(57, 228, 165, 0.08); }
+        .nutri-error { color: #ff4d4d; font-size: 0.85rem; margin: 0.5rem 0 0; min-height: 1em; }
+
+        /* Resumen del plan */
+        .nutri-cabecera { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .nutri-objetivo { display: inline-block; background: rgba(57, 228, 165, 0.12); color: #39e4a5; font-size: 0.72rem; font-weight: 900; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 12px; }
+        .nutri-kcal { font-size: 2.1rem; font-weight: 900; line-height: 1.1; margin: 0.4rem 0 0; }
+        .nutri-kcal small { font-size: 0.85rem; color: #888; font-weight: 700; }
+        .nutri-vigencia { color: #888; font-size: 0.78rem; margin: 0.2rem 0 0; }
+        .macros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-bottom: 1rem; }
+        .macro { background: #111; border: 1px solid #262626; border-radius: 8px; padding: 0.6rem 0.7rem; }
+        .macro span { display: block; font-size: 0.68rem; color: #888; font-weight: 700; text-transform: uppercase; }
+        .macro strong { font-size: 1.1rem; }
+        .macro i { display: block; height: 4px; border-radius: 2px; margin-top: 0.4rem; background: #333; overflow: hidden; }
+        .macro i b { display: block; height: 100%; border-radius: 2px; }
+        .nutri-acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .btn-chico { padding: 0.6rem 0.9rem; font-size: 0.78rem; flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; }
+        .btn-borde-app { background: transparent; border: 1px solid #444; color: #ddd; }
+        .btn-borde-app:hover { border-color: #39e4a5; color: #39e4a5; background: transparent; }
+
+        /* Semanas y días */
+        .semanas { display: flex; gap: 0.4rem; margin-bottom: 0.7rem; overflow-x: auto; }
+        .semana-btn, .dia-btn {
+            flex: 0 0 auto; background: #111; border: 1px solid #2d2d2d; color: #aaa; cursor: pointer;
+            font-family: 'Montserrat', sans-serif; font-weight: 700;
+        }
+        .semana-btn { padding: 0.5rem 0.9rem; border-radius: 20px; font-size: 0.78rem; }
+        .semana-btn.activa { background: #39e4a5; border-color: #39e4a5; color: #000; }
+        .semana-btn em, .dia-btn em { font-style: normal; font-size: 0.6rem; display: block; color: inherit; opacity: 0.8; }
+        .dias-semana { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.3rem; margin-bottom: 1rem; }
+        .dia-btn { padding: 0.5rem 0; border-radius: 10px; font-size: 0.8rem; text-align: center; }
+        .dia-btn.activo { border-color: #39e4a5; color: #fff; background: #1f1f1f; }
+        .dia-btn.hoy { box-shadow: inset 0 -3px 0 #39e4a5; }
+
+        .comida-item {
+            display: flex; align-items: center; gap: 0.8rem; width: 100%; box-sizing: border-box;
+            background: #111; border: 1px solid #262626; border-radius: 10px; padding: 0.8rem 0.9rem;
+            color: #fff; text-align: left; font-family: 'Montserrat', sans-serif;
+        }
+        button.comida-item { cursor: pointer; transition: border-color 0.15s; }
+        button.comida-item:hover { border-color: #39e4a5; }
+        .comida-emoji { font-size: 1.5rem; flex: 0 0 auto; }
+        .comida-info { flex: 1; min-width: 0; }
+        .comida-info small { display: block; color: #39e4a5; font-size: 0.68rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.4px; }
+        .comida-info strong { display: block; font-size: 0.92rem; line-height: 1.3; }
+        .comida-info em { display: block; font-style: normal; color: #888; font-size: 0.75rem; margin-top: 0.2rem; }
+        .comida-flecha { color: #555; flex: 0 0 auto; }
+        .lista-comidas { display: flex; flex-direction: column; gap: 0.5rem; }
+        .total-dia { display: flex; justify-content: space-between; color: #888; font-size: 0.8rem; margin: 0.8rem 0.2rem 1rem; }
+        .total-dia strong { color: #fff; }
+        .nutri-aviso { color: #666; font-size: 0.72rem; line-height: 1.5; margin: 1rem 0 0; }
+
+        /* Hoja que sube desde abajo (receta / lista de compras) */
+        .hoja-fondo { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        .hoja-fondo.abierta { opacity: 1; pointer-events: auto; }
+        .hoja {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 95; max-height: 88vh; overflow-y: auto;
+            background: #161616; border-radius: 18px 18px 0 0; border-top: 1px solid #2a2a2a;
+            padding: 0.6rem 1.3rem calc(1.5rem + env(safe-area-inset-bottom));
+            transform: translateY(100%); transition: transform 0.28s cubic-bezier(.22, 1, .36, 1);
+            max-width: 700px; margin: 0 auto;
+        }
+        .hoja.abierta { transform: translateY(0); }
+        .hoja-tirador { width: 40px; height: 4px; border-radius: 2px; background: #444; margin: 0 auto 0.8rem; }
+        .hoja-cerrar { position: absolute; top: 0.6rem; right: 0.9rem; background: none; border: none; color: #888; font-size: 1.8rem; cursor: pointer; line-height: 1; }
+        .hoja h3 { margin: 0.2rem 2rem 0.3rem 0; font-size: 1.2rem; font-weight: 900; line-height: 1.3; }
+        .hoja .receta-meta { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+        .hoja .receta-meta span { background: #222; border-radius: 12px; padding: 0.25rem 0.6rem; font-size: 0.75rem; color: #ccc; }
+        .hoja h4 { margin: 1.1rem 0 0.5rem; font-size: 0.8rem; color: #39e4a5; text-transform: uppercase; letter-spacing: 0.4px; }
+        .hoja ul, .hoja ol { margin: 0; padding-left: 1.2rem; }
+        .hoja li { margin-bottom: 0.45rem; font-size: 0.92rem; line-height: 1.45; color: #ddd; }
+        .hoja .ingredientes { list-style: none; padding: 0; }
+        .hoja .ingredientes li { display: flex; gap: 0.6rem; border-bottom: 1px solid #222; padding-bottom: 0.45rem; }
+        .hoja .ingredientes li b { min-width: 72px; color: #fff; }
+        .hoja .compras li label { display: flex; gap: 0.6rem; align-items: flex-start; cursor: pointer; text-transform: none; font-weight: 400; color: #ddd; font-size: 0.92rem; }
+        .hoja .compras input { width: 18px; height: 18px; accent-color: #39e4a5; flex: 0 0 auto; margin-top: 2px; }
+        .hoja .compras input:checked + span { text-decoration: line-through; color: #666; }
+
+        @media (max-width: 420px) {
+            .objetivos { gap: 0.4rem; }
+            .grid-3 { grid-template-columns: 1fr 1fr; }
+            .grid-3 .form-group:last-child { grid-column: 1 / -1; }
+        }
     </style>
 </head>
 <body>
@@ -384,14 +491,14 @@
         <main class="vista" id="vista-nutricion" data-titulo="Nutrición">
             <section class="card" id="seccionNutricion">
                 <div id="contenidoNutricion">
-                    <h2><i class="fa-solid fa-apple-whole"></i> Asesoramiento Nutricional Premium</h2>
-                    <div class="form-group">
-                        <label>Mi Objetivo Principal</label>
-                        <select id="objetivoNutricion">
-                            <option value="bajar">Definición / Bajar de peso 🏃‍♂️</option>
-                            <option value="subir">Volumen / Ganar Masa Muscular 💪</option>
-                            <option value="mantener">Mantenimiento / Rendimiento ⚡</option>
-                        </select>
+                    <!-- Vista previa (se ve borrosa si el plan no incluye nutrición) -->
+                    <h2><i class="fa-solid fa-apple-whole"></i> Tu plan de comidas</h2>
+                    <p class="nutri-intro">Un plan de comidas armado para tu objetivo, con recetas y porciones según tus calorías. Cambia todos los meses.</p>
+                    <div class="nutri-teaser">
+                        <div class="comida-item"><span class="comida-emoji">☀️</span><span class="comida-info"><small>Desayuno</small><strong>Avena cocida con banana y canela</strong></span></div>
+                        <div class="comida-item"><span class="comida-emoji">🍽️</span><span class="comida-info"><small>Almuerzo</small><strong>Pollo al horno con calabaza y papa</strong></span></div>
+                        <div class="comida-item"><span class="comida-emoji">🧉</span><span class="comida-info"><small>Merienda</small><strong>Yogur con granola y frutillas</strong></span></div>
+                        <div class="comida-item"><span class="comida-emoji">🌙</span><span class="comida-info"><small>Cena</small><strong>Merluza a la plancha con puré de calabaza</strong></span></div>
                     </div>
                 </div>
             </section>
@@ -442,6 +549,15 @@
 
             <button type="button" class="btn btn-logout btn-salir-perfil" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
         </main>
+    </div>
+
+
+    <!-- ================= HOJAS DE NUTRICIÓN (receta y lista de compras) ================= -->
+    <div class="hoja-fondo" id="hojaFondo" onclick="cerrarHoja()"></div>
+    <div class="hoja" id="hoja" role="dialog" aria-modal="true">
+        <div class="hoja-tirador"></div>
+        <button type="button" class="hoja-cerrar" onclick="cerrarHoja()" aria-label="Cerrar">&times;</button>
+        <div id="hojaContenido"></div>
     </div>
 
     <!-- ================= BARRA DE NAVEGACIÓN (estilo Instagram) ================= -->
@@ -540,6 +656,8 @@
                         capa.innerHTML = '<i class="fa-solid fa-lock"></i><p>Módulo de Nutrición exclusivo para el <span style="color:#39e4a5;"></span></p>';
                         capa.querySelector('span').textContent = nombresPlanes;
                         seccionNutricion.appendChild(capa);
+                    } else {
+                        iniciarNutricion(miData);
                     }
                 }
             } catch (err) { console.error("Error:", err); }
@@ -870,6 +988,310 @@
         });
 
 
+
+        // ================= NUTRICIÓN =================
+        let datosSocioActual = null;
+        let nutri = null;                 // { perfil, plan, desde, hasta, recetas }
+        let semanaVista = 0, diaVista = 0;
+        const COMIDAS_INFO = {
+            desayuno: { nombre: 'Desayuno', emoji: '☀️' },
+            almuerzo: { nombre: 'Almuerzo', emoji: '🍽️' },
+            merienda: { nombre: 'Merienda', emoji: '🧉' },
+            cena:     { nombre: 'Cena',     emoji: '🌙' },
+            colacion: { nombre: 'Colación', emoji: '🍎' }
+        };
+        const DIAS_CORTOS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+        const DIAS_LARGOS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+        const contNutri = () => document.getElementById('contenidoNutricion');
+        const fechaDe = t => { const [a, m, d] = t.split('-').map(Number); return new Date(a, m - 1, d); };
+
+        async function iniciarNutricion(miData) {
+            datosSocioActual = miData;
+            contNutri().innerHTML = '<p class="nutri-cargando">Cargando tu plan de comidas...</p>';
+            try {
+                const res = await fetch(`/api/nutricion/${socioId}`);
+                const r = await res.json();
+                if (res.status === 404 && r.sinPlan) return mostrarFormularioNutricion();
+                if (!res.ok) throw new Error(r.error || 'Error');
+                nutri = r;
+                elegirHoyEnPlan();
+                renderPlanNutricion(r.renovado ? '✨ Tu plan del mes se renovó: tenés comidas nuevas.' : '');
+            } catch (err) {
+                contNutri().innerHTML = `<p class="nutri-cargando" style="color:#ff4d4d">No se pudo cargar tu plan de comidas. ${esc(err.message)}</p>`;
+            }
+        }
+
+        // ---------- Formulario (primera vez o "Cambiar mis datos") ----------
+        function mostrarFormularioNutricion() {
+            const p = (nutri && nutri.perfil) || {};
+            const d = datosSocioActual || {};
+            const val = (a, b) => a ?? b ?? '';
+            const marcada = (r) => (p.restricciones || []).includes(r) ? 'checked' : '';
+            const obj = p.objetivo || '';
+            contNutri().innerHTML = `
+                <h2><i class="fa-solid fa-apple-whole"></i> ${nutri ? 'Mis datos para el plan' : 'Armemos tu plan de comidas'}</h2>
+                <p class="nutri-intro">${nutri ? 'Si cambiás algo, se arma un plan nuevo con tus datos actualizados.' : 'Contanos tu objetivo y te armamos un plan de 4 semanas con recetas y porciones según tus calorías. Se renueva solo cada mes.'}</p>
+                <form id="formNutricion">
+                    <label>¿Cuál es tu objetivo?</label>
+                    <div class="objetivos" style="margin-top:0.5rem">
+                        <div class="objetivo-opcion"><input type="radio" name="objetivo" id="objBajar" value="bajar" ${obj === 'bajar' ? 'checked' : ''}><label for="objBajar"><span>🔥</span>Bajar de peso</label></div>
+                        <div class="objetivo-opcion"><input type="radio" name="objetivo" id="objMantener" value="mantener" ${obj === 'mantener' ? 'checked' : ''}><label for="objMantener"><span>⚖️</span>Mantenerme</label></div>
+                        <div class="objetivo-opcion"><input type="radio" name="objetivo" id="objSubir" value="subir" ${obj === 'subir' ? 'checked' : ''}><label for="objSubir"><span>💪</span>Ganar músculo</label></div>
+                    </div>
+                    <div class="grid-3">
+                        <div class="form-group"><label>Peso (kg)</label><input type="number" id="nPeso" step="0.1" min="30" max="250" value="${val(p.peso, d.peso)}" required></div>
+                        <div class="form-group"><label>Altura (m)</label><input type="number" id="nAltura" step="0.01" min="1.2" max="2.3" placeholder="1.75" value="${val(p.altura, d.altura)}" required></div>
+                        <div class="form-group"><label>Edad</label><input type="number" id="nEdad" min="14" max="90" value="${val(p.edad, '')}" required></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Sexo</label>
+                        <select id="nSexo">
+                            ${['Masculino', 'Femenino', 'Otro'].map(x => `<option ${val(p.sexo, d.sexo) === x ? 'selected' : ''}>${x}</option>`).join('')}
+                        </select>
+                    </div>
+                    <label>¿Algo que tengamos en cuenta?</label>
+                    <div class="chips-check" style="margin-top:0.5rem">
+                        <span class="chip-check"><input type="checkbox" id="rVeg" value="veg" ${marcada('veg')}><label for="rVeg">🥦 Vegetariano</label></span>
+                        <span class="chip-check"><input type="checkbox" id="rTacc" value="sintacc" ${marcada('sintacc')}><label for="rTacc">🌾 Sin TACC (celíaco)</label></span>
+                        <span class="chip-check"><input type="checkbox" id="rLact" value="sinlactosa" ${marcada('sinlactosa')}><label for="rLact">🥛 Sin lactosa</label></span>
+                        <span class="chip-check"><input type="checkbox" id="rColacion" ${p.colacion ? 'checked' : ''}><label for="rColacion">🍎 Quiero colación</label></span>
+                    </div>
+                    <button type="submit" class="btn" style="width:100%">${nutri ? 'Guardar y armar plan nuevo' : 'Armar mi plan'}</button>
+                    ${nutri ? '<button type="button" class="btn btn-borde-app" style="width:100%; margin-top:0.5rem" onclick="renderPlanNutricion()">Cancelar</button>' : ''}
+                    <p class="nutri-error" id="nutriError"></p>
+                </form>`;
+
+            document.getElementById('formNutricion').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const objetivo = (document.querySelector('input[name=objetivo]:checked') || {}).value;
+                const error = document.getElementById('nutriError');
+                if (!objetivo) { error.textContent = 'Elegí tu objetivo.'; return; }
+                const perfil = {
+                    objetivo,
+                    peso: document.getElementById('nPeso').value,
+                    altura: document.getElementById('nAltura').value,
+                    edad: document.getElementById('nEdad').value,
+                    sexo: document.getElementById('nSexo').value,
+                    restricciones: ['rVeg', 'rTacc', 'rLact'].filter(id => document.getElementById(id).checked).map(id => document.getElementById(id).value),
+                    colacion: document.getElementById('rColacion').checked
+                };
+                await pedirPlanNuevo(perfil, e.submitter);
+            });
+        }
+
+        async function pedirPlanNuevo(perfil, boton) {
+            const textoBoton = boton ? boton.textContent : '';
+            if (boton) { boton.disabled = true; boton.textContent = 'Armando tu plan...'; }
+            try {
+                const res = await fetch(`/api/nutricion/${socioId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ perfil })
+                });
+                const r = await res.json();
+                if (!res.ok) throw new Error(r.error || 'No se pudo armar el plan');
+                nutri = r;
+                elegirHoyEnPlan();
+                renderPlanNutricion('✅ ¡Listo! Tu plan nuevo ya está armado.');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } catch (err) {
+                const error = document.getElementById('nutriError');
+                if (error) error.textContent = err.message; else alert(err.message);
+                if (boton) { boton.disabled = false; boton.textContent = textoBoton; }
+            }
+        }
+
+        function generarOtroPlan(boton) {
+            if (!confirm('¿Armar un plan nuevo? Vas a tener otras comidas y recetas, con tus mismos datos.')) return;
+            pedirPlanNuevo(nutri.perfil, boton);
+        }
+
+        // Semana y día de hoy dentro del plan (el plan arranca el día que se creó)
+        function elegirHoyEnPlan() {
+            const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+            const dias = Math.max(0, Math.round((hoy - fechaDe(nutri.desde)) / 86400000));
+            semanaVista = Math.floor(dias / 7) % 4;
+            diaVista = (hoy.getDay() + 6) % 7;   // 0 = lunes
+        }
+
+        // ---------- Vista del plan ----------
+        function renderPlanNutricion(mensaje = '') {
+            const plan = nutri.plan;
+            const desde = fechaDe(nutri.desde), hasta = fechaDe(nutri.hasta);
+            const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+            const semanaHoy = Math.floor(Math.max(0, Math.round((hoy - desde) / 86400000)) / 7) % 4;
+            const diaHoy = (hoy.getDay() + 6) % 7;
+            const dia = plan.semanas[semanaVista][diaVista];
+            const totalKcal = dia.reduce((t, c) => t + (nutri.recetas[c.id]?.kcal || 0) * c.porcion, 0);
+            const totalProt = dia.reduce((t, c) => t + (nutri.recetas[c.id]?.p || 0) * c.porcion, 0);
+            const pct = (g, kcalPorG) => Math.round(g * kcalPorG * 100 / plan.kcal);
+            const restricciones = { veg: 'Vegetariano', sintacc: 'Sin TACC', sinlactosa: 'Sin lactosa' };
+
+            contNutri().innerHTML = `
+                ${mensaje ? `<p class="nutri-intro" style="color:#39e4a5; font-weight:700">${mensaje}</p>` : ''}
+                <div class="nutri-cabecera">
+                    <div>
+                        <span class="nutri-objetivo">${esc(plan.objetivoNombre)}</span>
+                        ${(plan.restricciones || []).map(r => `<span class="nutri-objetivo" style="background:#222;color:#ccc">${restricciones[r]}</span>`).join(' ')}
+                        <p class="nutri-kcal">${plan.kcal.toLocaleString('es-AR')} <small>kcal por día</small></p>
+                        <p class="nutri-vigencia">Plan de ${MESES[desde.getMonth()]} · se renueva solo el ${hasta.getDate()}/${hasta.getMonth() + 1}</p>
+                    </div>
+                </div>
+                <div class="macros">
+                    <div class="macro"><span>Proteínas</span><strong>${plan.proteinas} g</strong><i><b style="width:${pct(plan.proteinas, 4)}%;background:#39e4a5"></b></i></div>
+                    <div class="macro"><span>Carbohidratos</span><strong>${plan.carbohidratos} g</strong><i><b style="width:${pct(plan.carbohidratos, 4)}%;background:#5b9cff"></b></i></div>
+                    <div class="macro"><span>Grasas</span><strong>${plan.grasas} g</strong><i><b style="width:${pct(plan.grasas, 9)}%;background:#ffb020"></b></i></div>
+                </div>
+                <div class="nutri-acciones">
+                    <button type="button" class="btn btn-chico" onclick="generarOtroPlan(this)">🔄 Generar plan nuevo</button>
+                    <button type="button" class="btn btn-chico btn-borde-app" onclick="mostrarFormularioNutricion()">⚙️ Mis datos</button>
+                </div>
+
+                <h2 style="margin-top:1.6rem"><i class="fa-solid fa-utensils"></i> Menú</h2>
+                <div class="semanas">
+                    ${plan.semanas.map((_, i) => `<button type="button" class="semana-btn ${i === semanaVista ? 'activa' : ''}" onclick="verSemana(${i})">Semana ${i + 1}${i === semanaHoy ? '<em>esta semana</em>' : ''}</button>`).join('')}
+                </div>
+                <div class="dias-semana">
+                    ${DIAS_CORTOS.map((d, i) => `<button type="button" class="dia-btn ${i === diaVista ? 'activo' : ''} ${i === diaHoy && semanaVista === semanaHoy ? 'hoy' : ''}" onclick="verDia(${i})" aria-label="${DIAS_LARGOS[i]}">${d}</button>`).join('')}
+                </div>
+                <p style="margin:0 0 0.6rem; font-weight:900; text-transform:uppercase; font-size:0.9rem">${DIAS_LARGOS[diaVista]}${diaVista === diaHoy && semanaVista === semanaHoy ? ' <span style="color:#39e4a5">· hoy</span>' : ''}</p>
+                <div class="lista-comidas">
+                    ${dia.map((c, k) => {
+                        const r = nutri.recetas[c.id];
+                        if (!r) return '';
+                        const info = COMIDAS_INFO[c.comida];
+                        return `<button type="button" class="comida-item" onclick="verReceta(${k})">
+                            <span class="comida-emoji">${info.emoji}</span>
+                            <span class="comida-info">
+                                <small>${info.nombre}</small>
+                                <strong>${esc(r.nombre)}</strong>
+                                <em>${Math.round(r.kcal * c.porcion)} kcal · ${r.min} min${c.porcion !== 1 ? ` · porción x${String(c.porcion).replace('.', ',')}` : ''}</em>
+                            </span>
+                            <i class="fa-solid fa-chevron-right comida-flecha"></i>
+                        </button>`;
+                    }).join('')}
+                </div>
+                <div class="total-dia"><span>Total del día</span><span><strong>${Math.round(totalKcal).toLocaleString('es-AR')} kcal</strong> · ${Math.round(totalProt)} g de proteína</span></div>
+                <button type="button" class="btn btn-secundario-app" onclick="verListaCompras()">🛒 Lista de compras de la semana ${semanaVista + 1}</button>
+                <p class="nutri-aviso">Plan orientativo armado según tus datos y tu objetivo. No reemplaza la consulta con un/a nutricionista; si tenés alguna condición de salud, consultá antes de cambiar tu alimentación.${(plan.restricciones || []).includes('sintacc') ? ' Usá siempre productos con el logo "Sin TACC".' : ''}</p>`;
+        }
+
+        function verSemana(i) { semanaVista = i; renderPlanNutricion(); }
+        function verDia(i) { diaVista = i; renderPlanNutricion(); }
+
+        // ---------- Cantidades ----------
+        function fraccion(n) {
+            const entero = Math.floor(n + 0.001);
+            const resto = Math.round((n - entero) * 4) / 4;
+            const simbolos = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
+            if (resto === 1) return String(entero + 1);
+            const f = simbolos[resto] || '';
+            return entero ? (f ? `${entero} ${f}` : String(entero)) : (f || '0');
+        }
+
+        // Cosas que no se pueden partir: se redondean a unidades enteras (nunca "2 ½ huevos")
+        const ENTEROS = /huevo|clara|lata|rebanada|tortilla|galleta|pan |pan$|panqueque|feta|saquito|tapa|tomates cherry/i;
+        function ajustarEntero(cant, unidad, nombre) {
+            return unidad === 'u' && ENTEROS.test(nombre) ? Math.max(1, Math.round(cant)) : cant;
+        }
+
+        function textoCantidad(cant, unidad) {
+            if (cant === null || cant === undefined) return 'a gusto';
+            if (unidad === 'g' || unidad === 'ml') {
+                const r = cant < 20 ? Math.round(cant) : Math.round(cant / 5) * 5;
+                return r >= 1000 ? `${(r / 1000).toLocaleString('es-AR', { maximumFractionDigits: 2 })} ${unidad === 'g' ? 'kg' : 'l'}` : `${r} ${unidad}`;
+            }
+            if (unidad === 'u') return fraccion(cant);
+            return `${fraccion(cant)} ${unidad}`;
+        }
+
+        // ---------- Hoja: receta ----------
+        function verReceta(k) {
+            const c = nutri.plan.semanas[semanaVista][diaVista][k];
+            const r = nutri.recetas[c.id];
+            const etiquetas = { veg: '🥦 Vegetariana', sintacc: '🌾 Sin TACC', sinlactosa: '🥛 Sin lactosa' };
+            abrirHoja(`
+                <small style="color:#39e4a5; font-weight:900; text-transform:uppercase; font-size:0.72rem">${COMIDAS_INFO[c.comida].emoji} ${COMIDAS_INFO[c.comida].nombre} · ${DIAS_LARGOS[diaVista]}</small>
+                <h3>${esc(r.nombre)}</h3>
+                <div class="receta-meta">
+                    <span>⏱ ${r.min} min</span>
+                    <span>🔥 ${Math.round(r.kcal * c.porcion)} kcal</span>
+                    <span>💪 ${Math.round(r.p * c.porcion)} g proteína</span>
+                    ${c.porcion !== 1 ? `<span>🍽 porción x${String(c.porcion).replace('.', ',')}</span>` : ''}
+                    ${r.tags.filter(t => etiquetas[t]).map(t => `<span>${etiquetas[t]}</span>`).join('')}
+                </div>
+                <h4>Ingredientes${c.porcion !== 1 ? ' (ya ajustados a tu porción)' : ''}</h4>
+                <ul class="ingredientes">
+                    ${r.ing.map(([cant, unidad, nombre]) => `<li><b>${cant === null ? '' : textoCantidad(ajustarEntero(cant * c.porcion, unidad, nombre), unidad)}</b><span>${esc(nombre)}${cant === null ? ' (a gusto)' : ''}</span></li>`).join('')}
+                </ul>
+                <h4>Preparación</h4>
+                <ol>${r.pasos.map(p => `<li>${esc(p)}</li>`).join('')}</ol>`);
+        }
+
+        // ---------- Hoja: lista de compras de la semana ----------
+        function verListaCompras() {
+            const semana = nutri.plan.semanas[semanaVista];
+            const totales = new Map();
+            const aGusto = new Set();
+            semana.forEach(dia => dia.forEach(c => {
+                const r = nutri.recetas[c.id];
+                if (!r) return;
+                r.ing.forEach(([cant, unidad, nombre]) => {
+                    if (cant === null) { aGusto.add(nombre); return; }
+                    // Cucharaditas y cucharadas se suman juntas (3 cditas = 1 cda)
+                    if (unidad === 'cdita') { cant = cant / 3; unidad = 'cda'; }
+                    const clave = `${nombre.toLowerCase()}|${unidad}`;
+                    const actual = totales.get(clave) || { nombre, unidad, cant: 0 };
+                    actual.cant += cant * c.porcion;
+                    totales.set(clave, actual);
+                });
+            }));
+            const items = [...totales.values()]
+                .map(i => ({ ...i, cant: i.unidad === 'u' ? (ENTEROS.test(i.nombre) ? Math.ceil(i.cant) : Math.ceil(i.cant * 2) / 2) : i.cant }))
+                .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+            const guardadas = leerTildadas();
+            abrirHoja(`
+                <h3>🛒 Lista de compras · Semana ${semanaVista + 1}</h3>
+                <p class="nutri-intro" style="margin-bottom:0.5rem">Todo lo que necesitás para los menús de la semana, ya sumado. Tocá cada cosa a medida que la comprás.</p>
+                <ul class="compras" style="list-style:none; padding:0">
+                    ${items.map(i => {
+                        const id = `s${semanaVista}-${i.nombre}-${i.unidad}`;
+                        return `<li><label><input type="checkbox" data-id="${esc(id)}" ${guardadas.includes(id) ? 'checked' : ''} onchange="tildarCompra(this)"><span><b>${textoCantidad(i.cant, i.unidad)}</b> ${esc(i.nombre)}</span></label></li>`;
+                    }).join('')}
+                </ul>
+                ${aGusto.size ? `<h4>Condimentos y extras</h4><p style="color:#bbb; font-size:0.88rem; line-height:1.5">${[...aGusto].map(esc).join(' · ')}</p>` : ''}`);
+        }
+
+        // Lo que ya se tildó en la lista de compras queda guardado en este celular
+        function leerTildadas() {
+            try { return JSON.parse(localStorage.getItem(`compras-${socioId}-${nutri.id}`) || '[]'); } catch (e) { return []; }
+        }
+        function tildarCompra(input) {
+            const lista = new Set(leerTildadas());
+            input.checked ? lista.add(input.dataset.id) : lista.delete(input.dataset.id);
+            try { localStorage.setItem(`compras-${socioId}-${nutri.id}`, JSON.stringify([...lista])); } catch (e) { /* sin storage */ }
+        }
+
+        function abrirHoja(html) {
+            document.getElementById('hojaContenido').innerHTML = html;
+            document.getElementById('hoja').scrollTop = 0;
+            document.getElementById('hoja').classList.add('abierta');
+            document.getElementById('hojaFondo').classList.add('abierta');
+            document.body.style.overflow = 'hidden';
+            history.pushState({ vista: vistaActual, hoja: true }, '', location.hash);   // "atrás" cierra la hoja
+        }
+        function cerrarHoja(desdeAtras = false) {
+            const hoja = document.getElementById('hoja');
+            if (!hoja.classList.contains('abierta')) return;
+            hoja.classList.remove('abierta');
+            document.getElementById('hojaFondo').classList.remove('abierta');
+            document.body.style.overflow = '';
+            if (!desdeAtras && history.state && history.state.hoja) history.back();
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarHoja(); });
+
         // ================= NAVEGACIÓN ENTRE PESTAÑAS (barra de abajo) =================
         const VISTAS = ['inicio', 'rutina', 'progreso', 'nutricion', 'perfil'];
         const scrollGuardado = {};           // cada pestaña recuerda hasta dónde bajaste
@@ -907,6 +1329,7 @@
 
         document.querySelectorAll('.nav-item').forEach(b => b.addEventListener('click', () => mostrarVista(b.dataset.vista)));
         window.addEventListener('popstate', (e) => {
+            if (document.getElementById('hoja').classList.contains('abierta')) { cerrarHoja(true); return; }
             mostrarVista((e.state && e.state.vista) || location.hash.slice(1) || 'inicio', { guardarHistorial: false });
         });
 

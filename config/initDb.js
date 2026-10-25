@@ -134,6 +134,25 @@ async function inicializarBaseDeDatos() {
     } catch (error) {
         console.error("❌ No se pudo crear la tabla 'asistencias':", error.message);
     }
+
+    try {
+        // Planes de nutrición: uno por mes por socio (se guarda el historial)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS planes_nutricion (
+                id SERIAL PRIMARY KEY,
+                socio_id INTEGER NOT NULL REFERENCES socios(id) ON DELETE CASCADE,
+                perfil JSONB NOT NULL,
+                plan JSONB NOT NULL,
+                desde DATE NOT NULL,
+                hasta DATE NOT NULL,
+                creado TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            )
+        `);
+        await db.query(`CREATE INDEX IF NOT EXISTS idx_planes_nutricion_socio ON planes_nutricion (socio_id)`);
+        console.log("✅ Tabla 'planes_nutricion' lista");
+    } catch (error) {
+        console.error("❌ No se pudo crear la tabla 'planes_nutricion':", error.message);
+    }
 }
 
 module.exports = inicializarBaseDeDatos;

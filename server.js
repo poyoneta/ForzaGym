@@ -39,6 +39,12 @@ app.use(
     require("./routes/asistenciasRoutes")
 );
 
+// Planes de nutrición con recetas (se arman solos según el objetivo del socio)
+app.use(
+    "/api/nutricion",
+    require("./routes/nutricionRoutes")
+);
+
 // Fotos subidas desde el backoffice
 app.use(
     "/api/imagenes",
