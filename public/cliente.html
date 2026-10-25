@@ -150,155 +150,318 @@
             .tabla-rutina-cliente th { font-size: 0.68rem; }
         }
         .tabla-scroll { overflow-x: auto; }
+
+        /* ================= NAVEGACIÓN ESTILO APP ================= */
+        :root { --alto-nav: 64px; --alto-barra: 56px; }
+        body {
+            padding: calc(var(--alto-barra) + 1rem) 1rem calc(var(--alto-nav) + 1.5rem + env(safe-area-inset-bottom));
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Barra de arriba */
+        .barra-app {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            height: var(--alto-barra);
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 0 1rem;
+            background: rgba(11, 11, 11, 0.94);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1c1c1c;
+        }
+        .marca-app { display: flex; align-items: center; gap: 0.5rem; font-weight: 900; font-size: 1rem; letter-spacing: -0.3px; }
+        .marca-app img { width: 30px; height: 30px; }
+        .marca-app strong { color: #39e4a5; }
+        .titulo-vista { margin: 0; font-size: 0.8rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Vistas (una por pestaña) */
+        .vista { display: none; }
+        .vista.activa { display: block; animation: aparecerVista 0.22s ease; }
+        @keyframes aparecerVista { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .vista.activa { animation: none; } }
+
+        .saludo { margin: 0.2rem 0 1.2rem; }
+        .saludo p { margin: 0; font-size: 1.5rem; font-weight: 900; }
+        .saludo p span { color: #39e4a5; }
+        .saludo small { color: #888; font-size: 0.9rem; }
+
+        /* Barra de abajo (como Instagram) */
+        .nav-app {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+            display: flex; justify-content: space-around; align-items: center;
+            height: calc(var(--alto-nav) + env(safe-area-inset-bottom));
+            padding: 0 0.4rem env(safe-area-inset-bottom);
+            background: #0d0e10;
+            border-top: 1px solid #1c1c1c;
+        }
+        .nav-item {
+            position: relative; flex: 1 1 0; max-width: 120px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: none; border: none; border-radius: 24px; cursor: pointer;
+            color: #e8e8e8; font-size: 1.45rem;
+            transition: background 0.2s, color 0.2s, transform 0.1s;
+        }
+        .icono-nav {
+            width: 27px; height: 27px; fill: none; stroke: currentColor;
+            stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
+            opacity: 0.8; transition: opacity 0.2s;
+        }
+        .icono-nav .relleno { fill: none; }
+        .nav-item.activo .icono-nav { opacity: 1; stroke-width: 2.2; }
+        .nav-item.activo .icono-nav .relleno { fill: currentColor; }   /* activo = relleno, como en Instagram */
+        .nav-item.activo { color: #fff; background: #24262a; }   /* el "óvalo" de la pestaña activa */
+        .nav-item:active { transform: scale(0.92); }
+        .nav-item:focus-visible { outline: 2px solid #39e4a5; outline-offset: -2px; }
+
+        /* Avatar con iniciales (perfil) */
+        .avatar-nav {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #39e4a5, #1f9e70);
+            color: #000; font-size: 0.78rem; font-weight: 900;
+            border: 2px solid transparent; box-sizing: border-box;
+        }
+        .nav-item.activo .avatar-nav { border-color: #fff; }
+
+        /* Punto rojo de aviso */
+        .punto-aviso {
+            display: none; position: absolute; top: 9px; right: calc(50% - 20px);
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #ff3b47; border: 2px solid #0d0e10;
+        }
+        .punto-aviso.visible { display: block; }
+
+        /* Tarjeta "Hoy te toca" */
+        .card-hoy { border: 1px solid rgba(57, 228, 165, 0.35); background: linear-gradient(135deg, #1a1a1a, #14241e); }
+        .hoy-titulo { margin: 0 0 0.3rem; font-size: 1.15rem; font-weight: 900; text-transform: uppercase; }
+        .hoy-titulo span { color: #39e4a5; }
+        .hoy-detalle { margin: 0 0 1rem; color: #aaa; font-size: 0.88rem; line-height: 1.5; }
+        .btn-secundario-app { background: transparent; border: 1px solid #39e4a5; color: #39e4a5; width: 100%; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-secundario-app:hover { background: #39e4a5; color: #000; }
+
+        /* Perfil */
+        .perfil-cabecera { display: flex; align-items: center; gap: 1rem; margin: 0.3rem 0 1.5rem; }
+        .avatar-grande {
+            width: 76px; height: 76px; border-radius: 50%; flex: 0 0 auto;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #39e4a5, #1f9e70);
+            color: #000; font-size: 1.6rem; font-weight: 900;
+            box-shadow: 0 0 0 3px #0b0b0b, 0 0 0 5px #39e4a5;
+        }
+        .perfil-nombre { margin: 0; font-size: 1.3rem; font-weight: 900; }
+        .perfil-plan { margin: 0.2rem 0 0; color: #39e4a5; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+        .btn-salir-perfil { width: 100%; padding: 0.9rem; justify-content: center; display: flex; align-items: center; gap: 0.5rem; }
+
+        @media (min-width: 700px) {
+            .nav-app { justify-content: center; gap: 1.5rem; }
+            .nav-item { flex: 0 0 96px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header class="header">
-            <h1>Hola, <span id="nombreCliente">Cliente</span></h1>
-            <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
-        </header>
-
-        <!-- Aparece solo si el plan vence en 7 días o menos, o ya venció -->
-        <div class="aviso-vencimiento" id="avisoVencimiento">
-            <span id="textoVencimiento"></span>
-            <a class="btn-whatsapp" id="btnRenovar" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Quiero renovar</a>
+    <!-- ================= BARRA SUPERIOR ================= -->
+    <header class="barra-app">
+        <div class="marca-app">
+            <img src="imagenes/logo-splash.png" alt="">
+            <span>FORZA <strong>GYM</strong></span>
         </div>
+        <h1 class="titulo-vista" id="tituloVista">Inicio</h1>
+    </header>
 
-        <section class="card">
-            <h2><i class="fa-solid fa-id-card"></i> Mi Estado</h2>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Plan Actual</label>
-                    <p style="margin: 0; font-size: 1.1rem;"><span id="planCliente" style="color:#39e4a5; font-weight:bold; text-transform:uppercase;">Regular</span></p>
+    <div class="container">
+
+        <!-- ================= INICIO ================= -->
+        <main class="vista activa" id="vista-inicio" data-titulo="Inicio">
+            <div class="saludo">
+                <p>Hola, <span id="nombreCliente">Cliente</span> 👋</p>
+                <small id="fraseDia">¿Listo para entrenar?</small>
+            </div>
+            <!-- Aparece solo si el plan vence en 7 días o menos, o ya venció -->
+            <div class="aviso-vencimiento" id="avisoVencimiento">
+                <span id="textoVencimiento"></span>
+                <a class="btn-whatsapp" id="btnRenovar" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-whatsapp"></i> Quiero renovar</a>
+            </div>
+            <section class="card">
+                <h2><i class="fa-solid fa-id-card"></i> Mi Estado</h2>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Plan Actual</label>
+                        <p style="margin: 0; font-size: 1.1rem;"><span id="planCliente" style="color:#39e4a5; font-weight:bold; text-transform:uppercase;">Regular</span></p>
+                    </div>
+                    <div class="form-group" style="text-align: right;">
+                        <label>Fecha de Vencimiento</label>
+                        <p style="margin: 0; font-size: 1.1rem;"><span id="venceCliente" style="color:#ff4d4d; font-weight:bold;">--/--/--</span></p>
+                    </div>
                 </div>
-                <div class="form-group" style="text-align: right;">
-                    <label>Fecha de Vencimiento</label>
-                    <p style="margin: 0; font-size: 1.1rem;"><span id="venceCliente" style="color:#ff4d4d; font-weight:bold;">--/--/--</span></p>
+            </section>
+
+            <section class="card card-hoy" id="cardHoy" style="display:none;">
+                <h2><i class="fa-solid fa-fire"></i> Hoy te toca</h2>
+                <p class="hoy-titulo" id="hoyTitulo"></p>
+                <p class="hoy-detalle" id="hoyDetalle"></p>
+                <button type="button" class="btn btn-secundario-app" onclick="irA('rutina')">Ver rutina completa <i class="fa-solid fa-arrow-right"></i></button>
+            </section>
+
+            <section class="card">
+                <h2><i class="fa-solid fa-calendar-check"></i> Mis Asistencias</h2>
+                <div class="resumen-asistencia">
+                    <div class="dato"><strong id="asisMes">0</strong><span>Este mes</span></div>
+                    <div class="dato"><strong id="asisSemana">0</strong><span>Esta semana</span></div>
+                    <div class="dato"><strong id="asisUltima" style="font-size:1.1rem; padding: 0.35rem 0;">--</strong><span>Última vez</span></div>
                 </div>
-            </div>
-        </section>
+                <div class="calendario" id="calendarioAsistencia" aria-label="Días que viniste este mes"></div>
+                <p class="ayuda-qr"><i class="fa-solid fa-qrcode"></i> Cada vez que vengas, escaneá el QR de la entrada con la cámara del celu para registrar tu asistencia.</p>
+            </section>
+        </main>
 
-        <section class="card">
-            <h2><i class="fa-solid fa-calendar-check"></i> Mis Asistencias</h2>
-            <div class="resumen-asistencia">
-                <div class="dato"><strong id="asisMes">0</strong><span>Este mes</span></div>
-                <div class="dato"><strong id="asisSemana">0</strong><span>Esta semana</span></div>
-                <div class="dato"><strong id="asisUltima" style="font-size:1.1rem; padding: 0.35rem 0;">--</strong><span>Última vez</span></div>
-            </div>
-            <div class="calendario" id="calendarioAsistencia" aria-label="Días que viniste este mes"></div>
-            <p class="ayuda-qr"><i class="fa-solid fa-qrcode"></i> Cada vez que vengas, escaneá el QR de la entrada con la cámara del celu para registrar tu asistencia.</p>
-        </section>
-
-        <section class="card">
-            <h2><i class="fa-solid fa-dumbbell"></i> Mi Plan de Entrenamiento</h2>
-            <div id="metaRutinaCliente" style="margin-bottom: 1rem; font-size: 0.9rem; display: none;">
-                <span>Enfoque: <strong id="clienteEnfoque" style="color:#39e4a5;"></strong></span> | 
-                <span>Duración: <strong id="clienteDuracion" style="color:#fff;"></strong> semanas</span>
-            </div>
+        <!-- ================= RUTINA ================= -->
+        <main class="vista" id="vista-rutina" data-titulo="Mi rutina">
+            <section class="card">
+                <h2><i class="fa-solid fa-dumbbell"></i> Mi Plan de Entrenamiento</h2>
+                <div id="metaRutinaCliente" style="margin-bottom: 1rem; font-size: 0.9rem; display: none;">
+                    <span>Enfoque: <strong id="clienteEnfoque" style="color:#39e4a5;"></strong></span> | 
+                    <span>Duración: <strong id="clienteDuracion" style="color:#fff;"></strong> semanas</span>
+                </div>
             
-            <div id="contenedorRutinaCliente">
-                <p style="color: #666; font-size: 0.9rem; margin: 0;">Cargando tu rutina...</p>
-            </div>
-        </section>
+                <div id="contenedorRutinaCliente">
+                    <p style="color: #666; font-size: 0.9rem; margin: 0;">Cargando tu rutina...</p>
+                </div>
+            </section>
+        </main>
 
-        <section class="card">
-            <h2><i class="fa-solid fa-heart-pulse"></i> Mi Ficha Física y Médica</h2>
-            <form id="formFicha">
-                <div class="grid-2">
-                    <div class="form-group">
-                        <label>Peso Actual (Kg)</label>
-                        <input type="number" id="fichaPeso" step="0.1">
+        <!-- ================= PROGRESO ================= -->
+        <main class="vista" id="vista-progreso" data-titulo="Mi progreso">
+            <section class="card">
+                <h2><i class="fa-solid fa-weight-hanging"></i> Registrar Récord de Carga</h2>
+                <form id="formPesos" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Ejercicio</label>
+                            <select id="ejercicio" required>
+                                <option value="Sentadillas">Sentadillas 🦵</option>
+                                <option value="Press de Banca">Press de Banca 🦈</option>
+                                <option value="Peso Muerto">Peso Muerto 🏋️‍♂️</option>
+                                <option value="Press Militar">Press Militar 🏛️</option>
+                                <option value="Bíceps con Barra">Bíceps con Barra 💪</option>
+                                <option value="__otro">Otro ejercicio...</option>
+                            </select>
+                            <input type="text" id="ejercicioOtro" placeholder="Nombre del ejercicio" maxlength="60" style="display:none;">
+                        </div>
+                        <div class="form-group">
+                            <label>Peso Máximo (Kg)</label>
+                            <input type="number" id="peso" step="0.5" required>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Altura (Metros)</label>
-                        <input type="number" id="fichaAltura" step="0.01">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Sexo</label>
-                    <select id="fichaSexo">
-                        <option value="">Seleccionar...</option>
-                        <option value="Masculino">Masculino</option>
-                        <option value="Femenino">Femenino</option>
-                        <option value="Otro">Otro</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>¿Tenés algún golpe, dolor o lesión actual?</label>
-                    <textarea id="fichaLesiones"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>¿Realizás otra actividad física?</label>
-                    <input type="text" id="fichaActividadExtra">
-                </div>
-                <button type="submit" class="btn" style="width: 100%;">Actualizar Ficha</button>
-            </form>
-        </section>
+                    <button type="submit" class="btn">Guardar Carga</button>
+                </form>
+            </section>
 
-        <section class="card">
-            <h2><i class="fa-solid fa-weight-hanging"></i> Registrar Récord de Carga</h2>
-            <form id="formPesos" style="display: flex; flex-direction: column; gap: 1rem;">
-                <div class="grid-2">
+            <section class="card">
+                <h2><i class="fa-solid fa-chart-line"></i> Mi Progreso</h2>
+                <div id="contenidoProgreso">
+                    <div class="barra-progreso">
+                        <select id="ejercicioProgreso" aria-label="Ejercicio a ver"></select>
+                    </div>
+                    <div class="stats-progreso">
+                        <div class="dato"><strong id="progresoRecord">--</strong><span>Récord</span></div>
+                        <div class="dato"><strong id="progresoMejora">--</strong><span>Mejora total</span></div>
+                        <div class="dato"><strong id="progresoRegistros">0</strong><span>Registros</span></div>
+                    </div>
+                    <div class="contenedor-grafico-progreso">
+                        <div id="graficoProgreso" role="img" aria-label="Gráfico de la evolución de tu carga"></div>
+                        <div class="tooltip-progreso" id="tooltipProgreso"></div>
+                    </div>
+                </div>
+                <p class="sin-datos" id="sinProgreso" style="display:none;"><i class="fa-solid fa-circle-info"></i> Todavía no registraste cargas. Usá el formulario de arriba y acá vas a ver cómo vas mejorando.</p>
+                <details class="todas-cargas">
+                    <summary>Ver todas mis cargas</summary>
+                    <ul id="listaHistorial" class="historial-lista"></ul>
+                </details>
+            </section>
+        </main>
+
+        <!-- ================= NUTRICIÓN ================= -->
+        <main class="vista" id="vista-nutricion" data-titulo="Nutrición">
+            <section class="card" id="seccionNutricion">
+                <div id="contenidoNutricion">
+                    <h2><i class="fa-solid fa-apple-whole"></i> Asesoramiento Nutricional Premium</h2>
                     <div class="form-group">
-                        <label>Ejercicio</label>
-                        <select id="ejercicio" required>
-                            <option value="Sentadillas">Sentadillas 🦵</option>
-                            <option value="Press de Banca">Press de Banca 🦈</option>
-                            <option value="Peso Muerto">Peso Muerto 🏋️‍♂️</option>
-                            <option value="Press Militar">Press Militar 🏛️</option>
-                            <option value="Bíceps con Barra">Bíceps con Barra 💪</option>
-                            <option value="__otro">Otro ejercicio...</option>
+                        <label>Mi Objetivo Principal</label>
+                        <select id="objetivoNutricion">
+                            <option value="bajar">Definición / Bajar de peso 🏃‍♂️</option>
+                            <option value="subir">Volumen / Ganar Masa Muscular 💪</option>
+                            <option value="mantener">Mantenimiento / Rendimiento ⚡</option>
                         </select>
-                        <input type="text" id="ejercicioOtro" placeholder="Nombre del ejercicio" maxlength="60" style="display:none;">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ================= PERFIL ================= -->
+        <main class="vista" id="vista-perfil" data-titulo="Mi perfil">
+            <section class="perfil-cabecera">
+                <div class="avatar-grande" id="avatarGrande">?</div>
+                <div>
+                    <p class="perfil-nombre" id="perfilNombre"></p>
+                    <p class="perfil-plan" id="perfilPlan"></p>
+                </div>
+            </section>
+            <section class="card">
+                <h2><i class="fa-solid fa-heart-pulse"></i> Mi Ficha Física y Médica</h2>
+                <form id="formFicha">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Peso Actual (Kg)</label>
+                            <input type="number" id="fichaPeso" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Altura (Metros)</label>
+                            <input type="number" id="fichaAltura" step="0.01">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label>Peso Máximo (Kg)</label>
-                        <input type="number" id="peso" step="0.5" required>
+                        <label>Sexo</label>
+                        <select id="fichaSexo">
+                            <option value="">Seleccionar...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
                     </div>
-                </div>
-                <button type="submit" class="btn">Guardar Carga</button>
-            </form>
-        </section>
+                    <div class="form-group">
+                        <label>¿Tenés algún golpe, dolor o lesión actual?</label>
+                        <textarea id="fichaLesiones"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>¿Realizás otra actividad física?</label>
+                        <input type="text" id="fichaActividadExtra">
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%;">Actualizar Ficha</button>
+                </form>
+            </section>
 
-        <section class="card">
-            <h2><i class="fa-solid fa-chart-line"></i> Mi Progreso</h2>
-            <div id="contenidoProgreso">
-                <div class="barra-progreso">
-                    <select id="ejercicioProgreso" aria-label="Ejercicio a ver"></select>
-                </div>
-                <div class="stats-progreso">
-                    <div class="dato"><strong id="progresoRecord">--</strong><span>Récord</span></div>
-                    <div class="dato"><strong id="progresoMejora">--</strong><span>Mejora total</span></div>
-                    <div class="dato"><strong id="progresoRegistros">0</strong><span>Registros</span></div>
-                </div>
-                <div class="contenedor-grafico-progreso">
-                    <div id="graficoProgreso" role="img" aria-label="Gráfico de la evolución de tu carga"></div>
-                    <div class="tooltip-progreso" id="tooltipProgreso"></div>
-                </div>
-            </div>
-            <p class="sin-datos" id="sinProgreso" style="display:none;"><i class="fa-solid fa-circle-info"></i> Todavía no registraste cargas. Usá el formulario de arriba y acá vas a ver cómo vas mejorando.</p>
-            <details class="todas-cargas">
-                <summary>Ver todas mis cargas</summary>
-                <ul id="listaHistorial" class="historial-lista"></ul>
-            </details>
-        </section>
-
-        <section class="card" id="seccionNutricion">
-            <div id="contenidoNutricion">
-                <h2><i class="fa-solid fa-apple-whole"></i> Asesoramiento Nutricional Premium</h2>
-                <div class="form-group">
-                    <label>Mi Objetivo Principal</label>
-                    <select id="objetivoNutricion">
-                        <option value="bajar">Definición / Bajar de peso 🏃‍♂️</option>
-                        <option value="subir">Volumen / Ganar Masa Muscular 💪</option>
-                        <option value="mantener">Mantenimiento / Rendimiento ⚡</option>
-                    </select>
-                </div>
-            </div>
-        </section>
+            <button type="button" class="btn btn-logout btn-salir-perfil" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</button>
+        </main>
     </div>
+
+    <!-- ================= BARRA DE NAVEGACIÓN (estilo Instagram) ================= -->
+    <nav class="nav-app" aria-label="Secciones">
+        <button type="button" class="nav-item activo" data-vista="inicio" aria-label="Inicio">
+            <svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><path class="relleno" d="M3.5 10.2 12 3.5l8.5 6.7V20a1 1 0 0 1-1 1h-5v-6h-5v6h-5a1 1 0 0 1-1-1z"/></svg><span class="punto-aviso" id="avisoInicio"></span>
+        </button>
+        <button type="button" class="nav-item" data-vista="rutina" aria-label="Mi rutina">
+            <svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/><rect class="relleno" x="4.5" y="6.5" width="2" height="11" rx="1"/><rect class="relleno" x="17.5" y="6.5" width="2" height="11" rx="1"/></svg>
+        </button>
+        <button type="button" class="nav-item" data-vista="progreso" aria-label="Mi progreso">
+            <svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 3.5v17h17"/><path class="linea" d="m7 15 4-4.5 3 3 5.5-6.5"/><circle class="relleno" cx="19.5" cy="7" r="1.6"/></svg>
+        </button>
+        <button type="button" class="nav-item" data-vista="nutricion" aria-label="Nutrición">
+            <svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><path class="relleno" d="M12 7.2c-1.7-1.6-5.6-1.8-6.9 1.6-1.2 3.3.6 8.6 3.3 10.6 1.3 1 2.4.8 3.6.2 1.2.6 2.3.8 3.6-.2 2.7-2 4.5-7.3 3.3-10.6-1.3-3.4-5.2-3.2-6.9-1.6z"/><path d="M12 7.2c0-1.8.8-3.3 2.6-4"/></svg>
+        </button>
+        <button type="button" class="nav-item" data-vista="perfil" aria-label="Mi perfil">
+            <span class="avatar-nav" id="avatarNav">?</span><span class="punto-aviso" id="avisoPerfil"></span>
+        </button>
+    </nav>
 
     <script src="datos-gym.js"></script>
     <script>
@@ -307,7 +470,7 @@
         const socioRol = localStorage.getItem('usuarioRol');
 
         if (!socioId || socioRol !== 'cliente') { window.location.href = 'login.html'; }
-        if (socioNombre) { document.getElementById('nombreCliente').textContent = socioNombre; }
+        if (socioNombre) { document.getElementById('nombreCliente').textContent = socioNombre.split(' ')[0]; }
 
         async function cargarDatosPerfil() {
             try {
@@ -355,6 +518,7 @@
                     document.getElementById('fichaSexo').value = miData.sexo || '';
                     document.getElementById('fichaLesiones').value = miData.lesiones || '';
                     document.getElementById('fichaActividadExtra').value = miData.actividadExtra || '';
+                    mostrarPerfil(miData);
 
                     // Nutrición: se desbloquea si el plan tiene "Incluye nutrición" (se configura en "Editar sitio")
                     let planesConNutricion = ['Premium'];
@@ -439,6 +603,7 @@
                         </button>`).join('')}
                 </div>` : '';
 
+            mostrarHoyTeToca();
             const dia = rutinaDias[activo];
             const titulo = rutinaDias.length > 1 || dia.nombre
                 ? `<p class="titulo-dia-rutina">Día ${activo + 1}${dia.nombre ? ` · <span>${esc(dia.nombre)}</span>` : ''}${activo === diaSugerido && rutinaDias.length > 1 ? ' <em>Te toca hoy</em>' : ''}</p>`
@@ -468,6 +633,7 @@
             const aviso = document.getElementById('avisoVencimiento');
             const texto = document.getElementById('textoVencimiento');
             aviso.className = 'aviso-vencimiento';
+            marcarAviso('avisoInicio', dias <= 7);
             if (dias > 7) return;
 
             if (dias < 0) {
@@ -677,7 +843,10 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ peso, altura, sexo, lesiones, actividadExtra })
             });
-            if(res.ok) { alert('¡Ficha actualizada!'); window.location.reload(); }
+            if (res.ok) {
+                alert('¡Ficha actualizada!');
+                marcarAviso('avisoPerfil', !peso || !altura || !sexo);
+            }
         });
 
         document.getElementById('formPesos').addEventListener('submit', async (e) => {
@@ -699,6 +868,95 @@
                 if ([...select.options].some(o => o.value === ejercicio)) { select.value = ejercicio; dibujarProgreso(); }
             }
         });
+
+
+        // ================= NAVEGACIÓN ENTRE PESTAÑAS (barra de abajo) =================
+        const VISTAS = ['inicio', 'rutina', 'progreso', 'nutricion', 'perfil'];
+        const scrollGuardado = {};           // cada pestaña recuerda hasta dónde bajaste
+        let vistaActual = 'inicio';
+
+        function mostrarVista(nombre, { guardarHistorial = true } = {}) {
+            if (!VISTAS.includes(nombre)) nombre = 'inicio';
+
+            // Tocar la pestaña en la que ya estás vuelve arriba (como en Instagram)
+            if (nombre === vistaActual && document.getElementById('vista-' + nombre).classList.contains('activa')) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            scrollGuardado[vistaActual] = window.scrollY;
+            vistaActual = nombre;
+
+            document.querySelectorAll('.vista').forEach(v => v.classList.toggle('activa', v.id === 'vista-' + nombre));
+            document.querySelectorAll('.nav-item').forEach(b => {
+                const activo = b.dataset.vista === nombre;
+                b.classList.toggle('activo', activo);
+                b.setAttribute('aria-current', activo ? 'page' : 'false');
+            });
+            document.getElementById('tituloVista').textContent = document.getElementById('vista-' + nombre).dataset.titulo;
+            window.scrollTo(0, scrollGuardado[nombre] || 0);
+
+            // El gráfico necesita estar visible para medir el ancho
+            if (nombre === 'progreso' && historialCargas.length) dibujarProgreso();
+
+            // El botón "atrás" del celular vuelve a la pestaña anterior
+            if (guardarHistorial) history.pushState({ vista: nombre }, '', '#' + nombre);
+        }
+
+        function irA(nombre) { mostrarVista(nombre); }
+
+        document.querySelectorAll('.nav-item').forEach(b => b.addEventListener('click', () => mostrarVista(b.dataset.vista)));
+        window.addEventListener('popstate', (e) => {
+            mostrarVista((e.state && e.state.vista) || location.hash.slice(1) || 'inicio', { guardarHistorial: false });
+        });
+
+        // Al abrir, se respeta la pestaña de la URL (ej: cliente.html#progreso)
+        const vistaInicial = location.hash.slice(1);
+        history.replaceState({ vista: VISTAS.includes(vistaInicial) ? vistaInicial : 'inicio' }, '', location.hash || '#inicio');
+        if (VISTAS.includes(vistaInicial) && vistaInicial !== 'inicio') {
+            vistaActual = '';
+            mostrarVista(vistaInicial, { guardarHistorial: false });
+        }
+
+        // ================= PUNTOS ROJOS, PERFIL Y "HOY TE TOCA" =================
+        function marcarAviso(id, mostrar) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('visible', Boolean(mostrar));
+        }
+
+        function iniciales(nombre) {
+            const partes = String(nombre || '').trim().split(/\s+/).filter(Boolean);
+            return ((partes[0] || '?')[0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
+        }
+
+        function mostrarPerfil(miData) {
+            const ini = iniciales(miData.nombre || socioNombre);
+            document.getElementById('avatarNav').textContent = ini;
+            document.getElementById('avatarGrande').textContent = ini;
+            document.getElementById('perfilNombre').textContent = miData.nombre || socioNombre || '';
+            document.getElementById('perfilPlan').textContent = miData.planElegido ? 'Plan ' + miData.planElegido : '';
+            document.getElementById('nombreCliente').textContent = String(miData.nombre || socioNombre || '').split(' ')[0];
+            // Punto rojo en Perfil si falta completar la ficha
+            marcarAviso('avisoPerfil', !miData.peso || !miData.altura || !miData.sexo);
+        }
+
+        function mostrarHoyTeToca() {
+            const card = document.getElementById('cardHoy');
+            if (!rutinaDias.length) { card.style.display = 'none'; return; }
+            const i = (diaSugerido ?? 0) < rutinaDias.length ? (diaSugerido ?? 0) : 0;
+            const dia = rutinaDias[i];
+            const nombres = dia.ejercicios.map(e => e.nombre);
+            document.getElementById('hoyTitulo').innerHTML = `Día ${i + 1}${dia.nombre ? ` · <span>${esc(dia.nombre)}</span>` : ''}`;
+            document.getElementById('hoyDetalle').textContent =
+                `${nombres.length} ${nombres.length === 1 ? 'ejercicio' : 'ejercicios'}: ${nombres.slice(0, 4).join(', ')}${nombres.length > 4 ? '…' : ''}`;
+            card.style.display = '';
+        }
+
+        // Frase del día en el saludo
+        (function () {
+            const frases = ['¿Listo para entrenar?', 'Break your limits 💪', 'Hoy es un buen día para superarte', 'Una rep más que ayer', 'La constancia le gana al talento'];
+            document.getElementById('fraseDia').textContent = frases[new Date().getDate() % frases.length];
+        })();
 
         function cerrarSesion() { localStorage.clear(); window.location.href = 'login.html'; }
         document.addEventListener('DOMContentLoaded', () => { cargarDatosPerfil(); cargarAsistencias(); });
