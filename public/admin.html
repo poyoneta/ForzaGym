@@ -366,6 +366,7 @@
         /* ================= ASISTENCIA ================= */
         .kpis-asistencia { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.2rem; }
         .graficos-asistencia { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.2rem; }
+        .graficos-asistencia > div { min-width: 0; }   /* deja que los gráficos se achiquen en el celular */
         .graficos-asistencia h4 { margin: 0 0 0.6rem 0; font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.4px; }
         .grafico-chico { position: relative; height: 200px; }
         .grafico-chico svg text { font-family: 'Montserrat', sans-serif; }
@@ -398,142 +399,366 @@
             .grid-plan .completo { grid-column: span 1; }
             .contador-resultados { margin-left: 0; width: 100%; }
         }
+
+        /* ================= NAVEGACIÓN ESTILO APP (igual que el panel del socio) ================= */
+        :root { --alto-nav: 64px; --alto-barra: 56px; }
+        body {
+            padding: calc(var(--alto-barra) + 1.2rem) 1.2rem calc(var(--alto-nav) + 1.5rem + env(safe-area-inset-bottom));
+            -webkit-tap-highlight-color: transparent;
+        }
+        .barra-app {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            height: var(--alto-barra);
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+            padding: 0 1.2rem;
+            background: rgba(11, 11, 11, 0.94); backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1c1c1c;
+        }
+        .marca-app { display: flex; align-items: center; gap: 0.5rem; font-weight: 900; font-size: 1rem; letter-spacing: -0.3px; }
+        .marca-app img { width: 30px; height: 30px; }
+        .marca-app strong { color: #39e4a5; }
+        .titulo-vista { margin: 0; font-size: 0.8rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .vista { display: none; }
+        .vista.activa { display: block; animation: aparecerVista 0.22s ease; }
+        @keyframes aparecerVista { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        @media (prefers-reduced-motion: reduce) { .vista.activa { animation: none; } }
+
+        .saludo { margin: 0 0 1.2rem; }
+        .saludo p { margin: 0; font-size: 1.5rem; font-weight: 900; }
+        .saludo p span { color: #39e4a5; }
+        .saludo small { color: #888; font-size: 0.9rem; }
+
+        .nav-app {
+            position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+            display: flex; justify-content: space-around; align-items: center;
+            height: calc(var(--alto-nav) + env(safe-area-inset-bottom));
+            padding: 0 0.4rem env(safe-area-inset-bottom);
+            background: #0d0e10; border-top: 1px solid #1c1c1c;
+        }
+        .nav-item {
+            position: relative; flex: 1 1 0; max-width: 120px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: none; border: none; border-radius: 24px; cursor: pointer;
+            color: #e8e8e8; transition: background 0.2s, color 0.2s, transform 0.1s;
+        }
+        .nav-item:active { transform: scale(0.92); }
+        .nav-item:focus-visible { outline: 2px solid #39e4a5; outline-offset: -2px; }
+        .nav-item.activo { color: #fff; background: #24262a; }
+        .icono-nav {
+            width: 27px; height: 27px; fill: none; stroke: currentColor;
+            stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8;
+        }
+        .icono-nav .relleno, .icono-nav .relleno-suave { fill: none; }
+        .nav-item.activo .icono-nav { opacity: 1; stroke-width: 2.2; }
+        .nav-item.activo .icono-nav .relleno { fill: currentColor; }
+        .nav-item.activo .icono-nav .relleno-suave { fill: currentColor; }
+        .nav-item.activo .icono-nav .tilde { stroke: #0d0e10; }
+        .avatar-nav {
+            width: 32px; height: 32px; border-radius: 50%; box-sizing: border-box;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #39e4a5, #1f9e70); color: #000;
+            font-size: 0.75rem; font-weight: 900; border: 2px solid transparent;
+        }
+        .nav-item.activo .avatar-nav { border-color: #fff; }
+
+        /* Numerito rojo (como Instagram) y punto rojo */
+        .contador-aviso {
+            display: none; position: absolute; top: 4px; left: calc(50% + 4px);
+            min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box;
+            border-radius: 10px; background: #ff3b47; color: #fff; border: 2px solid #0d0e10;
+            font-size: 0.68rem; font-weight: 900; line-height: 16px; text-align: center;
+        }
+        .contador-aviso.visible { display: block; }
+        .punto-aviso {
+            display: none; position: absolute; top: 9px; right: calc(50% - 20px);
+            width: 10px; height: 10px; border-radius: 50%; background: #ff3b47; border: 2px solid #0d0e10;
+        }
+        .punto-aviso.visible { display: block; }
+
+        /* Inicio */
+        .hoy-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .tile-hoy {
+            background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 8px; padding: 1rem 1.1rem;
+            text-align: left; color: #fff; font-family: 'Montserrat', sans-serif; cursor: pointer; transition: 0.2s;
+        }
+        .tile-hoy:hover { border-color: #444; }
+        .tile-hoy span { display: block; font-size: 0.7rem; color: #888; font-weight: bold; text-transform: uppercase; letter-spacing: 0.4px; }
+        .tile-hoy strong { display: block; font-size: 1.5rem; font-weight: 900; margin-top: 0.2rem; }
+        .lista-atender { list-style: none; padding: 0; margin: 0; }
+        .lista-atender li {
+            display: flex; justify-content: space-between; align-items: center; gap: 0.8rem;
+            padding: 0.75rem 0.9rem; background: #111; border: 1px solid #222; border-radius: 8px; margin-bottom: 0.5rem;
+        }
+        .lista-atender .quien strong { display: block; font-size: 0.92rem; }
+        .lista-atender .quien small { font-size: 0.75rem; font-weight: bold; }
+        .lista-atender .vacia { color: #666; justify-content: center; font-size: 0.9rem; }
+
+        /* Admin */
+        .perfil-cabecera { display: flex; align-items: center; gap: 1rem; margin: 0 0 1.5rem; }
+        .avatar-grande {
+            width: 76px; height: 76px; border-radius: 50%; flex: 0 0 auto;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #39e4a5, #1f9e70); color: #000; font-size: 1.6rem; font-weight: 900;
+            box-shadow: 0 0 0 3px #0b0b0b, 0 0 0 5px #39e4a5;
+        }
+        .perfil-nombre { margin: 0; font-size: 1.3rem; font-weight: 900; }
+        .perfil-plan { margin: 0.2rem 0 0; color: #39e4a5; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
+        .menu-admin { display: flex; flex-direction: column; gap: 0.6rem; max-width: 600px; }
+        .opcion-admin {
+            display: flex; align-items: center; gap: 1rem; width: 100%; box-sizing: border-box;
+            padding: 1rem 1.1rem; background: #1a1a1a; border: 1px solid #2d2d2d; border-radius: 10px;
+            color: #fff; text-decoration: none; text-align: left; cursor: pointer; font-family: 'Montserrat', sans-serif;
+        }
+        .opcion-admin:hover { border-color: #39e4a5; }
+        .opcion-admin > i:first-child { color: #39e4a5; font-size: 1.2rem; width: 1.5rem; text-align: center; }
+        .opcion-admin span { flex: 1; display: flex; flex-direction: column; gap: 0.15rem; }
+        .opcion-admin small { color: #888; font-size: 0.78rem; }
+        .opcion-admin .flecha { color: #555; }
+        .opcion-salir > i:first-child, .opcion-salir strong { color: #ff4d4d; }
+        .opcion-salir:hover { border-color: #ff4d4d; }
+
+        @media (min-width: 700px) {
+            .nav-app { justify-content: center; gap: 1.5rem; }
+            .nav-item { flex: 0 0 96px; }
+        }
+
+        /* ===== En el celular: la tabla de socios pasa a tarjetas ===== */
+        @media (max-width: 760px) {
+            body { padding-left: 0.9rem; padding-right: 0.9rem; }
+            .hoy-grid { grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+            .card-tabla { padding: 1rem; overflow: visible; }
+            .card-tabla table, .card-tabla tbody { display: block; }
+            .card-tabla thead { display: none; }
+            .card-tabla tr {
+                display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 0.8rem;
+                background: #111; border: 1px solid #262626; border-radius: 10px;
+                padding: 0.9rem 1rem; margin-bottom: 0.7rem;
+            }
+            .card-tabla tr.fila-vencido { border-left: 4px solid #ff4d4d; }
+            .card-tabla tr.fila-pronto { border-left: 4px solid #ffb020; }
+            .card-tabla tr td { padding: 0; border: none; font-size: 0.85rem; box-shadow: none !important; }
+            .card-tabla tr td:nth-child(1) { display: none; }                                        /* ID */
+            .card-tabla tr td:nth-child(2) { grid-column: 1; font-size: 1rem; }                       /* Nombre */
+            .card-tabla tr td:nth-child(5) { grid-column: 2; grid-row: 1; text-align: right; }        /* Plan */
+            .card-tabla tr td:nth-child(3) { grid-column: 1 / -1; color: #888; font-size: 0.8rem; word-break: break-all; } /* Email */
+            .card-tabla tr td:nth-child(4) { grid-column: 1 / -1; color: #888; font-size: 0.8rem; }   /* Teléfono */
+            .card-tabla tr td:nth-child(6) { grid-column: 1 / -1; margin-top: 0.4rem; display: flex; align-items: center; gap: 0.6rem; } /* Vencimiento */
+            .card-tabla tr td:nth-child(6) .venc-estado { margin-top: 0; }
+            .card-tabla tr td.acciones { grid-column: 1 / -1; display: flex; gap: 0.4rem; margin-top: 0.7rem; white-space: normal; }
+            .card-tabla tr td.acciones .btn { flex: 1; justify-content: center; margin: 0; padding: 0.6rem 0.4rem; }
+            .card-tabla tr td.sin-resultados { grid-column: 1 / -1; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ================= BARRA SUPERIOR ================= -->
+    <header class="barra-app">
+        <div class="marca-app">
+            <img src="imagenes/logo-splash.png" alt="">
+            <span>FORZA <strong>GYM</strong></span>
+        </div>
+        <h1 class="titulo-vista" id="tituloVista">Inicio</h1>
+    </header>
+
     <div class="container">
-        <header class="header">
-            <h1>Panel <span>Backoffice</span></h1>
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <a href="configuracion.html" class="btn btn-sitio"><i class="fa-solid fa-pen-to-square"></i> Editar sitio</a>
-                <button class="btn btn-logout" onclick="cerrarSesion()"><i class="fa-solid fa-right-from-bracket"></i> Salir</button>
+
+        <!-- ================= INICIO ================= -->
+        <main class="vista activa" id="vista-inicio" data-titulo="Inicio">
+            <div class="saludo">
+                <p>Hola, <span>Admin</span> 👋</p>
+                <small id="fechaHoy"></small>
             </div>
-        </header>
 
-        <!-- Resumen: al tocar una tarjeta se filtra la tabla -->
-        <div class="resumen">
-            <button class="stat total" data-estado="todos"><span>Socios</span><strong id="statTotal">0</strong></button>
-            <button class="stat ok" data-estado="ok"><span>Activos</span><strong id="statActivos">0</strong></button>
-            <button class="stat pronto" data-estado="pronto"><span>Vencen en 7 días</span><strong id="statPronto">0</strong></button>
-            <button class="stat vencido" data-estado="vencido"><span>Vencidos</span><strong id="statVencidos">0</strong></button>
-        </div>
+            <!-- Resumen: al tocar una tarjeta se filtra la tabla -->
+            <div class="resumen">
+                <button class="stat total" data-estado="todos"><span>Socios</span><strong id="statTotal">0</strong></button>
+                <button class="stat ok" data-estado="ok"><span>Activos</span><strong id="statActivos">0</strong></button>
+                <button class="stat pronto" data-estado="pronto"><span>Vencen en 7 días</span><strong id="statPronto">0</strong></button>
+                <button class="stat vencido" data-estado="vencido"><span>Vencidos</span><strong id="statVencidos">0</strong></button>
+            </div>
 
-        <!-- ================= PAGOS POR MES ================= -->
-        <div class="card-pagos">
-            <div class="card-pagos-header">
-                <h3><i class="fa-solid fa-chart-column"></i> Pagos por mes</h3>
-                <div class="controles-pagos">
-                    <select id="rangoMeses" aria-label="Cantidad de meses del gráfico">
-                        <option value="6">Últimos 6 meses</option>
-                        <option value="12">Últimos 12 meses</option>
+            <div class="hoy-grid">
+                <button class="tile-hoy" onclick="irA('asistencia')"><span>Vinieron hoy</span><strong id="inicioHoy">–</strong></button>
+                <button class="tile-hoy" onclick="irA('pagos')"><span>Recaudado este mes</span><strong id="inicioRecaudado">–</strong></button>
+                <button class="tile-hoy" onclick="irA('pagos')"><span>Pagaron este mes</span><strong id="inicioPagaron">–</strong></button>
+                <button class="tile-hoy" onclick="irA('asistencia')"><span>No vienen hace +14 días</span><strong id="inicioAusentes">–</strong></button>
+            </div>
+
+            <div class="card-pagos">
+                <div class="card-pagos-header">
+                    <h3><i class="fa-solid fa-bell" style="color:#ffb020"></i> Para atender</h3>
+                </div>
+                <ul class="lista-atender" id="listaAtender"></ul>
+            </div>
+        </main>
+
+        <!-- ================= SOCIOS ================= -->
+        <main class="vista" id="vista-socios" data-titulo="Socios">
+            <div class="card-tabla">
+                <h3 style="margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.5px; color: #aaa; margin-bottom: 1.2rem;"><i class="fa-solid fa-users"></i> Socios Inscriptos</h3>
+
+                <div class="barra-filtros">
+                    <div class="buscador">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" id="filtroTexto" placeholder="Buscar por nombre, email o teléfono...">
+                    </div>
+                    <select id="filtroPlan">
+                        <option value="todos">Todos los planes</option>
+                        <option value="Básico">Básico</option>
+                        <option value="Plus">Plus</option>
+                        <option value="Premium">Premium</option>
+                        <option value="otro">Otro / Sin plan</option>
                     </select>
-                    <select id="mesElegido" aria-label="Mes a ver en detalle"></select>
+                    <select id="filtroEstado">
+                        <option value="todos">Todos los estados</option>
+                        <option value="ok">Activos</option>
+                        <option value="pronto">Vencen en 7 días</option>
+                        <option value="vencido">Vencidos</option>
+                        <option value="sin">Sin fecha</option>
+                    </select>
+                    <span class="contador-resultados" id="contadorResultados"></span>
                 </div>
-            </div>
 
-            <div class="leyenda-pagos">
-                <span><i class="muestra" style="background:#39e4a5"></i> Pagaron</span>
-                <span><i class="muestra" style="background:#ff4d4d"></i> No pagaron</span>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Plan</th>
+                            <th>Vencimiento</th>
+                            <th style="text-align: right;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaSocios"></tbody>
+                </table>
             </div>
-            <div class="contenedor-grafico">
-                <div id="graficoPagos" role="img" aria-label="Gráfico de socios que pagaron y no pagaron por mes"></div>
-                <div class="tooltip-grafico" id="tooltipGrafico" role="status"></div>
-            </div>
-            <p class="aviso-historial" id="avisoHistorial"></p>
+        </main>
 
-            <div class="detalle-mes">
-                <h4>Detalle de <span id="tituloMes"></span></h4>
-                <div class="kpis-mes">
-                    <div class="kpi"><span>Socios</span><strong id="kpiSocios">0</strong><small id="kpiSociosDif"></small></div>
-                    <div class="kpi"><span>Pagaron</span><strong id="kpiPagaron">0</strong><small id="kpiPagaronDif"></small></div>
-                    <div class="kpi"><span>No pagaron</span><strong id="kpiNoPagaron">0</strong><small id="kpiNoPagaronDif"></small></div>
-                    <div class="kpi"><span>Nuevos socios</span><strong id="kpiNuevos">0</strong><small id="kpiNuevosDif"></small></div>
-                    <div class="kpi"><span>Recaudado</span><strong id="kpiRecaudado">$0</strong><small id="kpiRecaudadoDif"></small></div>
+        <!-- ================= PAGOS ================= -->
+        <main class="vista" id="vista-pagos" data-titulo="Pagos">
+            <!-- ================= PAGOS POR MES ================= -->
+            <div class="card-pagos">
+                <div class="card-pagos-header">
+                    <h3><i class="fa-solid fa-chart-column"></i> Pagos por mes</h3>
+                    <div class="controles-pagos">
+                        <select id="rangoMeses" aria-label="Cantidad de meses del gráfico">
+                            <option value="6">Últimos 6 meses</option>
+                            <option value="12">Últimos 12 meses</option>
+                        </select>
+                        <select id="mesElegido" aria-label="Mes a ver en detalle"></select>
+                    </div>
                 </div>
-                <div class="listas-mes">
-                    <details class="lista-mes" open>
-                        <summary><span><i class="punto-estado" style="background:#39e4a5"></i>Pagaron (<span id="cantPagaron">0</span>)</span></summary>
-                        <ul id="listaPagaron"></ul>
-                    </details>
-                    <details class="lista-mes" open>
-                        <summary><span><i class="punto-estado" style="background:#ff4d4d"></i>No pagaron (<span id="cantNoPagaron">0</span>)</span></summary>
-                        <ul id="listaNoPagaron"></ul>
-                    </details>
+
+                <div class="leyenda-pagos">
+                    <span><i class="muestra" style="background:#39e4a5"></i> Pagaron</span>
+                    <span><i class="muestra" style="background:#ff4d4d"></i> No pagaron</span>
+                </div>
+                <div class="contenedor-grafico">
+                    <div id="graficoPagos" role="img" aria-label="Gráfico de socios que pagaron y no pagaron por mes"></div>
+                    <div class="tooltip-grafico" id="tooltipGrafico" role="status"></div>
+                </div>
+                <p class="aviso-historial" id="avisoHistorial"></p>
+
+                <div class="detalle-mes">
+                    <h4>Detalle de <span id="tituloMes"></span></h4>
+                    <div class="kpis-mes">
+                        <div class="kpi"><span>Socios</span><strong id="kpiSocios">0</strong><small id="kpiSociosDif"></small></div>
+                        <div class="kpi"><span>Pagaron</span><strong id="kpiPagaron">0</strong><small id="kpiPagaronDif"></small></div>
+                        <div class="kpi"><span>No pagaron</span><strong id="kpiNoPagaron">0</strong><small id="kpiNoPagaronDif"></small></div>
+                        <div class="kpi"><span>Nuevos socios</span><strong id="kpiNuevos">0</strong><small id="kpiNuevosDif"></small></div>
+                        <div class="kpi"><span>Recaudado</span><strong id="kpiRecaudado">$0</strong><small id="kpiRecaudadoDif"></small></div>
+                    </div>
+                    <div class="listas-mes">
+                        <details class="lista-mes" open>
+                            <summary><span><i class="punto-estado" style="background:#39e4a5"></i>Pagaron (<span id="cantPagaron">0</span>)</span></summary>
+                            <ul id="listaPagaron"></ul>
+                        </details>
+                        <details class="lista-mes" open>
+                            <summary><span><i class="punto-estado" style="background:#ff4d4d"></i>No pagaron (<span id="cantNoPagaron">0</span>)</span></summary>
+                            <ul id="listaNoPagaron"></ul>
+                        </details>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
 
         <!-- ================= ASISTENCIA ================= -->
-        <div class="card-pagos" id="cardAsistencia">
-            <div class="card-pagos-header">
-                <h3><i class="fa-solid fa-person-walking-arrow-right"></i> Asistencia</h3>
-                <button class="btn btn-qr" onclick="abrirQR()"><i class="fa-solid fa-qrcode"></i> QR de la entrada</button>
+        <main class="vista" id="vista-asistencia" data-titulo="Asistencia">
+            <!-- ================= ASISTENCIA ================= -->
+            <div class="card-pagos" id="cardAsistencia">
+                <div class="card-pagos-header">
+                    <h3><i class="fa-solid fa-person-walking-arrow-right"></i> Asistencia</h3>
+                    <button class="btn btn-qr" onclick="abrirQR()"><i class="fa-solid fa-qrcode"></i> QR de la entrada</button>
+                </div>
+                <div class="kpis-asistencia">
+                    <div class="kpi"><span>Hoy</span><strong id="asisHoy">0</strong><small id="asisHoyDif"></small></div>
+                    <div class="kpi"><span>Esta semana</span><strong id="asisSemana">0</strong><small>visitas</small></div>
+                    <div class="kpi"><span>Este mes</span><strong id="asisMes">0</strong><small id="asisMesPersonas"></small></div>
+                    <div class="kpi"><span>Promedio por día</span><strong id="asisPromedio">0</strong><small>este mes</small></div>
+                </div>
+                <div class="graficos-asistencia">
+                    <div>
+                        <h4>Visitas por día (últimos 30 días)</h4>
+                        <div class="grafico-chico" id="graficoDias"></div>
+                    </div>
+                    <div>
+                        <h4>Horarios más concurridos (últimos 30 días)</h4>
+                        <div class="grafico-chico" id="graficoHoras"></div>
+                    </div>
+                </div>
+                <div class="tooltip-grafico" id="tooltipAsistencia" style="position: fixed;"></div>
+                <div class="ausentes">
+                    <h4><i class="fa-solid fa-user-clock" style="color:#ffb020"></i> No vienen hace más de 14 días <small>(con el plan al día)</small></h4>
+                    <ul class="lista-ausentes" id="listaAusentes"></ul>
+                </div>
             </div>
-            <div class="kpis-asistencia">
-                <div class="kpi"><span>Hoy</span><strong id="asisHoy">0</strong><small id="asisHoyDif"></small></div>
-                <div class="kpi"><span>Esta semana</span><strong id="asisSemana">0</strong><small>visitas</small></div>
-                <div class="kpi"><span>Este mes</span><strong id="asisMes">0</strong><small id="asisMesPersonas"></small></div>
-                <div class="kpi"><span>Promedio por día</span><strong id="asisPromedio">0</strong><small>este mes</small></div>
-            </div>
-            <div class="graficos-asistencia">
+        </main>
+
+        <!-- ================= ADMIN ================= -->
+        <main class="vista" id="vista-admin" data-titulo="Administración">
+            <section class="perfil-cabecera">
+                <div class="avatar-grande">AD</div>
                 <div>
-                    <h4>Visitas por día (últimos 30 días)</h4>
-                    <div class="grafico-chico" id="graficoDias"></div>
+                    <p class="perfil-nombre" id="adminNombre">Administrador</p>
+                    <p class="perfil-plan">Forza Gym · Backoffice</p>
                 </div>
-                <div>
-                    <h4>Horarios más concurridos (últimos 30 días)</h4>
-                    <div class="grafico-chico" id="graficoHoras"></div>
-                </div>
+            </section>
+            <div class="menu-admin">
+                <a href="configuracion.html" class="opcion-admin">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span><strong>Editar sitio</strong><small>Planes, precios, horarios e indumentaria</small></span>
+                    <i class="fa-solid fa-chevron-right flecha"></i>
+                </a>
+                <button type="button" class="opcion-admin" onclick="abrirQR()">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <span><strong>QR de la entrada</strong><small>Imprimir o generar uno nuevo</small></span>
+                    <i class="fa-solid fa-chevron-right flecha"></i>
+                </button>
+                <a href="index.html" target="_blank" class="opcion-admin">
+                    <i class="fa-solid fa-globe"></i>
+                    <span><strong>Ver la página</strong><small>Cómo la ven los visitantes</small></span>
+                    <i class="fa-solid fa-chevron-right flecha"></i>
+                </a>
+                <button type="button" class="opcion-admin opcion-salir" onclick="cerrarSesion()">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span><strong>Cerrar sesión</strong></span>
+                </button>
             </div>
-            <div class="tooltip-grafico" id="tooltipAsistencia" style="position: fixed;"></div>
-            <div class="ausentes">
-                <h4><i class="fa-solid fa-user-clock" style="color:#ffb020"></i> No vienen hace más de 14 días <small>(con el plan al día)</small></h4>
-                <ul class="lista-ausentes" id="listaAusentes"></ul>
-            </div>
-        </div>
-
-        <div class="card-tabla">
-            <h3 style="margin-top: 0; text-transform: uppercase; font-size: 1rem; letter-spacing: 0.5px; color: #aaa; margin-bottom: 1.2rem;"><i class="fa-solid fa-users"></i> Socios Inscriptos</h3>
-
-            <div class="barra-filtros">
-                <div class="buscador">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="search" id="filtroTexto" placeholder="Buscar por nombre, email o teléfono...">
-                </div>
-                <select id="filtroPlan">
-                    <option value="todos">Todos los planes</option>
-                    <option value="Básico">Básico</option>
-                    <option value="Plus">Plus</option>
-                    <option value="Premium">Premium</option>
-                    <option value="otro">Otro / Sin plan</option>
-                </select>
-                <select id="filtroEstado">
-                    <option value="todos">Todos los estados</option>
-                    <option value="ok">Activos</option>
-                    <option value="pronto">Vencen en 7 días</option>
-                    <option value="vencido">Vencidos</option>
-                    <option value="sin">Sin fecha</option>
-                </select>
-                <span class="contador-resultados" id="contadorResultados"></span>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Teléfono</th>
-                        <th>Plan</th>
-                        <th>Vencimiento</th>
-                        <th style="text-align: right;">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaSocios"></tbody>
-            </table>
-        </div>
+        </main>
     </div>
+
+    <!-- ================= BARRA DE NAVEGACIÓN (estilo Instagram) ================= -->
+    <nav class="nav-app" aria-label="Secciones">
+        <button type="button" class="nav-item activo" data-vista="inicio" aria-label="Inicio"><svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><path class="relleno" d="M3.5 10.2 12 3.5l8.5 6.7V20a1 1 0 0 1-1 1h-5v-6h-5v6h-5a1 1 0 0 1-1-1z"/></svg></button>
+        <button type="button" class="nav-item" data-vista="socios" aria-label="Socios"><svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><circle class="relleno" cx="9" cy="8" r="3.5"/><path class="relleno" d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z"/><path d="M15.5 4.8a3.4 3.4 0 0 1 0 6.4M17.5 14.3c2.4.6 4 2.6 4 5.7h-3"/></svg><span class="contador-aviso" id="contadorSocios"></span></button>
+        <button type="button" class="nav-item" data-vista="pagos" aria-label="Pagos"><svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><rect class="relleno" x="3.5" y="12" width="4" height="8.5" rx="1"/><rect class="relleno" x="10" y="7" width="4" height="13.5" rx="1"/><rect class="relleno" x="16.5" y="3.5" width="4" height="17" rx="1"/></svg></button>
+        <button type="button" class="nav-item" data-vista="asistencia" aria-label="Asistencia"><svg class="icono-nav" viewBox="0 0 24 24" aria-hidden="true"><rect class="relleno-suave" x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/><path class="tilde" d="m8.5 14.5 2.3 2.3 4.7-4.7"/></svg></button>
+        <button type="button" class="nav-item" data-vista="admin" aria-label="Administración"><span class="avatar-nav">AD</span></button>
+    </nav>
 
     <div id="modalFicha" class="modal">
         <div class="modal-content">
@@ -808,6 +1033,13 @@
             document.getElementById('statActivos').textContent = cuenta.ok + cuenta.pronto;
             document.getElementById('statPronto').textContent = cuenta.pronto;
             document.getElementById('statVencidos').textContent = cuenta.vencido;
+
+            // Numerito rojo en la pestaña Socios: vencidos + los que vencen en 7 días
+            const paraAtender = cuenta.vencido + cuenta.pronto;
+            const contador = document.getElementById('contadorSocios');
+            contador.textContent = paraAtender > 99 ? '99+' : paraAtender;
+            contador.classList.toggle('visible', paraAtender > 0);
+            actualizarInicio();
         }
 
         function renderTabla() {
@@ -884,6 +1116,7 @@
                 document.getElementById('filtroEstado').value = btn.dataset.estado;
                 marcarStatActiva();
                 renderTabla();
+                irA('socios');
             });
         });
 
@@ -1394,6 +1627,7 @@
 
             dibujarGrafico();
             mostrarDetalleMes(mesSeleccionado);
+            actualizarInicio();
         }
 
         // Gráfico de barras apiladas hecho a mano en SVG (no depende de ninguna librería)
@@ -1696,6 +1930,8 @@
                 .sort((a, b) => (b.dias ?? 9999) - (a.dias ?? 9999));
 
             const lista = document.getElementById('listaAusentes');
+            cantidadAusentes = ausentes.length;
+            actualizarInicio();
             if (ausentes.length === 0) {
                 lista.innerHTML = '<li style="color:#666; justify-content:center;">Todos los socios activos vinieron en las últimas dos semanas 💪</li>';
                 return;
@@ -1768,6 +2004,99 @@
                 <p>Abrí la cámara del celular y apuntá al código 📲</p>
                 </body></html>`);
             v.document.close();
+        }
+
+
+        // ================= NAVEGACIÓN ENTRE PESTAÑAS (barra de abajo) =================
+        const VISTAS = ['inicio', 'socios', 'pagos', 'asistencia', 'admin'];
+        const scrollGuardado = {};
+        let vistaActual = 'inicio';
+        let cantidadAusentes = null;
+
+        function mostrarVista(nombre, { guardarHistorial = true } = {}) {
+            if (!VISTAS.includes(nombre)) nombre = 'inicio';
+            // Tocar la pestaña en la que ya estás vuelve arriba
+            if (nombre === vistaActual && document.getElementById('vista-' + nombre).classList.contains('activa')) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+            scrollGuardado[vistaActual] = window.scrollY;
+            vistaActual = nombre;
+            document.querySelectorAll('.vista').forEach(v => v.classList.toggle('activa', v.id === 'vista-' + nombre));
+            document.querySelectorAll('.nav-item').forEach(b => {
+                const activo = b.dataset.vista === nombre;
+                b.classList.toggle('activo', activo);
+                b.setAttribute('aria-current', activo ? 'page' : 'false');
+            });
+            document.getElementById('tituloVista').textContent = document.getElementById('vista-' + nombre).dataset.titulo;
+            window.scrollTo(0, scrollGuardado[nombre] || 0);
+
+            // Los gráficos necesitan estar visibles para medir el ancho
+            if (nombre === 'pagos' && mesSeleccionado) dibujarGrafico();
+            if (nombre === 'asistencia' && listaAsistencias) armarAsistencia();
+
+            if (guardarHistorial) history.pushState({ vista: nombre }, '', '#' + nombre);
+        }
+
+        function irA(nombre) { mostrarVista(nombre); }
+
+        document.querySelectorAll('.nav-item').forEach(b => b.addEventListener('click', () => mostrarVista(b.dataset.vista)));
+        window.addEventListener('popstate', (e) => {
+            mostrarVista((e.state && e.state.vista) || location.hash.slice(1) || 'inicio', { guardarHistorial: false });
+        });
+
+        const vistaInicial = location.hash.slice(1);
+        history.replaceState({ vista: VISTAS.includes(vistaInicial) ? vistaInicial : 'inicio' }, '', location.hash || '#inicio');
+        if (VISTAS.includes(vistaInicial) && vistaInicial !== 'inicio') {
+            vistaActual = '';
+            mostrarVista(vistaInicial, { guardarHistorial: false });
+        }
+
+        // ================= INICIO: números de hoy y "Para atender" =================
+        const textoFecha = new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+        document.getElementById('fechaHoy').textContent = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
+
+        function actualizarInicio() {
+            // Asistencias: ya cargadas cuando se calcularon los ausentes
+            if (cantidadAusentes !== null) {
+                document.getElementById('inicioHoy').textContent = listaAsistencias.filter(a => a.fecha === claveDia(new Date())).length;
+                document.getElementById('inicioAusentes').textContent = cantidadAusentes;
+            }
+            // Pagos: ya cargados cuando hay un mes elegido en el gráfico
+            if (mesSeleccionado && listaSociosGlobal.length) {
+                const mes = calcularMes(claveMes(new Date()));
+                document.getElementById('inicioRecaudado').textContent = formatearPesos(mes.recaudado);
+                document.getElementById('inicioPagaron').textContent = `${mes.pagaron.length} de ${mes.socios}`;
+            }
+            armarParaAtender();
+        }
+
+        // Socios que vencen en los próximos 7 días o vencieron hace poco: para renovarles el plan
+        function armarParaAtender() {
+            const lista = document.getElementById('listaAtender');
+            const items = sociosSinAdmin()
+                .map(s => ({ socio: s, estado: estadoSocio(s) }))
+                .filter(({ estado }) => estado.clave === 'pronto' || (estado.clave === 'vencido' && estado.dias >= -15))
+                // Primero los que vencen (el más próximo arriba), después los vencidos (el más reciente arriba)
+                .sort((a, b) => {
+                    if (a.estado.clave !== b.estado.clave) return a.estado.clave === 'pronto' ? -1 : 1;
+                    return a.estado.clave === 'pronto' ? a.estado.dias - b.estado.dias : b.estado.dias - a.estado.dias;
+                });
+
+            if (!items.length) {
+                lista.innerHTML = '<li class="vacia">No hay planes por vencer esta semana 🎉</li>';
+                return;
+            }
+            const color = { pronto: '#ffb020', vencido: '#ff4d4d' };
+            lista.innerHTML = items.slice(0, 12).map(({ socio, estado }) => `
+                <li>
+                    <span class="quien">
+                        <strong>${esc(socio.nombre)}</strong>
+                        <small style="color:${color[estado.clave]}">${textoEstado(estado)} · ${esc(socio.planElegido || 'Sin plan')}</small>
+                    </span>
+                    <button class="btn btn-plan" onclick="abrirEditorPlan(${socio.id})"><i class="fa-solid fa-calendar-check"></i> Renovar</button>
+                </li>`).join('') +
+                (items.length > 12 ? `<li class="vacia"><a href="#" onclick="document.getElementById('filtroEstado').value='todos'; renderTabla(); irA('socios'); return false;" style="color:#39e4a5">Ver los ${items.length} en Socios</a></li>` : '');
         }
 
         function cerrarModal(id) { document.getElementById(id).style.display = 'none'; }
