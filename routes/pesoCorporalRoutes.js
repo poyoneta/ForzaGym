@@ -9,23 +9,37 @@ const HOY_ARGENTINA = "(NOW() AT TIME ZONE 'America/Argentina/Buenos_Aires')::da
 // indumentaria, sino con un código al azar de 32 caracteres imposible de adivinar.
 const urlFoto = clave => (clave ? `/api/peso-corporal/foto/${clave}` : null);
 
+// Medidas corporales que se pueden registrar (en centímetros)
+const MEDIDAS = ["cintura", "cadera", "pecho", "brazo", "muslo"];
+
 function fila(r) {
     return {
         id: r.id,
         fecha: r.fecha,
-        peso: Number(r.peso),
+        peso: r.peso === null ? null : Number(r.peso),
+        medidas: r.medidas || {},
         nota: r.nota || "",
         foto: urlFoto(r.foto_clave)
     };
+}
+
+// Deja solo medidas válidas: { cintura: 88.5, brazo: 35 }
+function limpiarMedidas(m) {
+    const limpias = {};
+    MEDIDAS.forEach(nombre => {
+        const valor = Math.round(Number(String((m || {})[nombre] ?? "").replace(",", ".")) * 10) / 10;
+        if (valor >= 10 && valor <= 250) limpias[nombre] = valor;
+    });
+    return limpias;
 }
 
 // Después de guardar o borrar, la ficha del socio queda con el último peso registrado
 async function actualizarPesoFicha(socioId) {
     await db.query(
         `UPDATE socios SET peso = (
-             SELECT peso FROM registros_peso_corporal WHERE socio_id = $1 ORDER BY fecha DESC LIMIT 1
+             SELECT peso FROM registros_peso_corporal WHERE socio_id = $1 AND peso IS NOT NULL ORDER BY fecha DESC LIMIT 1
          ) WHERE id = $1
-         AND EXISTS (SELECT 1 FROM registros_peso_corporal WHERE socio_id = $1)`,
+         AND EXISTS (SELECT 1 FROM registros_peso_corporal WHERE socio_id = $1 AND peso IS NOT NULL)`,
         [socioId]
     );
 }
@@ -54,7 +68,7 @@ router.get("/foto/:clave", async (req, res) => {
 router.get("/:socioId", async (req, res) => {
     try {
         const r = await db.query(
-            `SELECT id, to_char(fecha, 'YYYY-MM-DD') AS fecha, peso, nota, foto_clave
+            `SELECT id, to_char(fecha, 'YYYY-MM-DD') AS fecha, peso, medidas, nota, foto_clave
              FROM registros_peso_corporal WHERE socio_id = $1 ORDER BY fecha ASC`,
             [req.params.socioId]
         );
@@ -66,18 +80,24 @@ router.get("/:socioId", async (req, res) => {
 });
 
 // ==========================================
-// 3. REGISTRAR PESO (POST /api/peso-corporal/:socioId)  { peso, fecha?, nota?, foto? (dataURL) }
+// 3. REGISTRAR (POST /api/peso-corporal/:socioId)  { peso?, medidas?, fecha?, nota?, foto? (dataURL) }
+//    Hace falta al menos uno: peso, alguna medida o una foto.
 //    Un registro por día: si ya cargaste ese día, se actualiza.
 //    Si no mandás foto nueva, se conserva la que había.
 // ==========================================
 router.post("/:socioId", async (req, res) => {
     const socioId = Number(req.params.socioId);
-    const peso = Math.round(Number(String(req.body.peso).replace(",", ".")) * 10) / 10;
+    const pesoTexto = String(req.body.peso ?? "").trim();
+    const peso = pesoTexto === "" ? null : Math.round(Number(pesoTexto.replace(",", ".")) * 10) / 10;
+    const medidas = limpiarMedidas(req.body.medidas);
     const nota = String(req.body.nota || "").trim().slice(0, 200);
     const fecha = /^\d{4}-\d{2}-\d{2}$/.test(req.body.fecha || "") ? req.body.fecha : null;
 
     if (!socioId) return res.status(400).json({ error: "Falta el socio" });
-    if (!(peso >= 30 && peso <= 300)) return res.status(400).json({ error: "Revisá el peso (en kg)" });
+    if (peso !== null && !(peso >= 30 && peso <= 300)) return res.status(400).json({ error: "Revisá el peso (en kg)" });
+    if (peso === null && !Object.keys(medidas).length && !req.body.foto) {
+        return res.status(400).json({ error: "Cargá tu peso, alguna medida o una foto" });
+    }
 
     let foto = null, fotoTipo = null;
     if (req.body.foto) {
@@ -95,17 +115,19 @@ router.post("/:socioId", async (req, res) => {
         // La fecha no puede ser futura ni de hace más de 2 años
         const fechaSql = `LEAST(GREATEST(COALESCE($5::date, ${HOY_ARGENTINA}), (${HOY_ARGENTINA} - interval '2 years')::date), ${HOY_ARGENTINA})`;
         const r = await db.query(
-            `INSERT INTO registros_peso_corporal (socio_id, fecha, peso, nota, foto, foto_tipo, foto_clave)
-             VALUES ($1, ${fechaSql}, $2, $3, $4, $6, CASE WHEN $4::bytea IS NULL THEN NULL ELSE $7 END)
+            `INSERT INTO registros_peso_corporal (socio_id, fecha, peso, medidas, nota, foto, foto_tipo, foto_clave)
+             VALUES ($1, ${fechaSql}, $2, $8, $3, $4, $6, CASE WHEN $4::bytea IS NULL THEN NULL ELSE $7 END)
              ON CONFLICT (socio_id, fecha) DO UPDATE SET
                  peso = EXCLUDED.peso,
+                 medidas = EXCLUDED.medidas,
                  nota = EXCLUDED.nota,
                  foto = COALESCE(EXCLUDED.foto, registros_peso_corporal.foto),
                  foto_tipo = COALESCE(EXCLUDED.foto_tipo, registros_peso_corporal.foto_tipo),
                  foto_clave = COALESCE(EXCLUDED.foto_clave, registros_peso_corporal.foto_clave),
                  creado = NOW()
-             RETURNING id, to_char(fecha, 'YYYY-MM-DD') AS fecha, peso, nota, foto_clave`,
-            [socioId, peso, nota || null, foto, fecha, fotoTipo, crypto.randomBytes(16).toString("hex")]
+             RETURNING id, to_char(fecha, 'YYYY-MM-DD') AS fecha, peso, medidas, nota, foto_clave`,
+            [socioId, peso, nota || null, foto, fecha, fotoTipo, crypto.randomBytes(16).toString("hex"),
+             Object.keys(medidas).length ? JSON.stringify(medidas) : null]
         );
         await actualizarPesoFicha(socioId);
         res.status(201).json(fila(r.rows[0]));
@@ -126,7 +148,12 @@ router.delete("/:socioId/:id/foto", async (req, res) => {
             [req.params.id, req.params.socioId]
         );
         if (r.rowCount === 0) return res.status(404).json({ error: "No encontramos ese registro" });
-        res.json({ ok: true });
+        // Si el registro era solo la foto, queda vacío y se borra
+        const borrado = await db.query(
+            `DELETE FROM registros_peso_corporal WHERE id = $1 AND socio_id = $2 AND peso IS NULL AND medidas IS NULL`,
+            [req.params.id, req.params.socioId]
+        );
+        res.json({ ok: true, registroBorrado: borrado.rowCount > 0 });
     } catch (error) {
         console.error("Error en DELETE foto /api/peso-corporal:", error);
         res.status(500).json({ error: "No se pudo borrar la foto" });

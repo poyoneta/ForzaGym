@@ -371,6 +371,87 @@
         .btn-peligro { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; }
         .btn-peligro:hover { background: #ff4d4d; color: #fff; }
 
+        /* Métricas del cuerpo (Peso / Cintura / ...) y medidas */
+        .chips-metrica { display: flex; gap: 0.4rem; overflow-x: auto; margin-bottom: 1rem; padding-bottom: 2px; }
+        .chip-metrica { flex: 0 0 auto; background: #111; border: 1px solid #333; color: #aaa; border-radius: 16px; padding: 0.4rem 0.85rem; font-family: inherit; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+        .chip-metrica.activa { background: #39e4a5; border-color: #39e4a5; color: #000; }
+        details.medidas-form { background: #111; border: 1px solid #2a2a2a; border-radius: 8px; padding: 0.8rem; margin-bottom: 1rem; }
+        details.medidas-form summary { cursor: pointer; color: #ccc; font-weight: 700; font-size: 0.88rem; }
+        details.medidas-form[open] summary { margin-bottom: 0.6rem; }
+        .grid-medidas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 0.7rem; }
+        .grid-medidas .form-group { margin-bottom: 0.7rem; }
+        .hoja .lista-medidas, .lista-medidas { list-style: none; padding: 0; margin: 0 0 0.8rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .lista-medidas li { background: #111; border: 1px solid #2a2a2a; border-radius: 8px; padding: 0.55rem 0.7rem; margin: 0; display: flex; flex-direction: column; }
+        .lista-medidas li span { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 700; }
+        .lista-medidas li b { color: #fff; font-size: 1rem; }
+        .lista-medidas li small { color: #39e4a5; font-size: 0.75rem; }
+
+        /* Rutina interactiva */
+        .avance-dia { display: flex; align-items: center; gap: 0.8rem; margin: 0.8rem 0 0.6rem; }
+        .avance-dia small { color: #888; font-size: 0.78rem; white-space: nowrap; }
+        .avance-dia small b { color: #fff; }
+        .barra-avance { flex: 1; height: 6px; background: #262626; border-radius: 3px; overflow: hidden; }
+        .barra-avance span { display: block; height: 100%; background: #39e4a5; border-radius: 3px; transition: width 0.3s; }
+        .lista-ejercicios { list-style: none; padding: 0; margin: 0; }
+        .ejercicio-rutina { display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 0; border-bottom: 1px solid #262626; }
+        .check-ejercicio { flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%; border: 2px solid #444; background: transparent; color: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: 0.15s; padding: 0; }
+        .ejercicio-rutina.hecho .check-ejercicio { background: #39e4a5; border-color: #39e4a5; color: #000; transform: scale(1.05); }
+        .info-ejercicio { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+        .info-ejercicio strong { color: #fff; font-size: 0.95rem; }
+        .info-ejercicio span { color: #39e4a5; font-size: 0.8rem; font-weight: 600; }
+        .info-ejercicio small { color: #777; font-size: 0.72rem; }
+        .ejercicio-rutina.hecho .info-ejercicio strong { color: #888; text-decoration: line-through; text-decoration-color: #555; }
+        .kg-ejercicio { flex: 0 0 auto; display: flex; align-items: center; gap: 0.3rem; text-transform: none; font-weight: 400; margin: 0; }
+        .kg-ejercicio input { width: 62px; padding: 0.5rem 0.4rem; text-align: center; font-size: 0.95rem; }
+        .kg-ejercicio span { color: #777; font-size: 0.75rem; }
+        .dia-completado { margin-top: 1rem; background: rgba(57, 228, 165, 0.1); border: 1px solid rgba(57, 228, 165, 0.4); border-radius: 10px; padding: 1rem; text-align: center; animation: aparecer 0.4s ease; }
+        .dia-completado b { display: block; color: #39e4a5; font-size: 1.1rem; margin: 0.2rem 0; }
+        .dia-completado span { color: #bbb; font-size: 0.82rem; }
+        .ayuda-rutina { color: #666; font-size: 0.78rem; line-height: 1.5; margin: 0.9rem 0 0; }
+        @keyframes aparecer { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        /* Racha y logros */
+        .card-racha { background: linear-gradient(135deg, #1f1a12, #1a1a1a 60%); border-color: #3a2c17; }
+        .racha-cabecera { display: flex; align-items: center; gap: 0.9rem; }
+        .racha-fuego { font-size: 2.4rem; line-height: 1; filter: drop-shadow(0 0 10px rgba(255, 140, 0, 0.45)); }
+        .card-racha.apagada .racha-fuego { filter: grayscale(1); opacity: 0.5; }
+        .racha-titulo { margin: 0; color: #ccc; font-size: 0.95rem; }
+        .racha-titulo strong { color: #ffb020; font-size: 1.9rem; font-weight: 900; margin-right: 0.15rem; }
+        .card-racha.apagada .racha-titulo strong { color: #888; }
+        .racha-mejor { margin: 0.1rem 0 0; color: #888; font-size: 0.78rem; }
+        .racha-semana { display: flex; align-items: center; gap: 0.4rem; margin: 1rem 0 0; }
+        .punto-semana { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #4a3a20; }
+        .punto-semana.lleno { background: #ffb020; border-color: #ffb020; }
+        .racha-semana small { color: #aaa; font-size: 0.8rem; margin-left: 0.4rem; }
+        .proximo-logro { display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #2a2a2a; cursor: pointer; }
+        .proximo-logro > div { flex: 1; min-width: 0; }
+        .proximo-logro b { display: block; color: #fff; font-size: 0.85rem; }
+        .proximo-logro small { display: block; color: #888; font-size: 0.75rem; margin-bottom: 0.4rem; }
+        .proximo-logro em { font-style: normal; color: #aaa; font-size: 0.75rem; white-space: nowrap; }
+        .emoji-logro { font-size: 1.7rem; line-height: 1; }
+        .titulo-logros { display: flex; justify-content: space-between; align-items: center; }
+        .titulo-logros small { color: #888; font-size: 0.85rem; }
+        .grid-logros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+        .logro { background: #111; border: 1px solid #262626; border-radius: 10px; padding: 0.8rem 0.4rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+        .logro .emoji-logro { filter: grayscale(1); opacity: 0.35; margin-bottom: 0.2rem; }
+        .logro b { font-size: 0.72rem; color: #777; line-height: 1.25; }
+        .logro small { font-size: 0.64rem; color: #555; line-height: 1.3; }
+        .logro em { font-style: normal; font-size: 0.66rem; color: #888; margin-top: 0.15rem; }
+        .logro.logrado { border-color: rgba(57, 228, 165, 0.45); background: linear-gradient(180deg, rgba(57, 228, 165, 0.1), #111); }
+        .logro.logrado .emoji-logro { filter: none; opacity: 1; }
+        .logro.logrado b { color: #fff; }
+        .logro.logrado small { color: #999; }
+
+        .toast {
+            position: fixed; left: 50%; bottom: calc(var(--alto-nav) + 1rem + env(safe-area-inset-bottom)); z-index: 120;
+            transform: translate(-50%, 20px); opacity: 0; pointer-events: none; transition: 0.25s;
+            background: #222; border: 1px solid #39e4a5; color: #fff; border-radius: 12px; padding: 0.8rem 1.1rem;
+            font-size: 0.88rem; box-shadow: 0 8px 30px rgba(0,0,0,0.5); width: max-content; max-width: calc(100vw - 2rem);
+        }
+        .toast.visible { opacity: 1; transform: translate(-50%, 0); }
+        .toast b { color: #39e4a5; }
+        .emoji-toast { font-size: 1.2rem; }
+
         /* Hoja que sube desde abajo (receta / lista de compras) */
         .hoja-fondo { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
         .hoja-fondo.abierta { opacity: 1; pointer-events: auto; }
@@ -446,7 +527,20 @@
                 <h2><i class="fa-solid fa-fire"></i> Hoy te toca</h2>
                 <p class="hoy-titulo" id="hoyTitulo"></p>
                 <p class="hoy-detalle" id="hoyDetalle"></p>
-                <button type="button" class="btn btn-secundario-app" onclick="irA('rutina')">Ver rutina completa <i class="fa-solid fa-arrow-right"></i></button>
+                <button type="button" class="btn btn-secundario-app" onclick="irA('rutina')">Ir a mi rutina <i class="fa-solid fa-arrow-right"></i></button>
+            </section>
+
+            <!-- Racha semanal y próximo logro -->
+            <section class="card card-racha" id="rachaCard">
+                <div class="racha-cabecera">
+                    <div class="racha-fuego" aria-hidden="true">🔥</div>
+                    <div>
+                        <p class="racha-titulo"><strong id="rachaNumero">0</strong> <span id="rachaTexto">semanas seguidas</span></p>
+                        <p class="racha-mejor" id="rachaMejor"></p>
+                    </div>
+                </div>
+                <div class="racha-semana" id="rachaSemana"></div>
+                <div class="proximo-logro" id="rachaProximo" onclick="irA('perfil')" role="button" tabindex="0"></div>
             </section>
 
             <section class="card">
@@ -481,16 +575,18 @@
             <!-- Peso corporal + fotos de progreso -->
             <section class="card" id="cardPesoCorporal">
                 <div class="cabecera-peso">
-                    <h2><i class="fa-solid fa-scale-balanced"></i> Mi peso corporal</h2>
+                    <h2><i class="fa-solid fa-scale-balanced"></i> Mi cuerpo</h2>
                     <button type="button" class="btn btn-registrar-peso" onclick="abrirRegistroPeso()"><i class="fa-solid fa-plus"></i> Registrar</button>
                 </div>
                 <div id="contenidoPesoCorporal" style="display:none;">
+                    <!-- Peso / Cintura / Cadera... (solo las que tengan datos) -->
+                    <div class="chips-metrica" id="selectorMetrica" role="tablist" aria-label="Qué querés ver"></div>
                     <div class="stats-progreso">
-                        <div class="dato"><strong id="pcActual">--</strong><span>Peso actual</span></div>
+                        <div class="dato"><strong id="pcActual">--</strong><span id="pcActualTexto">Peso actual</span></div>
                         <div class="dato"><strong id="pcCambio">--</strong><span id="pcCambioTexto">Desde el inicio</span></div>
                         <div class="dato"><strong id="pcFotos">0</strong><span>Fotos</span></div>
                     </div>
-                    <div class="contenedor-grafico-progreso">
+                    <div class="contenedor-grafico-progreso" id="contenedorGraficoCuerpo">
                         <div id="graficoPesoCorporal" role="img" aria-label="Gráfico de la evolución de tu peso corporal"></div>
                         <div class="tooltip-progreso" id="tooltipPesoCorporal"></div>
                     </div>
@@ -507,7 +603,7 @@
                     </details>
                 </div>
                 <div class="sin-datos" id="sinPesoCorporal">
-                    <i class="fa-solid fa-circle-info"></i> Registrá tu peso cada semana o cada quince días, siempre a la misma hora (lo ideal es a la mañana y en ayunas). Si querés, sumá una foto: comparar fotos muestra cambios que la balanza no ve.
+                    <i class="fa-solid fa-circle-info"></i> Registrá tu peso cada semana o cada quince días, siempre a la misma hora (lo ideal es a la mañana y en ayunas). Si querés, sumá tus medidas (cintura, cadera, brazo...) y una foto: muestran cambios que la balanza no ve.
                 </div>
             </section>
 
@@ -587,6 +683,12 @@
                 </div>
             </section>
             <section class="card">
+                <h2 class="titulo-logros"><span><i class="fa-solid fa-medal"></i> Mis logros</span> <small id="logrosContador">0/0</small></h2>
+                <div class="grid-logros" id="gridLogros"></div>
+                <p class="ayuda-rutina" style="margin-top:1rem"><i class="fa-solid fa-circle-info"></i> Cuentan los días que escaneás el QR de la entrada y los días de rutina que completás en la app.</p>
+            </section>
+
+            <section class="card">
                 <h2><i class="fa-solid fa-heart-pulse"></i> Mi Ficha Física y Médica</h2>
                 <form id="formFicha">
                     <div class="grid-2">
@@ -626,6 +728,7 @@
 
 
     <!-- ================= HOJAS DE NUTRICIÓN (receta y lista de compras) ================= -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <div class="hoja-fondo" id="hojaFondo" onclick="cerrarHoja()"></div>
     <div class="hoja" id="hoja" role="dialog" aria-modal="true">
         <div class="hoja-tirador"></div>
@@ -716,6 +819,9 @@
                         if (resPlanes.ok) {
                             const planes = await resPlanes.json();
                             if (Array.isArray(planes) && planes.length) planesConNutricion = planes.filter(p => p.nutricion).map(p => p.nombre);
+                            // Meta semanal de la racha: los días del plan (máximo 4)
+                            const miPlan = (planes || []).find(p => p.nombre === miData.planElegido);
+                            if (miPlan && Number(miPlan.diasRutina)) metaSemanal = Math.max(1, Math.min(4, Number(miPlan.diasRutina)));
                         }
                     } catch (e) { /* queda el valor de respaldo */ }
 
@@ -778,6 +884,41 @@
             return visitasSemanaPrevias % rutinaDias.length;
         }
 
+        // Lo que vas tildando hoy se guarda en el celular (por si cerrás la app en medio del entrenamiento)
+        // { [dia]: { hechos: [0, 2], kg: { 0: '80' }, guardados: { 0: '80' } } }
+        let estadoHoyMemoria = {};
+        const claveEstadoHoy = () => `rutina-${socioId}-${hoyISO()}`;
+        function leerEstadoHoy() {
+            try { return JSON.parse(localStorage.getItem(claveEstadoHoy())) || estadoHoyMemoria; } catch (e) { return estadoHoyMemoria; }
+        }
+        function guardarEstadoHoy(estado) {
+            estadoHoyMemoria = estado;
+            try { localStorage.setItem(claveEstadoHoy(), JSON.stringify(estado)); } catch (e) { /* sin storage: queda en memoria */ }
+        }
+        function estadoDia(dia) {
+            const estado = leerEstadoHoy();
+            const d = estado[dia] || { hechos: [], kg: {}, guardados: {} };
+            // Si el día figura completado en el servidor (ej: desde otro celular), se muestra todo tildado
+            if (completadoHoy(dia) && d.hechos.length === 0) d.hechos = rutinaDias[dia].ejercicios.map((_, i) => i);
+            return d;
+        }
+        function actualizarEstadoDia(dia, cambio) {
+            const estado = leerEstadoHoy();
+            estado[dia] = cambio(estadoDia(dia));
+            guardarEstadoHoy(estado);
+            return estado[dia];
+        }
+        const completadoHoy = dia => entrenamientosHechos.some(e => e.fecha === hoyISO() && e.dia === dia);
+
+        // Récord y última carga de un ejercicio (sale del historial de Progreso)
+        const mismoNombre = (a, b) => String(a).trim().toLowerCase() === String(b).trim().toLowerCase();
+        function infoCargas(nombre) {
+            const cargas = historialCargas.filter(c => mismoNombre(c.ejercicio, nombre))
+                .map(c => ({ peso: Number(c.peso), fecha: new Date(c.fecha) })).sort((a, b) => a.fecha - b.fecha);
+            if (!cargas.length) return null;
+            return { record: Math.max(...cargas.map(c => c.peso)), ultima: cargas[cargas.length - 1] };
+        }
+
         function renderRutina() {
             const contenedor = document.getElementById('contenedorRutinaCliente');
             if (!rutinaDias.length) return;
@@ -789,7 +930,7 @@
                 <div class="tabs-rutina" role="tablist">
                     ${rutinaDias.map((d, i) => `
                         <button type="button" class="tab-rutina ${i === activo ? 'activa' : ''}" role="tab" onclick="elegirDiaRutina(${i})">
-                            <span>Día ${i + 1}${i === diaSugerido ? ' <em>Hoy</em>' : ''}</span>
+                            <span>${completadoHoy(i) ? '✅ ' : ''}Día ${i + 1}${i === diaSugerido ? ' <em>Hoy</em>' : ''}</span>
                             ${d.nombre ? `<small>${esc(d.nombre)}</small>` : ''}
                         </button>`).join('')}
                 </div>` : '';
@@ -800,24 +941,123 @@
                 ? `<p class="titulo-dia-rutina">Día ${activo + 1}${dia.nombre ? ` · <span>${esc(dia.nombre)}</span>` : ''}${activo === diaSugerido && rutinaDias.length > 1 ? ' <em>Te toca hoy</em>' : ''}</p>`
                 : '';
 
+            const estado = estadoDia(activo);
+            const total = dia.ejercicios.length;
+            const hechos = estado.hechos.filter(i => i < total).length;
+            const completo = hechos === total;
+
             contenedor.innerHTML = `
                 ${tabs}
                 ${titulo}
-                <div class="tabla-scroll"><table class="tabla-rutina-cliente">
-                    <thead><tr><th>Ejercicio</th><th>Series</th><th>Reps</th><th>Descanso</th></tr></thead>
-                    <tbody>
-                        ${dia.ejercicios.map(ej => `
-                            <tr>
-                                <td style="font-weight:bold; color:#fff;">${esc(ej.nombre)}</td>
-                                <td>${esc(ej.series)}</td>
-                                <td style="color:#39e4a5; font-weight:bold;">${esc(ej.repeticiones)}</td>
-                                <td style="color:#aaa;">${esc(ej.descanso) || '--'}</td>
-                            </tr>`).join('')}
-                    </tbody>
-                </table></div>`;
+                <div class="avance-dia">
+                    <div class="barra-avance"><span style="width:${Math.round(hechos * 100 / total)}%"></span></div>
+                    <small><b>${hechos}</b> de ${total} ejercicios</small>
+                </div>
+                <ul class="lista-ejercicios">
+                    ${dia.ejercicios.map((ej, i) => {
+                        const hecho = estado.hechos.includes(i);
+                        const info = infoCargas(ej.nombre);
+                        const detalle = [ej.series && `${esc(ej.series)} series`, ej.repeticiones && `${esc(ej.repeticiones)} reps`, ej.descanso && `${esc(ej.descanso)} descanso`].filter(Boolean).join(' · ');
+                        return `
+                        <li class="ejercicio-rutina ${hecho ? 'hecho' : ''}">
+                            <button type="button" class="check-ejercicio" onclick="tildarEjercicio(${activo}, ${i})" aria-pressed="${hecho}" aria-label="${hecho ? 'Desmarcar' : 'Marcar como hecho'}: ${esc(ej.nombre)}">
+                                <i class="fa-solid fa-check"></i>
+                            </button>
+                            <div class="info-ejercicio">
+                                <strong>${esc(ej.nombre)}</strong>
+                                <span>${detalle || '&nbsp;'}</span>
+                                ${info ? `<small>Récord: ${kg(info.record)} · Última: ${kg(info.ultima.peso)} (${fechaCorta(info.ultima.fecha)})</small>` : ''}
+                            </div>
+                            <label class="kg-ejercicio">
+                                <input type="number" inputmode="decimal" step="0.5" min="0" max="500" placeholder="${info ? Number(info.ultima.peso) : '--'}"
+                                    value="${esc(estado.kg[i] ?? '')}" onchange="anotarKg(${activo}, ${i}, this.value)" aria-label="Kilos usados en ${esc(ej.nombre)}">
+                                <span>kg</span>
+                            </label>
+                        </li>`;
+                    }).join('')}
+                </ul>
+                ${completo
+                    ? `<div class="dia-completado">🎉 <b>¡Día ${activo + 1} completado!</b><span>Buen trabajo. Los kilos que anotaste quedaron en tu Progreso.</span></div>`
+                    : `<p class="ayuda-rutina"><i class="fa-solid fa-circle-info"></i> Tocá el círculo cuando termines cada ejercicio. Si anotás los kilos, se guardan solos en tu Progreso.</p>`}`;
         }
 
         function elegirDiaRutina(i) { diaElegido = i; renderRutina(); }
+
+        async function tildarEjercicio(dia, i) {
+            const total = rutinaDias[dia].ejercicios.length;
+            const antes = estadoDia(dia).hechos.filter(x => x < total).length === total;
+            const estado = actualizarEstadoDia(dia, d => {
+                d.hechos = d.hechos.includes(i) ? d.hechos.filter(x => x !== i) : [...d.hechos, i];
+                return d;
+            });
+            const marcado = estado.hechos.includes(i);
+            const ahora = estado.hechos.filter(x => x < total).length === total;
+            if (marcado && navigator.vibrate) navigator.vibrate(15);
+            renderRutina();
+
+            if (marcado) await guardarCargaRutina(dia, i);
+
+            // Día completo → se guarda en el servidor (cuenta para la racha y los logros)
+            if (ahora && !antes && !completadoHoy(dia)) {
+                try {
+                    const res = await fetch(`/api/entrenamientos/${socioId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ dia, nombreDia: rutinaDias[dia].nombre || '', ejercicios: total })
+                    });
+                    if (res.ok) {
+                        entrenamientosHechos.unshift({ fecha: hoyISO(), dia, nombreDia: rutinaDias[dia].nombre || '', ejercicios: total });
+                        if (navigator.vibrate) navigator.vibrate([30, 60, 30]);
+                        renderRutina();
+                        actualizarLogros();
+                    }
+                } catch (e) { /* queda tildado en el celular */ }
+            } else if (!ahora && completadoHoy(dia)) {
+                // Destildó algo de un día completo: deja de contar como completado
+                try {
+                    await fetch(`/api/entrenamientos/${socioId}/${dia}`, { method: 'DELETE' });
+                    entrenamientosHechos = entrenamientosHechos.filter(e => !(e.fecha === hoyISO() && e.dia === dia));
+                    renderRutina();
+                    actualizarLogros();
+                } catch (e) { /* sin conexión */ }
+            }
+        }
+
+        async function anotarKg(dia, i, valor) {
+            const estado = actualizarEstadoDia(dia, d => { d.kg[i] = String(valor).trim(); return d; });
+            if (estado.hechos.includes(i)) await guardarCargaRutina(dia, i);
+        }
+
+        // Guarda los kilos del ejercicio en el historial de cargas (una vez por valor)
+        async function guardarCargaRutina(dia, i) {
+            const estado = estadoDia(dia);
+            const valor = Number(String(estado.kg[i] ?? '').replace(',', '.'));
+            if (!(valor > 0) || String(estado.guardados[i]) === String(valor)) return;
+            const ejercicio = rutinaDias[dia].ejercicios[i].nombre;
+            const info = infoCargas(ejercicio);
+            try {
+                const res = await fetch('/api/socios/pesos', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ socioId, ejercicio, peso: valor })
+                });
+                if (!res.ok) return;
+                actualizarEstadoDia(dia, d => { d.guardados[i] = valor; return d; });
+                if (info && valor > info.record) mostrarToast(`🏆 <b>¡Nuevo récord!</b> ${esc(ejercicio)}: ${kg(valor)}`);
+                await cargarHistorial();
+                renderRutina();
+            } catch (e) { /* sin conexión: se reintenta al volver a tildar */ }
+        }
+
+        // Cartelito que aparece abajo unos segundos
+        let esperaToast;
+        function mostrarToast(html, ms = 3500) {
+            const toast = document.getElementById('toast');
+            toast.innerHTML = html;
+            toast.classList.add('visible');
+            clearTimeout(esperaToast);
+            esperaToast = setTimeout(() => toast.classList.remove('visible'), ms);
+        }
 
         // ================= AVISO DE VENCIMIENTO =================
         function mostrarAvisoVencimiento(dias, miData) {
@@ -843,7 +1083,7 @@
         async function cargarAsistencias() {
             let fechas = [];
             try {
-                const res = await fetch(`/api/asistencias/socio/${socioId}`);
+                const res = await fetch(`/api/asistencias/socio/${socioId}?todas=1`);
                 if (res.ok) fechas = await res.json(); // ["2026-10-11", ...]
             } catch (e) { /* se muestra vacío */ }
 
@@ -860,6 +1100,8 @@
             document.getElementById('asisMes').textContent = fechas.filter(f => f.startsWith(prefijoMes)).length;
             document.getElementById('asisSemana').textContent = fechas.filter(f => f >= desdeLunes && f <= claveDia(hoy)).length;
             visitasSemanaPrevias = fechas.filter(f => f >= desdeLunes && f < claveDia(hoy)).length;
+            asistenciasFechas = fechas;
+            actualizarLogros();
             if (rutinaDias.length) renderRutina();
 
             if (fechas.length) {
@@ -919,6 +1161,8 @@
             select.innerHTML = ejercicios.map(e => `<option value="${esc(e)}">${esc(e)} (${conteo[e]})</option>`).join('');
             if (ejercicios.includes(anterior)) select.value = anterior;
             dibujarProgreso();
+            if (rutinaDias.length) renderRutina();   // récord y última carga de cada ejercicio
+            actualizarLogros();
         }
 
         function dibujarProgreso() {
@@ -1065,17 +1309,32 @@
 
 
 
-        // ================= PESO CORPORAL Y FOTOS DE PROGRESO =================
-        let registrosPeso = [];      // [{ id, fecha: 'YYYY-MM-DD', peso, nota, foto (url o null) }] del más viejo al más nuevo
+        // ================= MI CUERPO: PESO, MEDIDAS Y FOTOS DE PROGRESO =================
+        // registrosPeso: [{ id, fecha: 'YYYY-MM-DD', peso (o null), medidas: { cintura: 88 }, nota, foto (url o null) }]
+        let registrosPeso = [];
         let fotoElegida = null;      // foto achicada (dataURL) lista para subir
+        let metricaActual = 'peso';
+
+        const METRICAS = {
+            peso:    { nombre: 'Peso',    unidad: 'kg' },
+            cintura: { nombre: 'Cintura', unidad: 'cm', ayuda: 'A la altura del ombligo, sin apretar' },
+            cadera:  { nombre: 'Cadera',  unidad: 'cm', ayuda: 'En la parte más ancha de la cola' },
+            pecho:   { nombre: 'Pecho',   unidad: 'cm', ayuda: 'A la altura de las tetillas, con los brazos relajados' },
+            brazo:   { nombre: 'Brazo',   unidad: 'cm', ayuda: 'En la parte más ancha del bíceps, relajado' },
+            muslo:   { nombre: 'Muslo',   unidad: 'cm', ayuda: 'En la parte más ancha, parado' }
+        };
+        const MEDIDAS = Object.keys(METRICAS).filter(m => m !== 'peso');
 
         const hoyISO = () => {
             const d = new Date();
             return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         };
         const fechaLarga = t => fechaDe(t).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' });
-        const kgConSigno = n => `${n > 0 ? '+' : ''}${kg(n)}`;
         const redondeo1 = n => Math.round(n * 10) / 10;
+        const valorDe = (r, m) => m === 'peso' ? r.peso : ((r.medidas || {})[m] ?? null);
+        const conUnidad = (n, m) => m === 'peso' ? kg(n) : `${Number(n).toLocaleString('es-AR', { maximumFractionDigits: 1 })} cm`;
+        const conSigno = (n, m = 'peso') => `${n > 0 ? '+' : ''}${conUnidad(n, m)}`;
+        const kgConSigno = n => conSigno(n, 'peso');
 
         function tiempoEntre(desde, hasta) {
             const dias = Math.round((fechaDe(hasta) - fechaDe(desde)) / 86400000);
@@ -1083,6 +1342,16 @@
             if (dias < 60) return `${Math.round(dias / 7)} semanas`;
             const meses = Math.round(dias / 30.4);
             return `${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+        }
+
+        // ¿El cambio va en la dirección del objetivo? (para pintarlo de verde)
+        function cambioVaBien(m, cambio) {
+            const objetivo = nutri && nutri.perfil ? nutri.perfil.objetivo : null;
+            if (m === 'cintura' || m === 'cadera') return cambio < 0;
+            if (objetivo === 'bajar') return cambio < 0;
+            if (objetivo === 'subir') return cambio > 0;
+            if (objetivo === 'mantener' && m === 'peso') return Math.abs(cambio) <= 1;
+            return false;
         }
 
         async function cargarPesoCorporal() {
@@ -1093,24 +1362,41 @@
             renderPesoCorporal();
         }
 
+        function elegirMetrica(m) { metricaActual = m; renderPesoCorporal(); }
+
         function renderPesoCorporal() {
             const hay = registrosPeso.length > 0;
             document.getElementById('contenidoPesoCorporal').style.display = hay ? '' : 'none';
             document.getElementById('sinPesoCorporal').style.display = hay ? 'none' : '';
+            if (typeof actualizarLogros === 'function') actualizarLogros();
             if (!hay) return;
 
-            const primero = registrosPeso[0];
-            const ultimo = registrosPeso[registrosPeso.length - 1];
-            const cambio = redondeo1(ultimo.peso - primero.peso);
-            document.getElementById('pcActual').textContent = kg(ultimo.peso);
+            // Solo se ofrecen las métricas que tienen al menos un dato
+            const disponibles = Object.keys(METRICAS).filter(m => registrosPeso.some(r => valorDe(r, m) !== null));
+            if (!disponibles.includes(metricaActual)) metricaActual = disponibles[0] || 'peso';
+            const selector = document.getElementById('selectorMetrica');
+            selector.style.display = disponibles.length > 1 ? '' : 'none';
+            selector.innerHTML = disponibles.map(m => `
+                <button type="button" role="tab" class="chip-metrica ${m === metricaActual ? 'activa' : ''}" aria-selected="${m === metricaActual}"
+                    onclick="elegirMetrica('${m}')">${METRICAS[m].nombre}</button>`).join('');
 
-            // El color del cambio depende del objetivo del plan de nutrición (si lo tiene)
-            const objetivo = nutri && nutri.perfil ? nutri.perfil.objetivo : null;
-            const vaBien = (objetivo === 'bajar' && cambio < 0) || (objetivo === 'subir' && cambio > 0) || (objetivo === 'mantener' && Math.abs(cambio) <= 1);
+            const m = metricaActual;
+            const puntos = registrosPeso.filter(r => valorDe(r, m) !== null);
             const elCambio = document.getElementById('pcCambio');
-            elCambio.textContent = registrosPeso.length > 1 ? kgConSigno(cambio) : '--';
-            elCambio.className = vaBien ? 'baja' : 'neutro';
-            document.getElementById('pcCambioTexto').textContent = registrosPeso.length > 1 ? `En ${tiempoEntre(primero.fecha, ultimo.fecha)}` : 'Desde el inicio';
+            document.getElementById('pcActualTexto').textContent = m === 'peso' ? 'Peso actual' : `${METRICAS[m].nombre} actual`;
+            if (puntos.length) {
+                const primero = puntos[0], ultimo = puntos[puntos.length - 1];
+                const cambio = redondeo1(valorDe(ultimo, m) - valorDe(primero, m));
+                document.getElementById('pcActual').textContent = conUnidad(valorDe(ultimo, m), m);
+                elCambio.textContent = puntos.length > 1 ? conSigno(cambio, m) : '--';
+                elCambio.className = cambioVaBien(m, cambio) ? 'baja' : 'neutro';
+                document.getElementById('pcCambioTexto').textContent = puntos.length > 1 ? `En ${tiempoEntre(primero.fecha, ultimo.fecha)}` : 'Desde el inicio';
+            } else {
+                document.getElementById('pcActual').textContent = '--';
+                elCambio.textContent = '--';
+                elCambio.className = 'neutro';
+            }
+            document.getElementById('contenedorGraficoCuerpo').style.display = puntos.length ? '' : 'none';
 
             // Fotos: la más nueva primero
             const conFoto = registrosPeso.filter(r => r.foto);
@@ -1120,68 +1406,75 @@
             document.getElementById('tiraFotos').innerHTML = conFoto.slice().reverse().map(r => `
                 <button type="button" class="foto-mini" onclick="verRegistroPeso(${r.id})">
                     <img src="${r.foto}" loading="lazy" alt="Foto del ${fechaCorta(fechaDe(r.fecha))}">
-                    <span>${fechaCorta(fechaDe(r.fecha))}</span><b>${kg(r.peso)}</b>
+                    <span>${fechaCorta(fechaDe(r.fecha))}</span><b>${r.peso !== null ? kg(r.peso) : '&nbsp;'}</b>
                 </button>`).join('');
 
             // Lista completa (más nuevos primero)
-            document.getElementById('listaPesoCorporal').innerHTML = registrosPeso.slice().reverse().map((r, i, lista) => {
-                const anterior = lista[i + 1];
-                const dif = anterior ? redondeo1(r.peso - anterior.peso) : null;
+            const conPeso = registrosPeso.filter(r => r.peso !== null);
+            document.getElementById('listaPesoCorporal').innerHTML = registrosPeso.slice().reverse().map(r => {
+                const i = conPeso.indexOf(r);
+                const dif = i > 0 ? redondeo1(r.peso - conPeso[i - 1].peso) : null;
+                const cantMedidas = Object.keys(r.medidas || {}).length;
+                const iconos = (cantMedidas ? '<i class="fa-solid fa-ruler icono-foto" title="Medidas"></i>' : '') +
+                               (r.foto ? '<i class="fa-solid fa-camera icono-foto" title="Foto"></i>' : '');
+                const derecha = r.peso !== null ? kg(r.peso) : cantMedidas ? `${cantMedidas} ${cantMedidas === 1 ? 'medida' : 'medidas'}` : 'Foto';
                 return `<li class="historial-item registro-peso-item" onclick="verRegistroPeso(${r.id})">
-                    <div><strong>${fechaCorta(fechaDe(r.fecha))}</strong>${r.foto ? '<i class="fa-solid fa-camera icono-foto"></i>' : ''}
-                    ${dif !== null && dif !== 0 ? `<span class="fecha-tag"> (${kgConSigno(dif)})</span>` : ''}</div>
-                    <span class="peso-tag">${kg(r.peso)}</span></li>`;
+                    <div><strong>${fechaCorta(fechaDe(r.fecha))}</strong>${iconos}
+                    ${dif ? `<span class="fecha-tag"> (${kgConSigno(dif)})</span>` : ''}</div>
+                    <span class="peso-tag">${derecha}</span></li>`;
             }).join('');
 
-            dibujarPesoCorporal();
+            if (puntos.length) dibujarPesoCorporal();
         }
 
         function dibujarPesoCorporal() {
-            const puntos = registrosPeso.map(r => ({ ...r, t: fechaDe(r.fecha).getTime() }));
+            const m = metricaActual;
+            const puntos = registrosPeso.filter(r => valorDe(r, m) !== null).map(r => ({ ...r, v: valorDe(r, m), t: fechaDe(r.fecha).getTime() }));
             if (!puntos.length) return;
             const cont = document.getElementById('graficoPesoCorporal');
             const tooltip = document.getElementById('tooltipPesoCorporal');
+            cont.setAttribute('aria-label', `Gráfico de la evolución de tu ${METRICAS[m].nombre.toLowerCase()}`);
             tooltip.classList.remove('visible');
             const ancho = cont.clientWidth || 600;
             const alto = 210;
-            const m = { arriba: 26, derecha: 18, abajo: 28, izquierda: 44 };
-            const w = ancho - m.izquierda - m.derecha;
-            const h = alto - m.arriba - m.abajo;
+            const mg = { arriba: 26, derecha: 18, abajo: 28, izquierda: 44 };
+            const w = ancho - mg.izquierda - mg.derecha;
+            const h = alto - mg.arriba - mg.abajo;
 
-            // Escala vertical ajustada al rango de pesos (con números redondos)
-            const min = Math.min(...puntos.map(p => p.peso));
-            const max = Math.max(...puntos.map(p => p.peso));
+            // Escala vertical ajustada al rango (con números redondos)
+            const min = Math.min(...puntos.map(p => p.v));
+            const max = Math.max(...puntos.map(p => p.v));
             const paso = [0.5, 1, 2, 2.5, 5, 10, 20].find(s => (max - min + s) / s <= 4) || 50;
             const yMin = Math.floor((min - paso / 2) / paso) * paso;
             const yMax = Math.ceil((max + paso / 2) / paso) * paso;
-            const y = v => m.arriba + h - ((v - yMin) / (yMax - yMin)) * h;
+            const y = v => mg.arriba + h - ((v - yMin) / (yMax - yMin)) * h;
 
             const t0 = puntos[0].t, t1 = puntos[puntos.length - 1].t;
-            const x = t => t1 === t0 ? m.izquierda + w / 2 : m.izquierda + ((t - t0) / (t1 - t0)) * w;
+            const x = t => t1 === t0 ? mg.izquierda + w / 2 : mg.izquierda + ((t - t0) / (t1 - t0)) * w;
 
             let svg = `<svg width="${ancho}" height="${alto}" viewBox="0 0 ${ancho} ${alto}" xmlns="http://www.w3.org/2000/svg" style="display:block">`;
             for (let v = yMin; v <= yMax + 0.001; v += paso) {
-                svg += `<line x1="${m.izquierda}" x2="${ancho - m.derecha}" y1="${y(v)}" y2="${y(v)}" stroke="${v === yMin ? '#333' : '#232323'}"/>`;
-                svg += `<text x="${m.izquierda - 8}" y="${y(v) + 4}" fill="#666" font-size="11" text-anchor="end">${Number(v.toFixed(1)).toLocaleString('es-AR')}</text>`;
+                svg += `<line x1="${mg.izquierda}" x2="${ancho - mg.derecha}" y1="${y(v)}" y2="${y(v)}" stroke="${v === yMin ? '#333' : '#232323'}"/>`;
+                svg += `<text x="${mg.izquierda - 8}" y="${y(v) + 4}" fill="#666" font-size="11" text-anchor="end">${Number(v.toFixed(1)).toLocaleString('es-AR')}</text>`;
             }
             svg += `<text x="${x(t0)}" y="${alto - 8}" fill="#888" font-size="11" text-anchor="${puntos.length === 1 ? 'middle' : 'start'}">${fechaCorta(fechaDe(puntos[0].fecha))}</text>`;
             if (puntos.length > 1) svg += `<text x="${x(t1)}" y="${alto - 8}" fill="#888" font-size="11" text-anchor="end">${fechaCorta(fechaDe(puntos[puntos.length - 1].fecha))}</text>`;
 
             if (puntos.length > 1) {
-                const linea = puntos.map((p, i) => `${i ? 'L' : 'M'}${x(p.t)},${y(p.peso)}`).join(' ');
+                const linea = puntos.map((p, i) => `${i ? 'L' : 'M'}${x(p.t)},${y(p.v)}`).join(' ');
                 svg += `<path d="${linea} L${x(t1)},${y(yMin)} L${x(t0)},${y(yMin)} Z" fill="#39e4a5" opacity="0.08"/>`;
                 svg += `<path d="${linea}" fill="none" stroke="#39e4a5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
             }
 
-            // Puntos: los que tienen foto van rellenos; el último lleva su peso arriba
+            // Puntos: los que tienen foto van rellenos; el último lleva su valor arriba
             puntos.forEach((p, i) => {
-                const cx = x(p.t), cy = y(p.peso);
+                const cx = x(p.t), cy = y(p.v);
                 const esUltimo = i === puntos.length - 1;
                 svg += `<circle cx="${cx}" cy="${cy}" r="${esUltimo ? 6 : 4}" fill="${p.foto || esUltimo ? '#39e4a5' : '#1a1a1a'}" stroke="#39e4a5" stroke-width="2"/>`;
                 if (esUltimo) {
-                    const anclaje = cx > ancho - 50 ? 'end' : cx < m.izquierda + 40 ? 'start' : 'middle';
+                    const anclaje = cx > ancho - 50 ? 'end' : cx < mg.izquierda + 40 ? 'start' : 'middle';
                     const xTexto = anclaje === 'end' ? cx + 6 : anclaje === 'start' ? cx - 6 : cx;
-                    svg += `<text x="${xTexto}" y="${cy - 12}" fill="#fff" font-size="12" font-weight="bold" text-anchor="${anclaje}">${kg(p.peso)}</text>`;
+                    svg += `<text x="${xTexto}" y="${cy - 12}" fill="#fff" font-size="12" font-weight="bold" text-anchor="${anclaje}">${conUnidad(p.v, m)}</text>`;
                 }
                 svg += `<circle class="zona-punto" data-i="${i}" cx="${cx}" cy="${cy}" r="14" fill="transparent" style="cursor:pointer"/>`;
             });
@@ -1191,7 +1484,7 @@
             cont.querySelectorAll('.zona-punto').forEach(zona => {
                 const p = puntos[Number(zona.dataset.i)];
                 zona.addEventListener('mouseenter', () => {
-                    tooltip.innerHTML = `${fechaDe(p.fecha).toLocaleDateString('es-AR')}: <b>${kg(p.peso)}</b>${p.foto ? ' 📷' : ''}`;
+                    tooltip.innerHTML = `${fechaDe(p.fecha).toLocaleDateString('es-AR')}: <b>${conUnidad(p.v, m)}</b>${p.foto ? ' 📷' : ''}`;
                     tooltip.classList.add('visible');
                     const cx = Number(zona.getAttribute('cx'));
                     tooltip.style.left = Math.min(Math.max(cx - tooltip.offsetWidth / 2, 0), ancho - tooltip.offsetWidth) + 'px';
@@ -1202,26 +1495,47 @@
             });
         }
 
-        // ---------- Registrar (o editar) el peso de un día ----------
+        // ---------- Registrar (o editar) un día: peso, medidas y foto ----------
+        function ultimoValor(m) {
+            for (let i = registrosPeso.length - 1; i >= 0; i--) if (valorDe(registrosPeso[i], m) !== null) return valorDe(registrosPeso[i], m);
+            return null;
+        }
+
         function abrirRegistroPeso(fecha) {
             fotoElegida = null;
             const dia = fecha || hoyISO();
             const existente = registrosPeso.find(r => r.fecha === dia);
-            const ultimo = registrosPeso[registrosPeso.length - 1];
-            const pesoInicial = existente ? existente.peso : ultimo ? ultimo.peso : (document.getElementById('fichaPeso').value || '');
+            const pesoAnterior = ultimoValor('peso') ?? (Number(document.getElementById('fichaPeso').value) || null);
+            const medidasExistentes = existente ? existente.medidas || {} : {};
+            const camposMedidas = MEDIDAS.map(m => {
+                const ultimo = ultimoValor(m);
+                return `
+                    <div class="form-group">
+                        <label for="pcM_${m}" title="${METRICAS[m].ayuda}">${METRICAS[m].nombre} (cm)</label>
+                        <input type="number" id="pcM_${m}" step="0.5" min="10" max="250" inputmode="decimal"
+                            value="${medidasExistentes[m] ?? ''}" placeholder="${ultimo !== null ? 'Antes: ' + ultimo : ''}">
+                    </div>`;
+            }).join('');
             abrirHoja(`
-                <h3>${existente ? 'Editar registro' : 'Registrar mi peso'}</h3>
+                <h3>${existente ? 'Editar registro' : 'Registrar cómo estoy'}</h3>
                 <form id="formPesoCorporal" onsubmit="guardarPesoCorporal(event)" style="margin-top:1rem">
                     <div class="grid-2" style="grid-template-columns: 1fr 1fr;">
                         <div class="form-group">
                             <label for="pcPeso">Peso (kg)</label>
-                            <input type="number" id="pcPeso" step="0.1" min="30" max="300" inputmode="decimal" required value="${esc(pesoInicial)}">
+                            <input type="number" id="pcPeso" step="0.1" min="30" max="300" inputmode="decimal"
+                                value="${existente && existente.peso !== null ? existente.peso : ''}"
+                                placeholder="${pesoAnterior ? 'Antes: ' + pesoAnterior : 'Ej: 78.5'}">
                         </div>
                         <div class="form-group">
                             <label for="pcFecha">Fecha</label>
                             <input type="date" id="pcFecha" max="${hoyISO()}" value="${dia}" required onchange="cambioFechaPeso(this.value)">
                         </div>
                     </div>
+                    <details class="medidas-form" ${Object.keys(medidasExistentes).length ? 'open' : ''}>
+                        <summary><i class="fa-solid fa-ruler"></i> Medidas con centímetro (opcional)</summary>
+                        <p class="nota-privada" style="margin:0 0 0.8rem">Medite siempre en el mismo lugar del cuerpo y sin apretar la cinta. Completá solo las que quieras.</p>
+                        <div class="grid-medidas">${camposMedidas}</div>
+                    </details>
                     <div class="form-group">
                         <label for="pcNota">Nota (opcional)</label>
                         <input type="text" id="pcNota" maxlength="200" placeholder="Ej: arranqué la dieta, volví de vacaciones..." value="${esc(existente ? existente.nota : '')}">
@@ -1247,8 +1561,9 @@
         function cambioFechaPeso(fecha) {
             const existente = registrosPeso.find(r => r.fecha === fecha);
             if (existente) {
-                document.getElementById('pcPeso').value = existente.peso;
+                document.getElementById('pcPeso').value = existente.peso ?? '';
                 document.getElementById('pcNota').value = existente.nota || '';
+                MEDIDAS.forEach(m => { document.getElementById('pcM_' + m).value = (existente.medidas || {})[m] ?? ''; });
             }
             const aviso = document.getElementById('pcAvisoFoto');
             const yaTiene = '<i class="fa-solid fa-camera"></i> Ese día ya tiene una foto: si elegís otra, la reemplaza.<br>';
@@ -1302,6 +1617,15 @@
             e.preventDefault();
             const boton = document.getElementById('pcGuardar');
             const error = document.getElementById('pcError');
+            const fecha = document.getElementById('pcFecha').value;
+            const peso = document.getElementById('pcPeso').value.trim();
+            const medidas = {};
+            MEDIDAS.forEach(m => { const v = document.getElementById('pcM_' + m).value.trim(); if (v) medidas[m] = v; });
+            const existente = registrosPeso.find(r => r.fecha === fecha);
+            if (!peso && !Object.keys(medidas).length && !fotoElegida && !(existente && existente.foto)) {
+                error.textContent = 'Cargá tu peso, alguna medida o una foto.';
+                return;
+            }
             error.textContent = '';
             boton.disabled = true;
             boton.textContent = fotoElegida ? 'Subiendo foto...' : 'Guardando...';
@@ -1309,12 +1633,7 @@
                 const res = await fetch(`/api/peso-corporal/${socioId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        peso: document.getElementById('pcPeso').value,
-                        fecha: document.getElementById('pcFecha').value,
-                        nota: document.getElementById('pcNota').value,
-                        foto: fotoElegida
-                    })
+                    body: JSON.stringify({ peso, medidas, fecha, nota: document.getElementById('pcNota').value, foto: fotoElegida })
                 });
                 const datos = await res.json().catch(() => ({}));
                 if (!res.ok) throw new Error(datos.error || 'No se pudo guardar');
@@ -1322,8 +1641,8 @@
                 cerrarHoja();
                 await cargarPesoCorporal();
                 // La ficha del perfil queda con el último peso
-                const ultimo = registrosPeso[registrosPeso.length - 1];
-                if (ultimo) document.getElementById('fichaPeso').value = ultimo.peso;
+                const ultimoPeso = ultimoValor('peso');
+                if (ultimoPeso !== null) document.getElementById('fichaPeso').value = ultimoPeso;
             } catch (err) {
                 error.textContent = err.message;
                 boton.disabled = false;
@@ -1331,34 +1650,45 @@
             }
         }
 
-        // ---------- Ver un registro (con su foto) ----------
+        // ---------- Ver un registro (con su foto y medidas) ----------
         function verRegistroPeso(id) {
-            const i = registrosPeso.findIndex(r => r.id === id);
-            if (i < 0) return;
-            const r = registrosPeso[i];
-            const anterior = registrosPeso[i - 1];
-            const primero = registrosPeso[0];
-            const detalles = [];
-            if (anterior) detalles.push(`<span>${kgConSigno(redondeo1(r.peso - anterior.peso))} vs. registro anterior</span>`);
-            if (i > 0) detalles.push(`<span>${kgConSigno(redondeo1(r.peso - primero.peso))} desde el inicio</span>`);
+            const r = registrosPeso.find(x => x.id === id);
+            if (!r) return;
+            const i = registrosPeso.indexOf(r);
+            const chips = [];
+            if (r.peso !== null) {
+                chips.push(`<span style="color:#39e4a5; font-weight:700">${kg(r.peso)}</span>`);
+                const anteriores = registrosPeso.slice(0, i).filter(x => x.peso !== null);
+                if (anteriores.length) {
+                    chips.push(`<span>${kgConSigno(redondeo1(r.peso - anteriores[anteriores.length - 1].peso))} vs. anterior</span>`);
+                    if (anteriores.length > 1) chips.push(`<span>${kgConSigno(redondeo1(r.peso - anteriores[0].peso))} desde el inicio</span>`);
+                }
+            }
+            const medidas = MEDIDAS.filter(m => valorDe(r, m) !== null).map(m => {
+                const previo = registrosPeso.slice(0, i).filter(x => valorDe(x, m) !== null).pop();
+                const dif = previo ? redondeo1(valorDe(r, m) - valorDe(previo, m)) : 0;
+                return `<li><span>${METRICAS[m].nombre}</span><b>${conUnidad(valorDe(r, m), m)}</b>${dif ? `<small>${conSigno(dif, m)}</small>` : ''}</li>`;
+            }).join('');
             abrirHoja(`
                 <h3>${fechaLarga(r.fecha)}</h3>
-                <div class="receta-meta"><span style="color:#39e4a5; font-weight:700">${kg(r.peso)}</span>${detalles.join('')}</div>
+                ${chips.length ? `<div class="receta-meta">${chips.join('')}</div>` : ''}
                 ${r.foto ? `<img class="foto-grande" src="${r.foto}" alt="Foto del ${fechaLarga(r.fecha)}">` : ''}
+                ${medidas ? `<ul class="lista-medidas">${medidas}</ul>` : ''}
                 ${r.nota ? `<p style="color:#ddd; font-size:0.92rem; margin:0 0 0.5rem">📝 ${esc(r.nota)}</p>` : ''}
                 <div class="acciones-hoja">
-                    <button type="button" class="btn btn-chico" onclick="abrirRegistroPeso('${r.fecha}')"><i class="fa-solid fa-pen"></i> ${r.foto ? 'Editar' : 'Editar / sumar foto'}</button>
+                    <button type="button" class="btn btn-chico" onclick="abrirRegistroPeso('${r.fecha}')"><i class="fa-solid fa-pen"></i> Editar</button>
                     ${r.foto ? `<button type="button" class="btn btn-chico btn-borde-app" onclick="borrarFotoPeso(${r.id})"><i class="fa-solid fa-image"></i> Quitar foto</button>` : ''}
-                    <button type="button" class="btn btn-chico btn-peligro" onclick="borrarRegistroPeso(${r.id})" ><i class="fa-solid fa-trash"></i> Borrar</button>
+                    <button type="button" class="btn btn-chico btn-peligro" onclick="borrarRegistroPeso(${r.id})"><i class="fa-solid fa-trash"></i> Borrar</button>
                 </div>`);
         }
 
         async function borrarFotoPeso(id) {
-            if (!confirm('¿Quitar la foto de este día? El peso queda guardado.')) return;
+            if (!confirm('¿Quitar la foto de este día? El resto de los datos queda guardado.')) return;
             const res = await fetch(`/api/peso-corporal/${socioId}/${id}/foto`, { method: 'DELETE' });
             if (!res.ok) { alert('No se pudo quitar la foto'); return; }
+            const datos = await res.json().catch(() => ({}));
             await cargarPesoCorporal();
-            verRegistroPeso(id);
+            if (datos.registroBorrado) cerrarHoja(); else verRegistroPeso(id);
         }
 
         async function borrarRegistroPeso(id) {
@@ -1373,17 +1703,34 @@
         function abrirAntesYAhora(idAntes, idAhora) {
             const fotos = registrosPeso.filter(r => r.foto);
             if (fotos.length < 2) return;
-            const antes = fotos.find(r => r.id === idAntes) || fotos[0];
-            const ahora = fotos.find(r => r.id === idAhora) || fotos[fotos.length - 1];
+            let antes = fotos.find(r => r.id === idAntes) || fotos[0];
+            let ahora = fotos.find(r => r.id === idAhora) || fotos[fotos.length - 1];
             const opciones = elegida => fotos.map(r =>
-                `<option value="${r.id}" ${r.id === elegida.id ? 'selected' : ''}>${fechaCorta(fechaDe(r.fecha))} · ${kg(r.peso)}</option>`).join('');
-            const dif = redondeo1(ahora.peso - antes.peso);
+                `<option value="${r.id}" ${r.id === elegida.id ? 'selected' : ''}>${fechaCorta(fechaDe(r.fecha))}${r.peso !== null ? ' · ' + kg(r.peso) : ''}</option>`).join('');
             const figura = (r, rotulo, idSelect) => `
                 <figure>
                     <select id="${idSelect}" onchange="cambiarComparacion()" aria-label="Foto ${rotulo}">${opciones(r)}</select>
                     <img src="${r.foto}" alt="Foto ${rotulo}: ${fechaLarga(r.fecha)}">
-                    <figcaption><b>${kg(r.peso)}</b>${rotulo} · ${fechaCorta(fechaDe(r.fecha))}</figcaption>
+                    <figcaption><b>${r.peso !== null ? kg(r.peso) : '&nbsp;'}</b>${rotulo} · ${fechaCorta(fechaDe(r.fecha))}</figcaption>
                 </figure>`;
+
+            // Diferencias (siempre de la más vieja a la más nueva)
+            let resumen = 'Elegiste la misma foto';
+            if (antes.id !== ahora.id) {
+                const [viejo, nuevo] = antes.fecha < ahora.fecha ? [antes, ahora] : [ahora, antes];
+                const partes = [];
+                if (viejo.peso !== null && nuevo.peso !== null) {
+                    const dif = redondeo1(nuevo.peso - viejo.peso);
+                    partes.push(`<b>${dif === 0 ? 'Mismo peso' : kgConSigno(dif)}</b>`);
+                }
+                MEDIDAS.forEach(m => {
+                    if (valorDe(viejo, m) !== null && valorDe(nuevo, m) !== null) {
+                        const dif = redondeo1(valorDe(nuevo, m) - valorDe(viejo, m));
+                        if (dif) partes.push(`${METRICAS[m].nombre} ${conSigno(dif, m)}`);
+                    }
+                });
+                resumen = `${partes.join(' · ')}${partes.length ? ' en ' : ''}${tiempoEntre(viejo.fecha, nuevo.fecha)}${partes.length ? '' : ' de diferencia'}`;
+            }
             abrirHoja(`
                 <h3>Antes y ahora</h3>
                 <p style="color:#888; font-size:0.85rem; margin:0 0 1rem">Elegí qué dos fotos comparar.</p>
@@ -1391,12 +1738,193 @@
                     ${figura(antes, 'Antes', 'cmpAntes')}
                     ${figura(ahora, 'Ahora', 'cmpAhora')}
                 </div>
-                <p class="diferencia-comparacion">${antes.id === ahora.id ? 'Elegiste la misma foto' :
-                    `<b>${dif === 0 ? 'Mismo peso' : kgConSigno(dif)}</b> en ${tiempoEntre(antes.fecha < ahora.fecha ? antes.fecha : ahora.fecha, antes.fecha < ahora.fecha ? ahora.fecha : antes.fecha)}`}</p>`);
+                <p class="diferencia-comparacion">${resumen}</p>`);
         }
 
         function cambiarComparacion() {
             abrirAntesYAhora(Number(document.getElementById('cmpAntes').value), Number(document.getElementById('cmpAhora').value));
+        }
+
+        // ================= RACHA Y LOGROS =================
+        // Un día "entrenado" = asistencia con QR o rutina completada en la app
+        let asistenciasFechas = [];        // todas las asistencias del socio
+        let entrenamientosHechos = [];     // rutinas completadas [{ fecha, dia, nombreDia, ejercicios }]
+        let metaSemanal = 3;               // días por semana para sumar a la racha (los del plan, máximo 4)
+        let logrosListos = false;          // los festejos arrancan cuando ya cargó todo
+
+        async function cargarEntrenamientos() {
+            try {
+                const res = await fetch(`/api/entrenamientos/${socioId}`);
+                entrenamientosHechos = res.ok ? await res.json() : [];
+            } catch (e) { entrenamientosHechos = []; }
+            if (rutinaDias.length) renderRutina();
+        }
+
+        // Lunes de la semana de una fecha 'YYYY-MM-DD' (como texto, para agrupar)
+        function lunesDe(texto) {
+            const d = fechaDe(texto);
+            d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+        function semanaAnterior(lunes) {
+            const d = fechaDe(lunes);
+            d.setDate(d.getDate() - 7);
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function calcularRacha() {
+            const dias = new Set([...asistenciasFechas, ...entrenamientosHechos.map(e => e.fecha)]);
+            const porSemana = {};
+            dias.forEach(f => { const l = lunesDe(f); porSemana[l] = (porSemana[l] || 0) + 1; });
+            const cumple = l => (porSemana[l] || 0) >= metaSemanal;
+
+            const estaSemana = lunesDe(hoyISO());
+            // La semana en curso suma si ya cumpliste; si todavía no, no corta la racha
+            let semana = cumple(estaSemana) ? estaSemana : semanaAnterior(estaSemana);
+            let actual = 0;
+            while (cumple(semana)) { actual++; semana = semanaAnterior(semana); }
+
+            // Mejor racha de la historia
+            let mejor = 0, seguidas = 0;
+            const semanas = Object.keys(porSemana).sort();
+            if (semanas.length) {
+                for (let l = semanas[0]; l <= estaSemana; ) {
+                    seguidas = cumple(l) ? seguidas + 1 : (l === estaSemana ? seguidas : 0);
+                    mejor = Math.max(mejor, seguidas);
+                    const d = fechaDe(l); d.setDate(d.getDate() + 7);
+                    l = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                }
+            }
+            return { actual, mejor: Math.max(mejor, actual), estaSemana: porSemana[estaSemana] || 0, totalDias: dias.size };
+        }
+
+        // Cuántas veces superaste tu propia marca en algún ejercicio
+        function recordsSuperados() {
+            const maximos = {};
+            let superados = 0;
+            historialCargas.map(c => ({ ej: String(c.ejercicio).trim().toLowerCase(), peso: Number(c.peso), t: new Date(c.fecha).getTime() }))
+                .sort((a, b) => a.t - b.t)
+                .forEach(c => {
+                    if (maximos[c.ej] !== undefined && c.peso > maximos[c.ej]) superados++;
+                    maximos[c.ej] = Math.max(maximos[c.ej] ?? 0, c.peso);
+                });
+            return superados;
+        }
+
+        // Cambio desde el primer registro hasta el último de una métrica (peso, cintura...)
+        function cambioTotal(m) {
+            const puntos = registrosPeso.filter(r => valorDe(r, m) !== null);
+            return puntos.length > 1 ? redondeo1(valorDe(puntos[puntos.length - 1], m) - valorDe(puntos[0], m)) : 0;
+        }
+
+        // Lista de logros: valor(datos) va contra la meta. "si" decide si el logro aplica a este socio.
+        const LOGROS = [
+            { id: 'ent1',   emoji: '👟', nombre: 'Primer paso',        desc: 'Tu primer entrenamiento',              meta: 1,   valor: d => d.racha.totalDias },
+            { id: 'ent10',  emoji: '💪', nombre: 'Arrancaste en serio', desc: '10 entrenamientos',                   meta: 10,  valor: d => d.racha.totalDias },
+            { id: 'ent25',  emoji: '🏋️', nombre: 'Habitué',            desc: '25 entrenamientos',                    meta: 25,  valor: d => d.racha.totalDias },
+            { id: 'ent50',  emoji: '⚡', nombre: 'Imparable',           desc: '50 entrenamientos',                    meta: 50,  valor: d => d.racha.totalDias },
+            { id: 'ent100', emoji: '💯', nombre: 'Club de los 100',     desc: '100 entrenamientos',                   meta: 100, valor: d => d.racha.totalDias },
+            { id: 'ent250', emoji: '👑', nombre: 'Leyenda Forza',       desc: '250 entrenamientos',                   meta: 250, valor: d => d.racha.totalDias },
+            { id: 'rac2',   emoji: '🔥', nombre: 'En racha',            desc: '2 semanas seguidas cumpliendo tu meta', meta: 2,  valor: d => d.racha.mejor },
+            { id: 'rac4',   emoji: '📅', nombre: 'Un mes sin aflojar',  desc: '4 semanas seguidas',                   meta: 4,   valor: d => d.racha.mejor },
+            { id: 'rac8',   emoji: '🧱', nombre: 'Disciplina',          desc: '8 semanas seguidas',                   meta: 8,   valor: d => d.racha.mejor },
+            { id: 'rac12',  emoji: '🏔️', nombre: 'Tres meses on fire',  desc: '12 semanas seguidas',                  meta: 12,  valor: d => d.racha.mejor },
+            { id: 'rut1',   emoji: '✅', nombre: 'Rutina completa',     desc: 'Completá un día de rutina en la app',  meta: 1,   valor: d => d.rutinas },
+            { id: 'rut20',  emoji: '📋', nombre: 'Al pie de la letra',  desc: '20 rutinas completadas',               meta: 20,  valor: d => d.rutinas },
+            { id: 'car1',   emoji: '📈', nombre: 'Primera marca',       desc: 'Registrá tu primera carga',            meta: 1,   valor: d => historialCargas.length },
+            { id: 'rec1',   emoji: '🏆', nombre: 'Récord personal',     desc: 'Superá una de tus marcas',             meta: 1,   valor: d => d.records },
+            { id: 'rec10',  emoji: '🥇', nombre: 'Rompe récords',       desc: 'Superá tus marcas 10 veces',           meta: 10,  valor: d => d.records },
+            { id: 'pes1',   emoji: '⚖️', nombre: 'Punto de partida',    desc: 'Registrá tu peso por primera vez',     meta: 1,   valor: d => registrosPeso.filter(r => r.peso !== null).length },
+            { id: 'pes8',   emoji: '📊', nombre: 'Bajo control',        desc: '8 registros de peso',                  meta: 8,   valor: d => registrosPeso.filter(r => r.peso !== null).length },
+            { id: 'med1',   emoji: '📏', nombre: 'Centímetro en mano',  desc: 'Registrá tus medidas',                 meta: 1,   valor: d => registrosPeso.filter(r => Object.keys(r.medidas || {}).length).length },
+            { id: 'cin3',   emoji: '🎯', nombre: 'Cintura de avispa',   desc: 'Bajá 3 cm de cintura',                 meta: 3,   valor: d => Math.max(0, -cambioTotal('cintura')), unidad: 'cm' },
+            { id: 'fot1',   emoji: '📸', nombre: 'Foto de partida',     desc: 'Subí tu primera foto de progreso',     meta: 1,   valor: d => registrosPeso.filter(r => r.foto).length },
+            { id: 'fot5',   emoji: '🖼️', nombre: 'Álbum de progreso',   desc: '5 fotos de progreso',                  meta: 5,   valor: d => registrosPeso.filter(r => r.foto).length },
+            { id: 'baj2',   emoji: '🔻', nombre: 'Primeros 2 kilos',    desc: 'Bajá 2 kg desde tu primer registro',   meta: 2,   valor: d => Math.max(0, -cambioTotal('peso')), unidad: 'kg', si: d => d.objetivo === 'bajar' },
+            { id: 'baj5',   emoji: '🎉', nombre: 'Menos 5',             desc: 'Bajá 5 kg desde tu primer registro',   meta: 5,   valor: d => Math.max(0, -cambioTotal('peso')), unidad: 'kg', si: d => d.objetivo === 'bajar' },
+            { id: 'baj10',  emoji: '🦋', nombre: 'Transformación',      desc: 'Bajá 10 kg desde tu primer registro',  meta: 10,  valor: d => Math.max(0, -cambioTotal('peso')), unidad: 'kg', si: d => d.objetivo === 'bajar' },
+            { id: 'sub2',   emoji: '🔺', nombre: 'Sumando masa',        desc: 'Subí 2 kg desde tu primer registro',   meta: 2,   valor: d => Math.max(0, cambioTotal('peso')), unidad: 'kg', si: d => d.objetivo === 'subir' },
+            { id: 'sub5',   emoji: '🦍', nombre: 'Volumen',             desc: 'Subí 5 kg desde tu primer registro',   meta: 5,   valor: d => Math.max(0, cambioTotal('peso')), unidad: 'kg', si: d => d.objetivo === 'subir' }
+        ];
+
+        function calcularLogros() {
+            const datos = {
+                racha: calcularRacha(),
+                rutinas: entrenamientosHechos.length,
+                records: recordsSuperados(),
+                objetivo: nutri && nutri.perfil ? nutri.perfil.objetivo : null
+            };
+            const lista = LOGROS.filter(l => !l.si || l.si(datos)).map(l => {
+                const valor = l.valor(datos);
+                return { ...l, valor, logrado: valor >= l.meta };
+            });
+            return { datos, lista };
+        }
+
+        function actualizarLogros() {
+            const { datos, lista } = calcularLogros();
+            const { racha } = datos;
+
+            // ---- Tarjeta de racha en Inicio ----
+            const titulo = document.getElementById('rachaNumero');
+            if (titulo) {
+                titulo.textContent = racha.actual;
+                document.getElementById('rachaTexto').textContent = racha.actual === 1 ? 'semana seguida' : 'semanas seguidas';
+                document.getElementById('rachaCard').classList.toggle('apagada', racha.actual === 0);
+                const hechas = Math.min(racha.estaSemana, metaSemanal);
+                document.getElementById('rachaSemana').innerHTML =
+                    Array.from({ length: metaSemanal }, (_, i) => `<span class="punto-semana ${i < hechas ? 'lleno' : ''}"></span>`).join('') +
+                    `<small>${racha.estaSemana >= metaSemanal ? '¡Meta de la semana cumplida!' : `Esta semana: ${racha.estaSemana} de ${metaSemanal}`}</small>`;
+                document.getElementById('rachaMejor').textContent = racha.mejor > racha.actual ? `Tu mejor racha: ${racha.mejor} semanas` :
+                    racha.actual > 1 ? '¡Es tu mejor racha!' : `Entrená ${metaSemanal} días por semana para sumar`;
+
+                // Próximo logro (el que tenés más cerca)
+                const proximo = lista.filter(l => !l.logrado && l.valor > 0).sort((a, b) => b.valor / b.meta - a.valor / a.meta)[0]
+                    || lista.find(l => !l.logrado);
+                const elProx = document.getElementById('rachaProximo');
+                if (proximo) {
+                    elProx.style.display = '';
+                    elProx.innerHTML = `
+                        <span class="emoji-logro">${proximo.emoji}</span>
+                        <div><b>Próximo logro: ${esc(proximo.nombre)}</b><small>${esc(proximo.desc)}</small>
+                        <div class="barra-avance"><span style="width:${Math.min(100, Math.round(proximo.valor * 100 / proximo.meta))}%"></span></div></div>
+                        <em>${textoAvance(proximo)}</em>`;
+                } else elProx.style.display = 'none';
+            }
+
+            // ---- Vitrina de logros en Perfil ----
+            const logrados = lista.filter(l => l.logrado).length;
+            document.getElementById('logrosContador').textContent = `${logrados}/${lista.length}`;
+            document.getElementById('gridLogros').innerHTML = lista
+                .sort((a, b) => (b.logrado - a.logrado) || (b.valor / b.meta - a.valor / a.meta))
+                .map(l => `
+                    <div class="logro ${l.logrado ? 'logrado' : ''}" title="${esc(l.desc)}">
+                        <span class="emoji-logro">${l.emoji}</span>
+                        <b>${esc(l.nombre)}</b>
+                        <small>${esc(l.desc)}</small>
+                        ${l.logrado ? '' : `<em>${textoAvance(l)}</em>`}
+                    </div>`).join('');
+
+            // ---- Festejo de logros nuevos ----
+            if (!logrosListos) return;
+            const clave = `logros-${socioId}`;
+            let vistos = null;
+            try { vistos = JSON.parse(localStorage.getItem(clave)); } catch (e) { /* sin storage */ }
+            const ids = lista.filter(l => l.logrado).map(l => l.id);
+            if (Array.isArray(vistos)) {
+                const nuevos = lista.filter(l => l.logrado && !vistos.includes(l.id));
+                if (nuevos.length) {
+                    mostrarToast(`<span class="emoji-toast">${nuevos[0].emoji}</span> <b>¡Logro desbloqueado!</b> ${esc(nuevos[0].nombre)}${nuevos.length > 1 ? ` y ${nuevos.length - 1} más` : ''}`, 4500);
+                    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+                }
+            }
+            // La primera vez solo se guardan (no se festejan logros viejos de golpe)
+            try { localStorage.setItem(clave, JSON.stringify([...new Set([...(vistos || []), ...ids])])); } catch (e) { /* sin storage */ }
+        }
+
+        function textoAvance(l) {
+            const v = Number(l.valor.toFixed ? l.valor.toFixed(1) : l.valor);
+            return `${v.toLocaleString('es-AR')}${l.unidad ? ' ' + l.unidad : ''} / ${l.meta}${l.unidad ? ' ' + l.unidad : ''}`;
         }
 
         // ================= NUTRICIÓN =================
@@ -1784,8 +2312,10 @@
             const dia = rutinaDias[i];
             const nombres = dia.ejercicios.map(e => e.nombre);
             document.getElementById('hoyTitulo').innerHTML = `Día ${i + 1}${dia.nombre ? ` · <span>${esc(dia.nombre)}</span>` : ''}`;
-            document.getElementById('hoyDetalle').textContent =
-                `${nombres.length} ${nombres.length === 1 ? 'ejercicio' : 'ejercicios'}: ${nombres.slice(0, 4).join(', ')}${nombres.length > 4 ? '…' : ''}`;
+            const hechos = estadoDia(i).hechos.filter(x => x < nombres.length).length;
+            document.getElementById('hoyDetalle').textContent = completadoHoy(i) ? '✅ Ya lo completaste hoy. ¡Bien ahí!'
+                : hechos ? `Vas ${hechos} de ${nombres.length} ejercicios. ¡Seguí así!`
+                : `${nombres.length} ${nombres.length === 1 ? 'ejercicio' : 'ejercicios'}: ${nombres.slice(0, 4).join(', ')}${nombres.length > 4 ? '…' : ''}`;
             card.style.display = '';
         }
 
@@ -1796,7 +2326,11 @@
         })();
 
         function cerrarSesion() { localStorage.clear(); window.location.href = 'login.html'; }
-        document.addEventListener('DOMContentLoaded', () => { cargarDatosPerfil(); cargarAsistencias(); cargarPesoCorporal(); });
+        document.addEventListener('DOMContentLoaded', async () => {
+            await Promise.all([cargarDatosPerfil(), cargarAsistencias(), cargarPesoCorporal(), cargarEntrenamientos()]);
+            logrosListos = true;     // desde acá, los logros nuevos se festejan
+            actualizarLogros();
+        });
     </script>
 </body>
 </html>

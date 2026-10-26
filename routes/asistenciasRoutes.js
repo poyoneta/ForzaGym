@@ -125,12 +125,14 @@ router.post("/codigo", async (req, res) => {
 
 // ==========================================
 // 5. ASISTENCIAS DE UN SOCIO (GET /api/asistencias/socio/5) - para su panel
+//    Por defecto, los últimos 120 días. Con ?todas=1 trae todo (para los logros).
 // ==========================================
 router.get("/socio/:id", async (req, res) => {
     try {
+        const filtroFecha = req.query.todas ? "" : `AND fecha > ${HOY_ARGENTINA} - 120`;
         const result = await db.query(
             `SELECT to_char(fecha, 'YYYY-MM-DD') AS fecha FROM asistencias
-             WHERE socio_id = $1 AND fecha > ${HOY_ARGENTINA} - 120
+             WHERE socio_id = $1 ${filtroFecha}
              ORDER BY fecha DESC`,
             [req.params.id]
         );

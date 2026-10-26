@@ -51,6 +51,12 @@ app.use(
     require("./routes/pesoCorporalRoutes")
 );
 
+// Rutinas completadas desde la app (para la racha y los logros)
+app.use(
+    "/api/entrenamientos",
+    require("./routes/entrenamientosRoutes")
+);
+
 // Fotos subidas desde el backoffice
 app.use(
     "/api/imagenes",

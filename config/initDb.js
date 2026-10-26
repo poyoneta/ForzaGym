@@ -170,9 +170,31 @@ async function inicializarBaseDeDatos() {
                 UNIQUE (socio_id, fecha)
             )
         `);
+        // Medidas corporales (cintura, cadera...) y peso opcional: se puede cargar solo medidas o solo una foto
+        await db.query(`ALTER TABLE registros_peso_corporal ADD COLUMN IF NOT EXISTS medidas JSONB`);
+        await db.query(`ALTER TABLE registros_peso_corporal ALTER COLUMN peso DROP NOT NULL`);
         console.log("✅ Tabla 'registros_peso_corporal' lista");
     } catch (error) {
         console.error("❌ No se pudo crear la tabla 'registros_peso_corporal':", error.message);
+    }
+
+    try {
+        // Rutinas completadas desde la app (un registro por día de rutina por fecha)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS entrenamientos (
+                id SERIAL PRIMARY KEY,
+                socio_id INTEGER NOT NULL REFERENCES socios(id) ON DELETE CASCADE,
+                fecha DATE NOT NULL,
+                dia INTEGER NOT NULL,
+                nombre_dia VARCHAR(100),
+                ejercicios INTEGER NOT NULL DEFAULT 0,
+                creado TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                UNIQUE (socio_id, fecha, dia)
+            )
+        `);
+        console.log("✅ Tabla 'entrenamientos' lista");
+    } catch (error) {
+        console.error("❌ No se pudo crear la tabla 'entrenamientos':", error.message);
     }
 }
 
