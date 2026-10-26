@@ -3,319 +3,320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forza Gym | Break Your Limits</title>
-    <meta name="description" content="Forza Gym: musculación, crossfit, funcional, GAP y boxeo. Planes mensuales, rutinas personalizadas y seguimiento de tu progreso desde la app.">
-    <meta name="theme-color" content="#0b0b0b">
+    <title>Forza Gym | Gimnasio en Villa del Rosario</title>
+    <meta name="description" content="Forza Gym, gimnasio en Villa del Rosario (Córdoba): musculación, crossfit, funcional, GAP y boxeo. Planes mensuales y tu rutina personalizada en el celular.">
+    <meta name="theme-color" content="#000000">
 
     <!-- Vista previa al compartir el link (WhatsApp, Instagram, etc.) -->
     <meta property="og:title" content="Forza Gym | Break Your Limits">
-    <meta property="og:description" content="Planes mensuales, entrenador profesional y rutinas personalizadas. ¡Sumate!">
+    <meta property="og:description" content="Gimnasio en Villa del Rosario. Planes mensuales, entrenador y tu rutina en el celular.">
     <meta property="og:image" content="/imagenes/hero.jpg">
     <meta property="og:type" content="website">
 
     <link rel="icon" type="image/jpeg" href="imagenes/logo.jpg">
     <link rel="apple-touch-icon" href="imagenes/logo.jpg">
     <link rel="manifest" href="/manifest.json">
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <a class="saltar" href="#contenido">Ir al contenido</a>
 
     <!-- ===================== NAVEGACIÓN ===================== -->
-    <header class="barra-nav" id="inicio">
-        <a href="#inicio" class="marca">
-            <img src="imagenes/logo.jpg" alt="Logo Forza Gym" class="logo-header">
-            <span>FORZA <strong>GYM</strong></span>
+    <header class="barra">
+        <a href="#arriba" class="marca" aria-label="Forza Gym, volver arriba">
+            <img src="imagenes/logo-splash.png" alt="" width="40" height="40">
+            <span>Forza</span>
         </a>
 
-        <button class="btn-menu" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="menuPrincipal">
-            <i class="fa-solid fa-bars"></i>
-        </button>
-
-        <nav id="menuPrincipal">
+        <nav class="menu" id="menuPrincipal" aria-label="Secciones">
             <a href="#actividades">Actividades</a>
             <a href="#planes">Planes</a>
             <a href="#horarios">Horarios</a>
-            <a href="#entrenadores">Entrenador</a>
+            <a href="#app">La app</a>
             <a href="#tienda">Tienda</a>
-            <a href="#ubicacion">Ubicación</a>
-            <a href="login.html" class="nav-ingresar"><i class="fa-solid fa-user"></i> Ingresar</a>
+            <a href="#ubicacion">Cómo llegar</a>
         </nav>
+
+        <a href="login.html" class="btn-ingresar">Ingresar</a>
+        <button class="btn-menu" id="btnMenu" aria-label="Abrir menú" aria-expanded="false" aria-controls="menuPrincipal">
+            <span></span><span></span>
+        </button>
     </header>
 
-    <main>
+    <main id="contenido">
 
-        <!-- ===================== HERO ===================== -->
-        <section class="hero">
-            <div class="hero-contenido">
-                <p class="hero-slogan">Break Your Limits</p>
-                <h1>Transformá tu cuerpo y tu energía</h1>
-                <p class="hero-texto">
-                    Planes mensuales, entrenador profesional y tu rutina personalizada
-                    siempre a mano desde el celular.
+        <!-- ===================== PORTADA ===================== -->
+        <section class="portada" id="arriba">
+            <img class="portada-foto" src="imagenes/hero.jpg" alt="" fetchpriority="high">
+            <div class="portada-texto">
+                <h1 class="lema" aria-label="Break your limits">
+                    <span class="lema-caja" aria-hidden="true">
+                        <span>Break</span>
+                        <span>your</span>
+                        <span>limits</span>
+                    </span>
+                    <span class="lema-firma" aria-hidden="true">Team Forza</span>
+                </h1>
+                <p class="portada-bajada">
+                    Tu gimnasio en Villa del Rosario. Musculación, crossfit, funcional,
+                    GAP y boxeo, con tu rutina armada por el entrenador y siempre a mano en el celular.
                 </p>
-                <div class="hero-botones">
-                    <a href="registro.html" class="btn btn-principal">Inscribite</a>
-                    <a href="#planes" class="btn btn-secundario">Ver planes</a>
+                <div class="acciones">
+                    <a href="registro.html" class="btn btn-verde">Quiero empezar</a>
+                    <a href="#planes" class="btn btn-linea">Ver planes y precios</a>
                 </div>
             </div>
         </section>
 
+        <!-- Estado en vivo: abierto/cerrado según los horarios cargados -->
+        <div class="estado" aria-live="polite">
+            <p class="estado-ahora" id="estadoAhora"><span class="luz"></span> <span id="estadoTexto">Mirá nuestros horarios</span></p>
+            <p class="estado-dato"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> <span data-direccion></span></p>
+            <p class="estado-dato"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <a href="#" data-whatsapp>Escribinos</a></p>
+        </div>
+
         <!-- ===================== ACTIVIDADES ===================== -->
-        <section id="actividades">
-            <h2>Nuestras Actividades</h2>
+        <section class="seccion" id="actividades">
+            <div class="cabecera">
+                <h2>Qué entrenamos</h2>
+                <p>Cinco formas de moverte en el mismo lugar. Todas entran en tu plan.</p>
+            </div>
 
-            <div class="contenedor-actividades">
-                <article class="tarjeta-actividad">
-                    <div class="imagen-actividad">
-                        <img src="imagenes/crossfit.jpg" alt="Clase de crossfit" loading="lazy">
-                    </div>
-                    <div class="barra-actividad">🏋️‍♂️ CROSSFIT</div>
-                    <p class="desc-actividad">Alta intensidad: combina levantamiento, gimnasia y cardio en entrenamientos variados.</p>
+            <div class="actividades">
+                <article class="actividad">
+                    <img src="imagenes/musculacion.jpg" alt="Socio entrenando con mancuernas junto al entrenador" loading="lazy">
+                    <h3>Musculación</h3>
+                    <p>Pesas y máquinas para ganar fuerza y masa muscular, con tu rutina personalizada.</p>
                 </article>
-
-                <article class="tarjeta-actividad">
-                    <div class="imagen-actividad">
-                        <img src="imagenes/funcional.jpg" alt="Entrenamiento funcional" loading="lazy">
-                    </div>
-                    <div class="barra-actividad">💪 FUNCIONAL</div>
-                    <p class="desc-actividad">Movimientos naturales del cuerpo para ganar fuerza, coordinación y resistencia.</p>
+                <article class="actividad">
+                    <img src="imagenes/crossfit.jpg" alt="Atleta levantando una pesa rusa" loading="lazy">
+                    <h3>Crossfit</h3>
+                    <p>Levantamiento, gimnasia y cardio en entrenamientos cortos y variados.</p>
                 </article>
-
-                <article class="tarjeta-actividad">
-                    <div class="imagen-actividad">
-                        <img src="imagenes/gap.jpg" alt="Clase de GAP" loading="lazy">
-                    </div>
-                    <div class="barra-actividad">🔥 GAP</div>
-                    <p class="desc-actividad">Glúteos, abdominales y piernas: tonificá el tren inferior y fortalecé el core.</p>
+                <article class="actividad">
+                    <img src="imagenes/funcional.jpg" alt="Dos personas haciendo plancha con mancuernas" loading="lazy">
+                    <h3>Funcional</h3>
+                    <p>Movimientos naturales del cuerpo para ganar fuerza, coordinación y resistencia.</p>
                 </article>
-
-                <article class="tarjeta-actividad">
-                    <div class="imagen-actividad">
-                        <img src="imagenes/musculacion.jpg" alt="Musculación con pesas" loading="lazy">
-                    </div>
-                    <div class="barra-actividad">🏋️ MUSCULACIÓN</div>
-                    <p class="desc-actividad">Pesas y máquinas para ganar fuerza y masa muscular, con tu rutina personalizada.</p>
+                <article class="actividad">
+                    <img src="imagenes/gap.jpg" alt="Mujer haciendo ejercicio de piernas sobre una colchoneta" loading="lazy">
+                    <h3>GAP</h3>
+                    <p>Glúteos, abdominales y piernas: tonificá el tren inferior y fortalecé el core.</p>
                 </article>
-
-                <article class="tarjeta-actividad">
-                    <div class="imagen-actividad">
-                        <img src="imagenes/boxeo.jpg" alt="Clase de boxeo" loading="lazy">
-                    </div>
-                    <div class="barra-actividad">🥊 BOXEO</div>
-                    <p class="desc-actividad">Técnica, cardio y descarga: mejorá tu resistencia, reflejos y coordinación.</p>
+                <article class="actividad">
+                    <img src="imagenes/boxeo.jpg" alt="Boxeador golpeando la bolsa" loading="lazy">
+                    <h3>Boxeo</h3>
+                    <p>Técnica, cardio y descarga para mejorar resistencia, reflejos y coordinación.</p>
                 </article>
             </div>
         </section>
 
         <!-- ===================== PLANES ===================== -->
-        <section id="planes">
-            <h2>Planes de entrenamiento</h2>
+        <section class="seccion" id="planes">
+            <div class="cabecera">
+                <h2>Planes</h2>
+                <p>Pagás por mes y elegís cuántos días venir. Todos incluyen tu rutina en la app.</p>
+            </div>
 
-            <div class="contenedor-planes">
-                <article class="tarjeta-plan">
-                    <h3>Plan Básico</h3>
-                    <p class="precio">$18.000 <span>/ mes</span></p>
-                    <ul class="lista-beneficios">
-                        <li><i class="fa-solid fa-check"></i> 2 días por semana</li>
-                        <li><i class="fa-solid fa-check"></i> Rutina personalizada en la app</li>
-                        <li><i class="fa-solid fa-check"></i> Registro de cargas y progreso</li>
+            <div class="planes" id="listaPlanes">
+                <article class="plan">
+                    <h3>Básico</h3>
+                    <p class="plan-dias">2 días por semana</p>
+                    <p class="plan-precio"><span class="signo">$</span>18.000<span class="mes">por mes</span></p>
+                    <ul>
+                        <li>Rutina personalizada en la app</li>
+                        <li>Registro de cargas y progreso</li>
                     </ul>
-                    <a href="registro.html?plan=B%C3%A1sico" class="btn btn-secundario">Elegir plan</a>
+                    <a href="registro.html?plan=B%C3%A1sico" class="btn btn-linea">Elegir Básico</a>
                 </article>
-
-                <article class="tarjeta-plan">
-                    <h3>Plan Plus</h3>
-                    <p class="precio">$23.000 <span>/ mes</span></p>
-                    <ul class="lista-beneficios">
-                        <li><i class="fa-solid fa-check"></i> 3 días por semana</li>
-                        <li><i class="fa-solid fa-check"></i> Rutina personalizada en la app</li>
-                        <li><i class="fa-solid fa-check"></i> Registro de cargas y progreso</li>
+                <article class="plan">
+                    <h3>Plus</h3>
+                    <p class="plan-dias">3 días por semana</p>
+                    <p class="plan-precio"><span class="signo">$</span>23.000<span class="mes">por mes</span></p>
+                    <ul>
+                        <li>Rutina personalizada en la app</li>
+                        <li>Registro de cargas y progreso</li>
                     </ul>
-                    <a href="registro.html?plan=Plus" class="btn btn-secundario">Elegir plan</a>
+                    <a href="registro.html?plan=Plus" class="btn btn-linea">Elegir Plus</a>
                 </article>
-
-                <article class="tarjeta-plan destacado">
-                    <span class="etiqueta-destacado">Recomendado</span>
-                    <h3>Plan Premium</h3>
-                    <p class="precio">$30.000 <span>/ mes</span></p>
-                    <ul class="lista-beneficios">
-                        <li><i class="fa-solid fa-check"></i> Pase libre todos los días</li>
-                        <li><i class="fa-solid fa-check"></i> Asesoramiento nutricional</li>
-                        <li><i class="fa-solid fa-check"></i> Rutina personalizada en la app</li>
-                        <li><i class="fa-solid fa-check"></i> Registro de cargas y progreso</li>
+                <article class="plan plan-destacado">
+                    <p class="plan-marca">Recomendado</p>
+                    <h3>Premium</h3>
+                    <p class="plan-dias">Pase libre + nutrición</p>
+                    <p class="plan-precio"><span class="signo">$</span>30.000<span class="mes">por mes</span></p>
+                    <ul>
+                        <li>Pase libre todos los días</li>
+                        <li>Plan de nutrición con recetas</li>
+                        <li>Rutina personalizada en la app</li>
+                        <li>Registro de cargas y progreso</li>
                     </ul>
-                    <a href="registro.html?plan=Premium" class="btn btn-principal">Elegir plan</a>
+                    <a href="registro.html?plan=Premium" class="btn btn-verde">Elegir Premium</a>
                 </article>
             </div>
         </section>
 
         <!-- ===================== HORARIOS ===================== -->
-        <section id="horarios">
-            <h2>Horarios</h2>
-
-            <div class="contenedor-horarios">
-                <article class="tarjeta-horario">
-                    <div class="etiqueta-dia">Lunes a Viernes</div>
-
-                    <div class="bloque-turno">
-                        <h3>Por la mañana</h3>
-                        <p class="hora">8:00 a 12:00</p>
-                    </div>
-
-                    <div class="divisor-horario"></div>
-
-                    <div class="bloque-turno">
-                        <h3>Por la tarde</h3>
-                        <p class="hora">16:00 a 22:30</p>
-                    </div>
-                </article>
-
-                <article class="tarjeta-horario">
-                    <div class="etiqueta-dia">Sábado</div>
-
-                    <div class="bloque-turno">
-                        <h3>Por la mañana</h3>
-                        <p class="hora">10:30 a 12:30</p>
-                    </div>
-                </article>
+        <section class="seccion" id="horarios">
+            <div class="cabecera">
+                <h2>Horarios</h2>
+                <p id="horariosBajada">Cuándo podés venir, día por día.</p>
             </div>
+
+            <!-- Grilla semanal (la arma script.js con los horarios cargados en "Editar sitio") -->
+            <div class="semana" id="grillaSemana" hidden></div>
+
+            <!-- Lista de horarios (se ve siempre; si la grilla no se puede armar, queda solo esta) -->
+            <dl class="horarios-lista" id="listaHorarios">
+                <div>
+                    <dt>Lunes a Viernes</dt>
+                    <dd>Por la mañana: 8:00 a 12:00</dd>
+                    <dd>Por la tarde: 16:00 a 22:30</dd>
+                </div>
+                <div>
+                    <dt>Sábado</dt>
+                    <dd>Por la mañana: 10:30 a 12:30</dd>
+                </div>
+            </dl>
         </section>
 
         <!-- ===================== ENTRENADOR ===================== -->
-        <section id="entrenadores">
-            <h2>Entrenador</h2>
-
-            <div class="contenedor-tarjetas">
-                <article class="tarjeta">
-                    <img src="imagenes/entrenador.jpeg" alt="Leonardo Bustillo, entrenador de musculación" loading="lazy">
-                    <h3>Leonardo Bustillo</h3>
-                    <p>Especialista en musculación e hipertrofia.</p>
-                </article>
+        <section class="seccion entrenador" id="entrenador">
+            <img src="imagenes/entrenador.jpeg" alt="Leonardo Bustillo" loading="lazy">
+            <div class="entrenador-texto">
+                <h2>Leonardo Bustillo</h2>
+                <p class="entrenador-rol">Entrenador, especialista en musculación e hipertrofia</p>
+                <p>Leo arma tu rutina según tu objetivo y los días que venís, y la va ajustando a medida que avanzás. La ves en la app el mismo día que te la carga.</p>
             </div>
         </section>
 
-        <!-- ===================== TIENDA / INDUMENTARIA OFICIAL ===================== -->
-        <!-- Para agregar una prenda: copiá un <article> y cambiá imagen, nombre, descripción y data-producto.
-             Si querés mostrar el precio, completá el <p class="precio-producto">; si lo dejás vacío no se ve. -->
-        <section id="tienda">
-            <h2>Indumentaria oficial</h2>
-            <p class="subtitulo-seccion">Entrená con los colores de Forza. Consultanos talles, stock y precio por WhatsApp.</p>
+        <!-- ===================== LA APP ===================== -->
+        <section class="seccion app" id="app">
+            <div class="app-texto">
+                <h2>Tu entrenamiento en el celular</h2>
+                <p>Cuando te anotás, tenés tu propio panel. Se instala como una app desde el navegador, sin descargar nada de la tienda.</p>
+                <ul class="app-lista">
+                    <li><i class="fa-solid fa-dumbbell" aria-hidden="true"></i><div><b>La rutina del día</b>Tildás cada ejercicio y anotás los kilos mientras entrenás.</div></li>
+                    <li><i class="fa-solid fa-chart-line" aria-hidden="true"></i><div><b>Tu progreso</b>Cargas, peso, medidas y fotos de antes y ahora.</div></li>
+                    <li><i class="fa-solid fa-fire" aria-hidden="true"></i><div><b>Racha y logros</b>Cada semana que cumplís, la racha suma.</div></li>
+                    <li><i class="fa-solid fa-apple-whole" aria-hidden="true"></i><div><b>Nutrición con recetas</b>Un menú para tu objetivo que cambia cada mes. Incluido en Premium.</div></li>
+                </ul>
+                <a href="registro.html" class="btn btn-verde">Crear mi cuenta</a>
+            </div>
 
-            <div class="contenedor-tienda">
-                <article class="tarjeta-producto">
-                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto de la remera deportiva">
+            <!-- Celular de muestra (ilustración hecha con HTML, no es una captura) -->
+            <div class="celular" aria-hidden="true">
+                <div class="celular-pantalla">
+                    <p class="cel-dia">Día 2 <span>Pecho y espalda</span></p>
+                    <div class="cel-avance"><span></span></div>
+                    <p class="cel-cuenta">2 de 4 ejercicios</p>
+                    <div class="cel-ej hecho"><i></i><div><b>Press de banca</b><small>4 × 8</small></div><em>62,5</em></div>
+                    <div class="cel-ej hecho"><i></i><div><b>Remo con barra</b><small>4 × 10</small></div><em>50</em></div>
+                    <div class="cel-ej"><i></i><div><b>Press inclinado</b><small>3 × 10</small></div><em>--</em></div>
+                    <div class="cel-ej"><i></i><div><b>Dominadas</b><small>3 × 8</small></div><em>--</em></div>
+                    <div class="cel-racha">🔥 <b>5</b> semanas seguidas</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================== TIENDA ===================== -->
+        <section class="seccion" id="tienda">
+            <div class="cabecera">
+                <h2>Indumentaria oficial</h2>
+                <p>Entrená con los colores de Forza. Consultá talles, stock y precio por WhatsApp.</p>
+            </div>
+
+            <div class="tienda" id="listaProductos">
+                <article class="producto">
+                    <button class="producto-foto" data-ampliar aria-label="Ampliar foto: Remera deportiva">
                         <img src="imagenes/tienda-remera.jpg" alt="Remera deportiva Forza, frente y espalda" loading="lazy">
                     </button>
-                    <div class="info-producto">
-                        <h3>Remera deportiva</h3>
-                        <p>Tela deportiva con vivos en verde y "Break Your Limits" en la espalda.</p>
-                        <p class="precio-producto"></p>
-                        <a href="#" class="btn btn-secundario" data-producto="Remera deportiva"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
-                    </div>
+                    <h3>Remera deportiva</h3>
+                    <p>Tela deportiva con vivos en verde y "Break Your Limits" en la espalda.</p>
+                    <a href="#" class="consultar" data-producto="Remera deportiva"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Consultar</a>
                 </article>
-
-                <article class="tarjeta-producto">
-                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto de la remera Team Forza">
-                        <img src="imagenes/tienda-remera-team.jpg" alt="Remera Team Forza One More Rep, frente y espalda" loading="lazy">
+                <article class="producto">
+                    <button class="producto-foto" data-ampliar aria-label="Ampliar foto: Remera Team Forza">
+                        <img src="imagenes/tienda-remera-team.jpg" alt="Remera Team Forza, frente y espalda" loading="lazy">
                     </button>
-                    <div class="info-producto">
-                        <h3>Remera Team Forza</h3>
-                        <p>Logo grande en la espalda con "One More Rep" y "Team Forza".</p>
-                        <p class="precio-producto"></p>
-                        <a href="#" class="btn btn-secundario" data-producto="Remera Team Forza"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
-                    </div>
+                    <h3>Remera Team Forza</h3>
+                    <p>Logo grande en la espalda con "One More Rep" y "Team Forza".</p>
+                    <a href="#" class="consultar" data-producto="Remera Team Forza"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Consultar</a>
                 </article>
-
-                <article class="tarjeta-producto">
-                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto de la musculosa">
+                <article class="producto">
+                    <button class="producto-foto" data-ampliar aria-label="Ampliar foto: Musculosa">
                         <img src="imagenes/tienda-musculosa.jpg" alt="Musculosa Forza, frente y espalda" loading="lazy">
                     </button>
-                    <div class="info-producto">
-                        <h3>Musculosa</h3>
-                        <p>Ideal para entrenar: franja vertical en verde y logo en el pecho.</p>
-                        <p class="precio-producto"></p>
-                        <a href="#" class="btn btn-secundario" data-producto="Musculosa"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
-                    </div>
+                    <h3>Musculosa</h3>
+                    <p>Ideal para entrenar: franja vertical en verde y logo en el pecho.</p>
+                    <a href="#" class="consultar" data-producto="Musculosa"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Consultar</a>
                 </article>
-
-                <article class="tarjeta-producto">
-                    <button class="imagen-producto" data-ampliar aria-label="Ampliar foto del buzo con capucha">
+                <article class="producto">
+                    <button class="producto-foto" data-ampliar aria-label="Ampliar foto: Buzo con capucha">
                         <img src="imagenes/tienda-buzo.jpg" alt="Buzo con capucha Forza, frente y espalda" loading="lazy">
                     </button>
-                    <div class="info-producto">
-                        <h3>Buzo con capucha</h3>
-                        <p>"Forza" al frente y "Break Your Limits · Team Forza" en la espalda.</p>
-                        <p class="precio-producto"></p>
-                        <a href="#" class="btn btn-secundario" data-producto="Buzo con capucha"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
-                    </div>
+                    <h3>Buzo con capucha</h3>
+                    <p>"Forza" al frente y "Break Your Limits" en la espalda.</p>
+                    <a href="#" class="consultar" data-producto="Buzo con capucha"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Consultar</a>
                 </article>
-
-                <article class="tarjeta-producto">
-                    <button class="imagen-producto fondo-claro" data-ampliar aria-label="Ampliar foto del conjunto chomba y short">
+                <article class="producto">
+                    <button class="producto-foto claro" data-ampliar aria-label="Ampliar foto: Conjunto chomba y short">
                         <img src="imagenes/tienda-chomba.jpg" alt="Conjunto chomba y short Forza" loading="lazy">
                     </button>
-                    <div class="info-producto">
-                        <h3>Conjunto chomba + short</h3>
-                        <p>Chomba con vivos verdes y short a juego, con escudo y número.</p>
-                        <p class="precio-producto"></p>
-                        <a href="#" class="btn btn-secundario" data-producto="Conjunto chomba + short"><i class="fa-brands fa-whatsapp"></i> Consultar</a>
-                    </div>
+                    <h3>Conjunto chomba + short</h3>
+                    <p>Chomba con vivos verdes y short a juego, con escudo y número.</p>
+                    <a href="#" class="consultar" data-producto="Conjunto chomba + short"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Consultar</a>
                 </article>
             </div>
         </section>
 
-        <!-- Visor para ver las fotos en grande -->
-        <div class="visor-foto" id="visorFoto" aria-hidden="true">
-            <button class="cerrar-visor" aria-label="Cerrar">&times;</button>
+        <!-- Visor para ver las fotos de la tienda en grande -->
+        <div class="visor" id="visorFoto" aria-hidden="true">
+            <button class="visor-cerrar" aria-label="Cerrar">&times;</button>
             <img src="" alt="">
         </div>
 
         <!-- ===================== UBICACIÓN ===================== -->
-        <section id="ubicacion">
-            <h2>Dónde estamos</h2>
-
-            <div class="contenedor-ubicacion">
-                <div class="info-ubicacion">
-                    <p><i class="fa-solid fa-location-dot"></i> <span data-direccion></span></p>
-                    <p><i class="fa-brands fa-whatsapp"></i> <a href="#" data-whatsapp>Escribinos por WhatsApp</a></p>
-                    <p><i class="fa-brands fa-instagram"></i> <a href="https://www.instagram.com/_forzagym" target="_blank" rel="noopener">@_forzagym</a></p>
-                </div>
-                <div class="mapa">
-                    <iframe id="mapaGym" title="Mapa de Forza Gym" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
+        <section class="seccion ubicacion" id="ubicacion">
+            <div class="ubicacion-texto">
+                <h2>Cómo llegar</h2>
+                <p class="direccion" data-direccion></p>
+                <ul class="contacto">
+                    <li><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> <a href="#" data-whatsapp>Escribinos por WhatsApp</a></li>
+                    <li><i class="fa-brands fa-instagram" aria-hidden="true"></i> <a href="https://www.instagram.com/_forzagym" target="_blank" rel="noopener">@_forzagym</a></li>
+                </ul>
+            </div>
+            <div class="mapa">
+                <iframe id="mapaGym" title="Mapa con la ubicación de Forza Gym" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </section>
 
-        <!-- ===================== LLAMADO FINAL ===================== -->
-        <section id="inscripcion" class="cta-final">
-            <h2>¿Listo para empezar?</h2>
-            <p>Creá tu cuenta en un minuto, elegí tu plan y empezá a ver tu rutina desde el celular.</p>
-            <div class="hero-botones">
-                <a href="registro.html" class="btn btn-principal">Crear mi cuenta</a>
-                <a href="#" class="btn btn-secundario" data-whatsapp><i class="fa-brands fa-whatsapp"></i> Tengo una consulta</a>
+        <!-- ===================== CIERRE ===================== -->
+        <section class="cierre">
+            <p class="cierre-grande">One more rep.</p>
+            <p>Creá tu cuenta en un minuto, elegí tu plan y arrancá esta semana.</p>
+            <div class="acciones">
+                <a href="registro.html" class="btn btn-verde">Crear mi cuenta</a>
+                <a href="#" class="btn btn-linea" data-whatsapp><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Hacer una consulta</a>
             </div>
-            <p class="ya-socio">¿Ya sos socio? <a href="login.html">Ingresá acá</a></p>
+            <p class="ya-socio">¿Ya sos socio? <a href="login.html">Ingresá a tu cuenta</a></p>
         </section>
-
     </main>
 
-    <footer>
-        <div class="redes-sociales">
-            <a href="#" data-whatsapp target="_blank" rel="noopener" aria-label="WhatsApp">
-                <i class="fa-brands fa-whatsapp"></i>
-            </a>
-            <a href="https://www.instagram.com/_forzagym" target="_blank" rel="noopener" aria-label="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
+    <footer class="pie">
+        <img src="imagenes/logo-splash.png" alt="Forza Gym" width="56" height="56" loading="lazy">
+        <p>Forza Gym, Villa del Rosario, Córdoba</p>
+        <div class="redes">
+            <a href="#" data-whatsapp aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="https://www.instagram.com/_forzagym" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
         </div>
-        <p>&copy; 2026 Gimnasio Forza Gym - Todos los derechos reservados</p>
     </footer>
 
     <!-- Botón flotante de WhatsApp -->
-    <a href="#" class="whatsapp-flotante" data-whatsapp target="_blank" rel="noopener" aria-label="Escribinos por WhatsApp">
-        <i class="fa-brands fa-whatsapp"></i>
-    </a>
+    <a href="#" class="wpp-flotante" data-whatsapp aria-label="Escribinos por WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
 
     <script src="datos-gym.js"></script>
     <script src="script.js"></script>

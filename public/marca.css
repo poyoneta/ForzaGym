@@ -1,0 +1,139 @@
+/* ==========================================================
+   FORZA GYM - Estilo de marca para las pantallas internas
+   (app del socio, backoffice, ingreso, registro y asistencia).
+   Se carga DESPUÉS del <style> de cada página, así que lo que está
+   acá manda. Mismos colores y letras que la página principal.
+   ========================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&display=swap');
+
+:root {
+  --negro: #000;
+  --grafito: #151716;
+  --grafito-alto: #1d201f;
+  --linea: #2a2e2c;
+  --verde: #39e4a5;
+  --tiza: #f2f3ef;
+  --gris: #9aa09d;
+  --condensada: 'Archivo', 'Arial Narrow', sans-serif;
+  --texto: 'Archivo', system-ui, sans-serif;
+}
+
+html, body {
+  background-color: var(--negro) !important;
+  font-family: var(--texto) !important;
+  font-stretch: 100%;
+  color: var(--tiza);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Los formularios tenían 'Montserrat' escrito a mano */
+button, input, select, textarea { font-family: var(--texto) !important; font-stretch: 100%; }
+
+:focus-visible { outline: 2px solid var(--verde); outline-offset: 2px; }
+
+/* ---------- Títulos: condensados y en cursiva, como en la ropa ---------- */
+.card h2, .card-tabla h2, .modal h2, .hoja h3, h1 {
+  font-family: var(--condensada);
+  font-stretch: 62%;
+  font-style: italic;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.card h2, .card-tabla h2 {
+  color: var(--tiza);
+  font-size: 1.65rem;
+  border-bottom: 0;
+  padding-bottom: 0;
+  margin-bottom: 1.1rem;
+}
+.card h2 i, .card-tabla h2 i, .modal h2 i { color: var(--verde); font-size: 0.75em; font-style: normal; }
+.modal h2 { color: var(--tiza); font-size: 1.7rem; border-bottom-color: var(--linea); }
+.hoja h3 { font-size: 1.7rem; }
+
+/* ---------- Superficies ---------- */
+.card, .card-tabla {
+  background-color: var(--grafito) !important;
+  border: 1px solid #202322;
+  border-radius: 6px;
+  box-shadow: none;
+}
+.modal-content, .hoja { background-color: var(--grafito) !important; border-color: var(--linea); }
+
+/* ---------- Etiquetas en minúscula normal (más fáciles de leer) ---------- */
+label { text-transform: none !important; letter-spacing: 0 !important; font-weight: 600 !important; color: var(--gris) !important; font-size: 0.88rem !important; }
+.dato span, .stat span { text-transform: none !important; letter-spacing: 0 !important; font-size: 0.78rem !important; }
+
+/* ---------- Campos ---------- */
+select, input, textarea {
+  background-color: var(--negro) !important;
+  border-color: var(--linea) !important;
+  border-radius: 4px !important;
+  color: var(--tiza) !important;
+}
+select:focus, input:focus, textarea:focus { border-color: var(--verde) !important; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--verde); }
+
+/* ---------- Botones: letras de marca ---------- */
+.btn, .btn-register, .btn-login, .btn-ingresar, button[type="submit"] {
+  font-family: var(--condensada) !important;
+  font-stretch: 75%;
+  font-style: italic;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  border-radius: 3px;
+}
+/* El botón principal (verde lleno) lleva el corte en diagonal de la F */
+.card > .btn:not([class*="btn-"]), form .btn:not([class*="btn-"]), .btn-register, .btn-login, form > button[type="submit"]:not([class*="btn-"]) {
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  border-radius: 0;
+}
+.btn:hover { transform: none !important; }
+
+/* ---------- Números grandes (stats, datos) ---------- */
+.dato strong, .stat strong, .racha-titulo strong, .resumen-asistencia strong {
+  font-family: var(--condensada);
+  font-stretch: 70%;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.dato, .stat { background: var(--negro) !important; border-color: #222624 !important; }
+
+/* ---------- Barras de la app (arriba y abajo) ---------- */
+.barra-app { background: rgba(0, 0, 0, 0.92) !important; border-bottom-color: #1a1c1b !important; }
+.marca-app {
+  font-family: var(--condensada); font-stretch: 62%; font-style: italic; font-weight: 900 !important;
+  font-size: 1.35rem !important; text-transform: uppercase; letter-spacing: 0.01em !important;
+}
+.titulo-vista { text-transform: none !important; letter-spacing: 0 !important; font-size: 0.9rem !important; font-weight: 600 !important; }
+.nav-app { background: var(--negro) !important; border-top-color: #1a1c1b !important; }
+.nav-item.activo { background: #1f2221 !important; }
+
+/* ---------- Tablas del backoffice ---------- */
+table th { text-transform: none !important; letter-spacing: 0 !important; font-weight: 600; color: var(--gris) !important; }
+table td, table th { border-color: #222624 !important; }
+
+/* ---------- Saludo de la app ---------- */
+.saludo p {
+  font-family: var(--condensada); font-stretch: 62%; font-style: italic; font-weight: 850;
+  font-size: 2.3rem !important; text-transform: uppercase; line-height: 1;
+}
+.saludo small { display: block; margin-top: 0.35rem; }
+
+/* ---------- Backoffice: números del inicio y del mes ---------- */
+.tile-hoy, .kpi, .opcion-admin, .card-pagos { background: var(--grafito) !important; border-color: #222624 !important; }
+.tile-hoy span, .kpi span, .perfil-plan { text-transform: none !important; letter-spacing: 0 !important; font-size: 0.8rem !important; }
+.tile-hoy strong, .kpi strong {
+  font-family: var(--condensada); font-stretch: 70%; font-weight: 800; font-size: 1.9rem !important;
+  font-variant-numeric: tabular-nums;
+}
+.card h3, .card-tabla h3, .card-pagos h3, .card-pagos-header h3 {
+  font-family: var(--condensada); font-stretch: 62%; font-style: italic; font-weight: 850;
+  text-transform: uppercase; letter-spacing: 0 !important; color: var(--tiza) !important; font-size: 1.45rem !important;
+}
+.lista-atender li { background: var(--negro) !important; border-color: #222624 !important; }
+
+/* La barra de arriba lleva el título de la pestaña en letra normal */
+.titulo-vista { font-family: var(--texto) !important; font-style: normal !important; font-stretch: 100% !important; color: var(--gris) !important; }
